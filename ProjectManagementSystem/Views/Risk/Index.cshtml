@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Risk>
+<table class="table">
+    <caption>List of users</caption>
+    <thead>
+        <tr>
+            <th scope="col">名称</th>
+            <th scope="col">风险类型</th>
+            <th scope="col">发生概率</th>
+            <th scope="col">创建日期</th>
+            <th scope="col">风险等级</th>
+            <th scope="col">状态</th>
+            <th scope="col">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var risk in Model)
+        {
+            <tr>
+                <td scope="row">@risk.Name</td>
+                <td scope="row">@risk.RiskType</td>
+                <td scope="row">@risk.Probability</td>
+                <td scope="row">@risk.CreateDate</td>
+                <td scope="row">@risk.Level</td>
+                <td scope="row">@risk.Status</td>
+                <td>
+                    <form asp-action="DeleteRisk" asp-route-id="@risk.Id" method="post">
+                        <a asp-action="EditRisk" asp-route-id="@risk.Id" class="btn btn-primary">编辑</a>
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('确认删除？')">
+                            删除
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="AddRisk" class="btn btn-primary">添加缺陷</a>

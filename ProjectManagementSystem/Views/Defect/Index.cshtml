@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Defect>
+<table class="table">
+    <caption>List of users</caption>
+    <thead>
+        <tr>
+            <th scope="col">名称</th>
+            <th scope="col">状态</th>
+            <th scope="col">创建日期</th>
+            <th scope="col">缺陷类型</th>
+            <th scope="col">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var defect in Model)
+        {
+            <tr>
+                <td scope="row">@defect.Name</td>
+                <td scope="row">@defect.DefectStatus</td>
+                <td scope="row">@defect.CreateDate</td>
+                <td scope="row">@defect.DefectType</td>
+                <td>
+                    <form asp-action="DeleteDefect" asp-route-id="@defect.Id" method="post">
+                        <a asp-action="EditDefect" asp-route-id="@defect.Id" class="btn btn-primary">编辑</a>
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('确认删除？')">
+                            删除
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="AddDefect" class="btn btn-primary">添加缺陷</a>

@@ -1,0 +1,96 @@
+﻿@using ProjectManagementSystem.ViewModels;
+@using ProjectManagementSystem.Data;
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Http
+@model RiskAddViewModel
+@inject DataDbContext dataDbContext
+@inject UserManager<ApplicationUser> userManager
+<form method="post">
+    <div class="form-group row">
+        <label asp-for="Risk.Name" class="col-sm-2"></label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Risk.Name">
+            <span class="invalid" asp-validation-for="Risk.Name"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Risk.Description" class="col-sm-2"></label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Risk.Description">
+            <span class="invalid" asp-validation-for="Risk.Description"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Risk.Probability" class="col-sm-2"></label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Risk.Probability">
+            <span class="invalid" asp-validation-for="Risk.Probability"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Risk.Incidence" class="col-sm-2"></label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Risk.Incidence">
+            <span class="invalid" asp-validation-for="Risk.Incidence"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Risk.CreateDate" class="col-sm-2"></label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Risk.CreateDate">
+            <span class="invalid" asp-validation-for="Risk.CreateDate"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Risk.Solution" class="col-sm-2"></label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Risk.Solution">
+            <span class="invalid" asp-validation-for="Risk.Solution"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Risk.Level" class="col-sm-2"></label>
+        <div class="col-sm-8">
+            <select asp-for="Risk.Level" asp-items="@new SelectList(dataDbContext.RiskLevels.Select(a=>a.LevelName).ToList())" class="form-control valid">
+            </select>
+            <span class="invalid" asp-validation-for="Risk.Level"></span>
+        </div>
+@*        <div class="col-sm-2">
+            <a asp-action="AddTable" class="btn btn-secondary">加</a>
+        </div>*@
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Risk.Status" class="col-sm-2"></label>
+        <div class="col-sm-8">
+            <select asp-for="Risk.Status" asp-items="@new SelectList(dataDbContext.RiskStatuses.Select(a=>a.StatusName).ToList())" class="form-control valid">
+            </select>
+            <span class="invalid" asp-validation-for="Risk.Status"></span>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Risk.RiskType" class="col-sm-2"></label>
+        <div class="col-sm-8">
+            <select asp-for="Risk.RiskType" asp-items="@new SelectList(dataDbContext.RiskTypes.Select(a=>a.TypeName).ToList())" class="form-control valid">
+            </select>
+            <span class="invalid" asp-validation-for="Risk.RiskType"></span>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+
+    <div class="invalid" asp-validation-summary="ModelOnly">
+    </div>
+
+    <button type="submit" class="btn btn-primary">提交</button>
+    <a asp-action="Index" class="btn btn-secondary">返回列表</a>
+</form>
