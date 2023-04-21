@@ -1,17 +1,176 @@
-﻿<div class="row">
-    <div class="col-lg-3">
-        <div class="d-grid mx-auto bg-white">
-            <button class="btn text-dark " type="button">+</button>
-        </div>
-        <br />
-        <!-- Default Card -->
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Default Card</h5>
-                Ut in ea error laudantium quas omnis officia. Sit sed praesentium voluptas. Corrupti inventore consequatur nisi necessitatibus modi consequuntur soluta id. Enim autem est esse natus assumenda. Non sunt dignissimos officiis expedita. Consequatur sint repellendus voluptas.
-                Quidem sit est nulla ullam. Suscipit debitis ullam iusto dolorem animi dolorem numquam. Enim fuga ipsum dolor nulla quia ut.
-                Rerum dolor voluptatem et deleniti libero totam numquam nobis distinctio. Sit sint aut. Consequatur rerum in.
-            </div>
-        </div><!-- End Default Card -->
-    </div>
+﻿@using ProjectManagementSystem.ViewModels
+@using ProjectManagementSystem.Data
+@model MissionIndexViewModel
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+@inject DataDbContext dataDbContext
+@inject UserManager<ApplicationUser> userManager
+<div class="row">
+	<div class="col-lg-3">
+		<div class="d-grid mx-auto bg-white">
+			<button type="button" class="btn text-dark" data-bs-toggle="modal" data-bs-target="#addModal">+</button>
+		</div>
+		<br />
+		@foreach (var mission in Model.UntreatedMissions)
+		{
+			<!-- Default Card -->
+			<div class="card">
+				<div class="card-body">
+					<div class="container">
+						<br>
+						<div class="row">
+							<div class="col-8">
+								<h5>@mission.Name</h5>
+							</div>
+							<div class="col-4 text-end">
+								<button type="button" class="btn btn-outline-primary rounded-circle" disabled>@mission.Executor</button>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col">
+								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editmodel">
+									<i class="bi bi-brush"></i>编辑
+								</button>
+							</div>
+							<div class="col">
+								<button type="button" class="btn btn-danger">
+									<i class="bi bi-trash"></i>删除
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- End Default Card -->
+		}
+
+	</div>
 </div>
+<!-- EditModal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+	 aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="editModalLabel">Modal title</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-6">
+								<button> ssad </button><br>
+								<button> ssad </button><br>
+								<button> ssad </button><br>
+								<button> ssad </button><br>
+								<button> ssad </button><br>
+							</div>
+							<div class="col-6">
+								<button> ssad </button><br>
+								<button> ssad </button><br>
+								<button> ssad </button><br>
+								<button> ssad </button><br>
+								<button> ssad </button><br>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- AddModal -->
+<div class="modal fade bs-example-modal-lg" id="addModal" tabindex="-1" aria-labelledby="addModalLabel"
+	 aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addModalLabel">添加任务</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group row">
+							<label asp-for="@Model.Name" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<input class="form-control" asp-for="@Model.Name">
+								<span class="invalid" asp-validation-for="@Model.Name"></span>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="@Model.Description" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<textarea asp-for="@Model.Description" class="form-control" aria-label="With textarea"></textarea>
+								<span class="invalid" asp-validation-for="@Model.Description"></span>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="@Model.Deadline" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<input class="form-control" asp-for="@Model.Deadline">
+								<span class="invalid" asp-validation-for="@Model.Deadline"></span>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="@Model.Status" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<select asp-for="@Model.Status" asp-items="@new SelectList(dataDbContext.MissionStatuses.Select(a=>a.Status).ToList())" class="form-control valid">
+								</select>
+								<span class="invalid" asp-validation-for="@Model.Status"></span>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="@Model.Priority" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<select asp-for="@Model.Priority" asp-items="@new SelectList(dataDbContext.MissionStatuses.Select(a=>a.Status).ToList())" class="form-control valid">
+								</select>
+								<span class="invalid" asp-validation-for="@Model.Priority"></span>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="@Model.Executor" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<select class="selectpicker form-control valid" data-live-search="true" multiple>
+									@foreach (var item in userManager.Users.Select(a => a.UserName))
+									{
+										<option>@item</option>
+									}
+								</select>
+								<span class="invalid" asp-validation-for="@Model.Executor"></span>
+							</div>
+						</div>
+						<br />
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary">Save changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts {
+	<script type="text/javascript">
+		$(document).ready(function () {
+			// 初始化select元素
+			$('.selectpicker').selectpicker();
+		});
+	</script>
+}

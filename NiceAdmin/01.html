@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bootstrap-select Demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- 引入Bootstrap和Bootstrap-select的CSS文件 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/bootstrap-select-main/docs/docs/dist/css/bootstrap-select.min.css">
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>Bootstrap-select Demo</h1>
+        <select class="selectpicker" data-live-search="true" multiple>
+            <option>Mustard</option>
+            <option>Ketchup</option>
+            <option>Relish</option>
+        </select>
+
+    </div>
+
+    <!-- 引入Bootstrap和Bootstrap-select的JavaScript文件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="assets/bootstrap-select-main/docs/docs/dist/js/bootstrap-select.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 初始化select元素
+            $('.selectpicker').selectpicker();
+        });
+    </script>
+
+</body>
+
+</html>

@@ -22,6 +22,65 @@ namespace ProjectManagementSystem.Migrations.DataDb
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IdCardNo")
+                        .HasMaxLength(18)
+                        .HasColumnType("nvarchar(18)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationUser");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Defect", b =>
                 {
                     b.Property<int>("Id")
@@ -33,22 +92,36 @@ namespace ProjectManagementSystem.Migrations.DataDb
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DefectStatus")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DefectType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FunctionaryId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PutForwardId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Solution")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("FunctionaryId");
+
+                    b.HasIndex("PutForwardId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Defects");
                 });
@@ -85,6 +158,35 @@ namespace ProjectManagementSystem.Migrations.DataDb
                     b.ToTable("DefectTypes");
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.Dialogue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MissionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MissionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Dialogues");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Mission", b =>
                 {
                     b.Property<int>("Id")
@@ -102,8 +204,8 @@ namespace ProjectManagementSystem.Migrations.DataDb
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Executor")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ExecutorId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -111,18 +213,29 @@ namespace ProjectManagementSystem.Migrations.DataDb
                     b.Property<int?>("PriorityId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ExecutorId");
+
                     b.HasIndex("PriorityId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Missions");
                 });
@@ -159,6 +272,22 @@ namespace ProjectManagementSystem.Migrations.DataDb
                     b.ToTable("MissionStatuses");
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.MissionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("TypeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MissionTypes");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -180,25 +309,30 @@ namespace ProjectManagementSystem.Migrations.DataDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Functionary")
+                    b.Property<string>("FunctionaryId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PutForward")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PutForwardId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FunctionaryId");
+
+                    b.HasIndex("PutForwardId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Projects");
                 });
@@ -237,8 +371,8 @@ namespace ProjectManagementSystem.Migrations.DataDb
                     b.Property<string>("Incidence")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Level")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("LevelId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -246,16 +380,22 @@ namespace ProjectManagementSystem.Migrations.DataDb
                     b.Property<string>("Probability")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RiskType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("RiskTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Solution")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LevelId");
+
+                    b.HasIndex("RiskTypeId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Risks");
                 });
@@ -308,13 +448,131 @@ namespace ProjectManagementSystem.Migrations.DataDb
                     b.ToTable("RiskTypes");
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.Defect", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Functionary")
+                        .WithMany()
+                        .HasForeignKey("FunctionaryId");
+
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "PutForward")
+                        .WithMany()
+                        .HasForeignKey("PutForwardId");
+
+                    b.HasOne("ProjectManagementSystem.Models.DefectStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.HasOne("ProjectManagementSystem.Models.DefectType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId");
+
+                    b.Navigation("Functionary");
+
+                    b.Navigation("PutForward");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Dialogue", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.Mission", null)
+                        .WithMany("Dialogues")
+                        .HasForeignKey("MissionId");
+
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Mission", b =>
                 {
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Executor")
+                        .WithMany()
+                        .HasForeignKey("ExecutorId");
+
                     b.HasOne("ProjectManagementSystem.Models.MissionPriority", "Priority")
                         .WithMany()
                         .HasForeignKey("PriorityId");
 
+                    b.HasOne("ProjectManagementSystem.Models.Project", null)
+                        .WithMany("Missions")
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("ProjectManagementSystem.Models.MissionStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.HasOne("ProjectManagementSystem.Models.MissionType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId");
+
+                    b.Navigation("Executor");
+
                     b.Navigation("Priority");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Functionary")
+                        .WithMany()
+                        .HasForeignKey("FunctionaryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "PutForward")
+                        .WithMany()
+                        .HasForeignKey("PutForwardId");
+
+                    b.HasOne("ProjectManagementSystem.Models.ProjectStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Functionary");
+
+                    b.Navigation("PutForward");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Risk", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.RiskLevel", "Level")
+                        .WithMany()
+                        .HasForeignKey("LevelId");
+
+                    b.HasOne("ProjectManagementSystem.Models.RiskType", "RiskType")
+                        .WithMany()
+                        .HasForeignKey("RiskTypeId");
+
+                    b.HasOne("ProjectManagementSystem.Models.RiskStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Level");
+
+                    b.Navigation("RiskType");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Mission", b =>
+                {
+                    b.Navigation("Dialogues");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
+                {
+                    b.Navigation("Missions");
                 });
 #pragma warning restore 612, 618
         }

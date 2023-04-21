@@ -50,8 +50,8 @@ namespace ProjectManagementSystem.Controllers
             defect.Description = model.Defect.Description;
             defect.CreateDate = model.Defect.CreateDate;
             defect.Solution = model.Defect.Solution;
-            defect.DefectType = model.Defect.DefectType;
-            defect.DefectStatus = model.Defect.DefectStatus;
+            defect.Type = model.Defect.Type;
+            defect.Status = model.Defect.Status;
             dataDbContext.SaveChanges();
             return RedirectToAction("Index");
         }

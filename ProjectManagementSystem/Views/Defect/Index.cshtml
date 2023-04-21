@@ -15,9 +15,9 @@
         {
             <tr>
                 <td scope="row">@defect.Name</td>
-                <td scope="row">@defect.DefectStatus</td>
+                <td scope="row">@defect.Status</td>
                 <td scope="row">@defect.CreateDate</td>
-                <td scope="row">@defect.DefectType</td>
+                <td scope="row">@defect.Type</td>
                 <td>
                     <form asp-action="DeleteDefect" asp-route-id="@defect.Id" method="post">
                         <a asp-action="EditDefect" asp-route-id="@defect.Id" class="btn btn-primary">编辑</a>
