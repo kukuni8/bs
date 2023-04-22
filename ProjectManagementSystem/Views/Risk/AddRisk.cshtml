@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.AspNetCore.Http
 @model RiskAddViewModel
-@inject DataDbContext dataDbContext
+@inject ApplicationDbContext applicationDbContext
 @inject UserManager<ApplicationUser> userManager
 <form method="post">
     <div class="form-group row">
@@ -57,19 +57,19 @@
     <div class="form-group row">
         <label asp-for="Risk.Level" class="col-sm-2"></label>
         <div class="col-sm-8">
-            <select asp-for="Risk.Level" asp-items="@new SelectList(dataDbContext.RiskLevels.Select(a=>a.LevelName).ToList())" class="form-control valid">
+            <select asp-for="Risk.Level" asp-items="@new SelectList(applicationDbContext.RiskLevels.Select(a=>a.LevelName).ToList())" class="form-control valid">
             </select>
             <span class="invalid" asp-validation-for="Risk.Level"></span>
         </div>
-@*        <div class="col-sm-2">
-            <a asp-action="AddTable" class="btn btn-secondary">加</a>
+        @*        <div class="col-sm-2">
+        <a asp-action="AddTable" class="btn btn-secondary">加</a>
         </div>*@
     </div>
 
     <div class="form-group row">
         <label asp-for="Risk.Status" class="col-sm-2"></label>
         <div class="col-sm-8">
-            <select asp-for="Risk.Status" asp-items="@new SelectList(dataDbContext.RiskStatuses.Select(a=>a.StatusName).ToList())" class="form-control valid">
+            <select asp-for="Risk.Status" asp-items="@new SelectList(applicationDbContext.RiskStatuses.Select(a=>a.StatusName).ToList())" class="form-control valid">
             </select>
             <span class="invalid" asp-validation-for="Risk.Status"></span>
         </div>
@@ -80,7 +80,7 @@
     <div class="form-group row">
         <label asp-for="Risk.RiskType" class="col-sm-2"></label>
         <div class="col-sm-8">
-            <select asp-for="Risk.RiskType" asp-items="@new SelectList(dataDbContext.RiskTypes.Select(a=>a.TypeName).ToList())" class="form-control valid">
+            <select asp-for="Risk.RiskType" asp-items="@new SelectList(applicationDbContext.RiskTypes.Select(a=>a.TypeName).ToList())" class="form-control valid">
             </select>
             <span class="invalid" asp-validation-for="Risk.RiskType"></span>
         </div>

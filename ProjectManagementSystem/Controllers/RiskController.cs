@@ -7,15 +7,16 @@ namespace ProjectManagementSystem.Controllers
 {
     public class RiskController : Controller
     {
-        private readonly DataDbContext dataDbContext;
 
-        public RiskController(DataDbContext dataDbContext)
+        private readonly ApplicationDbContext applicationDbContext;
+
+        public RiskController(ApplicationDbContext applicationDbContext)
         {
-            this.dataDbContext = dataDbContext;
+            this.applicationDbContext = applicationDbContext;
         }
         public async Task<IActionResult> Index()
         {
-            var risks = await dataDbContext.Risks.ToListAsync();
+            var risks = await applicationDbContext.Risks.ToListAsync();
             return View(risks);
         }
 
@@ -26,14 +27,14 @@ namespace ProjectManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddRisk(RiskAddViewModel model)
         {
-            await dataDbContext.Risks.AddAsync(model.Risk);
-            await dataDbContext.SaveChangesAsync();
+            await applicationDbContext.Risks.AddAsync(model.Risk);
+            await applicationDbContext.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> EditRisk(int id)
         {
-            var risk = await dataDbContext.Risks.FirstOrDefaultAsync(x => x.Id == id);
+            var risk = await applicationDbContext.Risks.FirstOrDefaultAsync(x => x.Id == id);
             var model = new RiskEditViewModel
             {
                 Risk = risk,
@@ -44,7 +45,7 @@ namespace ProjectManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> EditRisk(RiskEditViewModel model)
         {
-            var risk = await dataDbContext.Risks.FirstOrDefaultAsync(a => a.Id == model.Risk.Id);
+            var risk = await applicationDbContext.Risks.FirstOrDefaultAsync(a => a.Id == model.Risk.Id);
             risk.Name = model.Risk.Name;
             risk.Description = model.Risk.Description;
             risk.CreateDate = model.Risk.CreateDate;
@@ -54,28 +55,28 @@ namespace ProjectManagementSystem.Controllers
             risk.Probability = model.Risk.Probability;
             risk.Level = model.Risk.Level;
             risk.Incidence = model.Risk.Incidence;
-            dataDbContext.SaveChanges();
+            applicationDbContext.SaveChanges();
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteRisk(int id)
         {
-            var risk = await dataDbContext.Risks.FirstOrDefaultAsync(a => a.Id == id);
-            dataDbContext.Risks.Remove(risk);
-            dataDbContext.SaveChanges();
+            var risk = await applicationDbContext.Risks.FirstOrDefaultAsync(a => a.Id == id);
+            applicationDbContext.Risks.Remove(risk);
+            applicationDbContext.SaveChanges();
             return RedirectToAction("Index");
         }
 
         public IActionResult AddTable()
         {
-            dataDbContext.RiskLevels.Add(new Models.RiskLevel { LevelName = "高" });
-            dataDbContext.RiskLevels.Add(new Models.RiskLevel { LevelName = "中" });
-            dataDbContext.RiskLevels.Add(new Models.RiskLevel { LevelName = "低" });
-            dataDbContext.RiskStatuses.Add(new Models.RiskStatus { StatusName = "已处理" });
-            dataDbContext.RiskStatuses.Add(new Models.RiskStatus { StatusName = "进行中" });
-            dataDbContext.RiskStatuses.Add(new Models.RiskStatus { StatusName = "待处理" });
-            dataDbContext.SaveChanges();
+            applicationDbContext.RiskLevels.Add(new Models.RiskLevel { LevelName = "高" });
+            applicationDbContext.RiskLevels.Add(new Models.RiskLevel { LevelName = "中" });
+            applicationDbContext.RiskLevels.Add(new Models.RiskLevel { LevelName = "低" });
+            applicationDbContext.RiskStatuses.Add(new Models.RiskStatus { StatusName = "已处理" });
+            applicationDbContext.RiskStatuses.Add(new Models.RiskStatus { StatusName = "进行中" });
+            applicationDbContext.RiskStatuses.Add(new Models.RiskStatus { StatusName = "待处理" });
+            applicationDbContext.SaveChanges();
             return RedirectToAction("Index");
         }
     }

@@ -10,5 +10,8 @@ namespace ProjectManagementSystem.Models
 
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
+
+
+
     }
 }

@@ -7,16 +7,16 @@ namespace ProjectManagementSystem.Controllers
 {
     public class DefectController : Controller
     {
-        private readonly DataDbContext dataDbContext;
+        private readonly ApplicationDbContext applicationDbContext;
 
-        public DefectController(DataDbContext dataDbContext)
+        public DefectController(ApplicationDbContext applicationDbContext)
         {
-            this.dataDbContext = dataDbContext;
+            this.applicationDbContext = applicationDbContext;
         }
 
         public async Task<IActionResult> Index()
         {
-            var defects = await dataDbContext.Defects.ToListAsync();
+            var defects = await applicationDbContext.Defects.ToListAsync();
             return View(defects);
         }
 
@@ -27,14 +27,14 @@ namespace ProjectManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddDefect(DefectAddViewModel model)
         {
-            await dataDbContext.Defects.AddAsync(model.Defect);
-            await dataDbContext.SaveChangesAsync();
+            await applicationDbContext.Defects.AddAsync(model.Defect);
+            await applicationDbContext.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> EditDefect(int id)
         {
-            var defect = await dataDbContext.Defects.FirstOrDefaultAsync(x => x.Id == id);
+            var defect = await applicationDbContext.Defects.FirstOrDefaultAsync(x => x.Id == id);
             var model = new DefectEditViewModel
             {
                 Defect = defect,
@@ -45,35 +45,35 @@ namespace ProjectManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> EditDefect(DefectEditViewModel model)
         {
-            var defect = await dataDbContext.Defects.FirstOrDefaultAsync(a => a.Id == model.Defect.Id);
+            var defect = await applicationDbContext.Defects.FirstOrDefaultAsync(a => a.Id == model.Defect.Id);
             defect.Name = model.Defect.Name;
             defect.Description = model.Defect.Description;
             defect.CreateDate = model.Defect.CreateDate;
             defect.Solution = model.Defect.Solution;
             defect.Type = model.Defect.Type;
             defect.Status = model.Defect.Status;
-            dataDbContext.SaveChanges();
+            applicationDbContext.SaveChanges();
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteDefect(int id)
         {
-            var defect = await dataDbContext.Defects.FirstOrDefaultAsync(a => a.Id == id);
-            dataDbContext.Defects.Remove(defect);
-            dataDbContext.SaveChanges();
+            var defect = await applicationDbContext.Defects.FirstOrDefaultAsync(a => a.Id == id);
+            applicationDbContext.Defects.Remove(defect);
+            applicationDbContext.SaveChanges();
             return RedirectToAction("Index");
         }
 
         public IActionResult AddTable()
         {
-            dataDbContext.DefectTypes.Add(new Models.DefectType { TypeName = "设计" });
-            dataDbContext.DefectTypes.Add(new Models.DefectType { TypeName = "技术" });
-            dataDbContext.DefectTypes.Add(new Models.DefectType { TypeName = "质量" });
-            dataDbContext.DefectStatuses.Add(new Models.DefectStatus { StatusName = "待处理" });
-            dataDbContext.DefectStatuses.Add(new Models.DefectStatus { StatusName = "进行中" });
-            dataDbContext.DefectStatuses.Add(new Models.DefectStatus { StatusName = "已完成" });
-            dataDbContext.SaveChanges();
+            applicationDbContext.DefectTypes.Add(new Models.DefectType { TypeName = "设计" });
+            applicationDbContext.DefectTypes.Add(new Models.DefectType { TypeName = "技术" });
+            applicationDbContext.DefectTypes.Add(new Models.DefectType { TypeName = "质量" });
+            applicationDbContext.DefectStatuses.Add(new Models.DefectStatus { StatusName = "待处理" });
+            applicationDbContext.DefectStatuses.Add(new Models.DefectStatus { StatusName = "进行中" });
+            applicationDbContext.DefectStatuses.Add(new Models.DefectStatus { StatusName = "已完成" });
+            applicationDbContext.SaveChanges();
             return RedirectToAction("Index");
         }
     }

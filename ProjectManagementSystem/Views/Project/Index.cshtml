@@ -1,34 +1,27 @@
-﻿@model IEnumerable<Project>
-<table class="table">
-    <caption>List of users</caption>
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">名称</th>
-            <th scope="col">状态</th>
-            <th scope="col">截止日期</th>
-            <th scope="col">操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var project in Model)
-        {
-            <tr>
-                <td scope="row">@project.Id</td>
-                <td scope="row">@project.Name</td>
-                <td scope="row">@project.Status</td>
-                <td scope="row">@project.Deadline</td>
-                <td>
-                    <form asp-action="DeleteProject" asp-route-id="@project.Id" method="post">
-                        <a asp-action="EditProject" asp-route-id="@project.Id" class="btn btn-primary">编辑</a>
-                        <button type="submit" class="btn btn-danger"
-                                onclick="return confirm('确认删除？')">
-                            删除
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-<a asp-action="AddProject" class="btn btn-primary">添加项目</a>
+﻿@using ProjectManagementSystem.ViewModels
+@model ProjectIndexViewModal
+
+<div class="col-lg-8 offset-2">
+    <div class="container-lg">
+        <div class="row">
+            <div class="col-2">
+                <label asp-for="@Model.HelpProject.Name"></label>
+            </div>
+            <div class="col-2">
+                <label asp-for="@Model.HelpProject.Name"></label>
+            </div>
+            <div class="col-2">
+                <label asp-for="@Model.HelpProject.Name"></label>
+            </div>
+            <div class="col-2">
+                <label asp-for="@Model.HelpProject.Name"></label>
+            </div>
+            <div class="col-2">
+                <label asp-for="@Model.HelpProject.Name"></label>
+            </div>
+            <div class="col-2">
+                <label asp-for="@Model.HelpProject.Name"></label>
+            </div>
+        </div>
+    </div>
+</div>

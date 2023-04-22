@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.AspNetCore.Http
 @model ProjectAddViewModel
-@inject DataDbContext dataDbContext
+@inject ApplicationDbContext applicationDbContext
 @inject UserManager<ApplicationUser> userManager
 <form method="post">
     <div class="form-group row">
@@ -57,7 +57,7 @@
     <div class="form-group row">
         <label asp-for="Project.Status" class="col-sm-2"></label>
         <div class="col-sm-8">
-            <select asp-for="Project.Status" asp-items="@new SelectList(dataDbContext.ProjectStatuses.Select(a=>a.StatusName).ToList())" class="form-control valid">
+            <select asp-for="Project.Status" asp-items="@new SelectList(applicationDbContext.ProjectStatuses.Select(a=>a.StatusName).ToList())" class="form-control valid">
             </select>
             <span class="invalid" asp-validation-for="Project.Status"></span>
         </div>

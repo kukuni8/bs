@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.AspNetCore.Http
 @model DefectAddViewModel
-@inject DataDbContext dataDbContext
+@inject ApplicationDbContext applicationDbContext
 @inject UserManager<ApplicationUser> userManager
 <form method="post">
     <div class="form-group row">
@@ -34,7 +34,7 @@
     <div class="form-group row">
         <label asp-for="Defect.Status" class="col-sm-2"></label>
         <div class="col-sm-8">
-            <select asp-for="Defect.Status" asp-items="@new SelectList(dataDbContext.DefectStatuses.Select(a=>a.StatusName).ToList())" class="form-control valid">
+            <select asp-for="Defect.Status" asp-items="@new SelectList(applicationDbContext.DefectStatuses.Select(a=>a.StatusName).ToList())" class="form-control valid">
             </select>
             <span class="invalid" asp-validation-for="Defect.Status"></span>
         </div>
@@ -54,7 +54,7 @@
     <div class="form-group row">
         <label asp-for="Defect.Type" class="col-sm-2"></label>
         <div class="col-sm-8">
-            <select asp-for="Defect.Type" asp-items="@new SelectList(dataDbContext.DefectTypes.Select(a=>a.TypeName).ToList())" class="form-control valid">
+            <select asp-for="Defect.Type" asp-items="@new SelectList(applicationDbContext.DefectTypes.Select(a=>a.TypeName).ToList())" class="form-control valid">
             </select>
             <span class="invalid" asp-validation-for="Defect.Type"></span>
         </div>
