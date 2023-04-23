@@ -187,8 +187,7 @@ namespace ProjectManagementSystem.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("IdCardNo")
-                        .HasMaxLength(18)
-                        .HasColumnType("nvarchar(18)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Job")
                         .HasColumnType("nvarchar(max)");
