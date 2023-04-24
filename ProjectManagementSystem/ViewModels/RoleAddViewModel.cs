@@ -7,20 +7,32 @@ using System.Threading.Tasks;
 
 namespace ProjectManagementSystem.ViewModels
 {
-	public class RoleAddViewModel
-	{
-		[Required]
-		[Display(Name = "角色名称")]
-		public string RoleName { get; set; }
+    public class RoleAddViewModel
+    {
+        [Required]
+        [Display(Name = "角色名称")]
+        public string RoleName { get; set; }
 
-		public Dictionary<string, bool> AuthorityDic { get; set; } = new Dictionary<string, bool>
-		{
-			{ "用户管理",false },
-			{ "角色管理",false },
-			{ "项目管理",false },
-			{ "任务管理",false },
-			{ "风险管理",false },
-			{ "缺陷管理",false },
-		};
-	}
+        public List<PriorityInfos> Infos { get; set; } = new List<PriorityInfos>()
+        {
+            new PriorityInfos(){AboutName="用户管理",priorityInfos=new List<PriorityInfo>{new PriorityInfo {Name="用户添加",IsOn=false },new PriorityInfo {Name="用户编辑",IsOn=false },new PriorityInfo {Name="用户删除",IsOn=false } }},
+            new PriorityInfos(){AboutName="角色管理",priorityInfos=new List<PriorityInfo>{new PriorityInfo {Name="角色添加",IsOn=false },new PriorityInfo {Name="角色编辑",IsOn=false },new PriorityInfo {Name="角色删除",IsOn=false } }},
+            new PriorityInfos(){AboutName="项目管理",priorityInfos=new List<PriorityInfo>{new PriorityInfo {Name="项目添加",IsOn=false },new PriorityInfo {Name="项目编辑",IsOn=false },new PriorityInfo {Name="项目删除",IsOn=false } }},
+            new PriorityInfos(){AboutName="任务管理",priorityInfos=new List<PriorityInfo>{new PriorityInfo {Name="任务添加",IsOn=false },new PriorityInfo {Name="任务编辑",IsOn=false },new PriorityInfo {Name="用户删除",IsOn=false } }},
+            new PriorityInfos(){AboutName="风险管理",priorityInfos=new List<PriorityInfo>{new PriorityInfo {Name="风险添加",IsOn=false },new PriorityInfo {Name="风险编辑",IsOn=false },new PriorityInfo {Name="用户删除",IsOn=false } }},
+            new PriorityInfos(){AboutName="缺陷管理",priorityInfos=new List<PriorityInfo>{new PriorityInfo {Name="缺陷添加",IsOn=false },new PriorityInfo {Name="缺陷编辑",IsOn=false },new PriorityInfo {Name="用户删除",IsOn=false } }},
+        };
+    }
+
+    public class PriorityInfos
+    {
+        public string AboutName { get; set; }
+        public List<PriorityInfo> priorityInfos { get; set; }
+    }
+
+    public class PriorityInfo
+    {
+        public string Name { get; set; }
+        public bool IsOn { get; set; }
+    }
 }
