@@ -35,12 +35,29 @@ namespace ProjectManagementSystem
 
 			builder.Services.AddAuthorization(options =>
 			{
-				options.AddPolicy("用户管理", policy => policy.RequireClaim("用户管理"));
-				options.AddPolicy("角色管理", policy => policy.RequireClaim("角色管理"));
-				options.AddPolicy("项目管理", policy => policy.RequireClaim("项目管理"));
-				options.AddPolicy("任务管理", policy => policy.RequireClaim("任务管理"));
-				options.AddPolicy("风险管理", policy => policy.RequireClaim("风险管理"));
-				options.AddPolicy("缺陷管理", policy => policy.RequireClaim("缺陷管理"));
+				options.AddPolicy("用户添加", policy => policy.RequireClaim("用户添加"));
+				options.AddPolicy("用户编辑", policy => policy.RequireClaim("用户编辑"));
+				options.AddPolicy("用户删除", policy => policy.RequireClaim("用户删除"));
+
+				options.AddPolicy("角色添加", policy => policy.RequireClaim("角色添加"));
+				options.AddPolicy("角色编辑", policy => policy.RequireClaim("角色编辑"));
+				options.AddPolicy("角色删除", policy => policy.RequireClaim("角色删除"));
+
+				options.AddPolicy("项目添加", policy => policy.RequireClaim("项目添加"));
+				options.AddPolicy("项目编辑", policy => policy.RequireClaim("项目编辑"));
+				options.AddPolicy("项目删除", policy => policy.RequireClaim("项目删除"));
+
+				options.AddPolicy("任务添加", policy => policy.RequireClaim("任务添加"));
+				options.AddPolicy("任务编辑", policy => policy.RequireClaim("任务编辑"));
+				options.AddPolicy("任务删除", policy => policy.RequireClaim("任务删除"));
+
+				options.AddPolicy("风险添加", policy => policy.RequireClaim("风险添加"));
+				options.AddPolicy("风险编辑", policy => policy.RequireClaim("风险编辑"));
+				options.AddPolicy("风险删除", policy => policy.RequireClaim("风险删除"));
+
+				options.AddPolicy("缺陷添加", policy => policy.RequireClaim("缺陷添加"));
+				options.AddPolicy("缺陷编辑", policy => policy.RequireClaim("缺陷编辑"));
+				options.AddPolicy("缺陷删除", policy => policy.RequireClaim("缺陷删除"));
 			});
 
 			builder.Services.AddHttpContextAccessor();
