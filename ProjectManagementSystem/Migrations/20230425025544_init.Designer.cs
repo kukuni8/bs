@@ -12,8 +12,8 @@ using ProjectManagementSystem.Data;
 namespace ProjectManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230424125542_dsad")]
-    partial class dsad
+    [Migration("20230425025544_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
