@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@using ProjectManagementSystem.ViewModels
+@model IEnumerable<UserIndexViewModel>
 @using Microsoft.AspNetCore.Identity;
 @inject RoleManager<IdentityRole> roleManager;
 @inject UserManager<ApplicationUser> userManager;
@@ -24,33 +25,37 @@
                                 <th scope="col">部门</th>
                                 <th scope="col">职位</th>
                                 <th scope="col">角色</th>
-                                <th scope="col">操作</th> <!-- 添加新的表头单元格 -->
+                                <th scope="col">年龄</th>
+                                <th scope="col">工龄</th>
+                                <th scope="col">操作</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                @foreach (var user in Model)
-                                {
-                                    var roleNames = await userManager.GetRolesAsync(user);
-                                    var roleName = roleNames == null || roleNames.Count == 0 ? "" : roleNames.First();
+                            @foreach (var user in Model)
+                            {
+                                var u = await userManager.FindByNameAsync(user.UserName);
+                                var roleNames = await userManager.GetRolesAsync(u);
+                                var roleName = roleNames == null || roleNames.Count == 0 ? "" : roleNames.First();
+                                <tr>
                                     <td>@user.UserName</td>
                                     <td>@user.TrueName</td>
                                     <td>@user.Department</td>
                                     <td>@user.Job</td>
                                     <td>@roleName</td>
+                                    <td>@user.Age</td>
+                                    <td>@user.JobYear</td>
                                     <td>
                                         <row>
                                             <a asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-outline-primary">编辑</a>
                                             <a asp-action="DeleteUser" asp-route-id="@user.Id" class="btn btn-outline-danger">删除</a>
                                         </row>
-                                    </td> <!-- 在每一行的最后一个单元格中添加按钮代码 -->
-                                }
-                            </tr>
+                                </tr>
+                            }
                         </tbody>
                     </table>
 
                     <!-- End Table with stripped rows -->
-
+                    <a asp-action="AddUser" class="btn btn-primary">添加用户</a>
                 </div>
             </div>
 
@@ -91,7 +96,7 @@
 	</tbody>
 </table>
 
-<a asp-action="AddUser" class="btn btn-primary">添加用户</a>*@
+*@
 
 @section Scripts{
     <script>

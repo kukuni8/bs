@@ -1,84 +1,56 @@
 ﻿@model ProjectManagementSystem.ViewModels.RoleAddViewModel
 
 <form method="post" asp-action="AddRole">
-	<div class="col-6 offset-3">
-		<div class="card">
-			<div class="card-body">
-				<h3 class="card-title">添加角色</h3>
-				<div class="row mb-5">
-					<div class="col-sm-3">
-						<label asp-for="@Model.RoleName"></label>
-					</div>
-					<div class="col-sm-6">
-						<input asp-for="@Model.RoleName">
-					</div>
-				</div>
-				@for (int j = 0; j < Model.Infos.Count; j++)
-				{
-					<div class="row mb-5">
-						<div class="row">
-							<div class="col-sm-3">
-								<label>@Model.Infos[j].AboutName</label>
-								<input asp-for="@Model.Infos[j].AboutName" hidden value="@Model.Infos[j].AboutName">
-							</div>
-							@for (int i = 0; i < Model.Infos[j].priorityInfos.Count; i++)
-							{
-								if (i != 0)
-								{
-									<div class="col-sm-6 offset-3">
-										<div class="form-check form-switch">
-											<input asp-for="@Model.Infos[j].priorityInfos[i].IsOn" class="form-check-input" type="checkbox">
-											<input asp-for="@Model.Infos[j].priorityInfos[i].Name" hidden value="@Model.Infos[j].priorityInfos[i].Name">
-											<label class="form-check-label">@Model.Infos[j].priorityInfos[i].Name</label>
-										</div>
-									</div>
-								}
-								else
-								{
-									<div class="col-sm-6">
-										<div class="form-check form-switch">
-											<input asp-for="@Model.Infos[j].priorityInfos[i].IsOn" class="form-check-input" type="checkbox">
-											<input asp-for="@Model.Infos[j].priorityInfos[i].Name" hidden value="@Model.Infos[j].priorityInfos[i].Name">
-											<label class="form-check-label">@Model.Infos[j].priorityInfos[i].Name</label>
-										</div>
-									</div>
-								}
-							}
-						</div>
-					</div>
-				}
+    <div class="col-6 offset-3">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">添加角色</h3>
+                <div class="row mb-5">
+                    <div class="col-sm-3">
+                        <label asp-for="@Model.RoleName"></label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input asp-for="@Model.RoleName">
+                    </div>
+                </div>
+                @for (int j = 0; j < Model.Infos.Count; j++)
+                {
+                    <div class="row mb-5">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label>@Model.Infos[j].AboutName</label>
+                                <input asp-for="@Model.Infos[j].AboutName" hidden value="@Model.Infos[j].AboutName">
+                            </div>
+                            @for (int i = 0; i < Model.Infos[j].priorityInfos.Count; i++)
+                            {
+                                if (i != 0)
+                                {
+                                    <div class="col-sm-6 offset-3">
+                                        <div class="form-check form-switch">
+                                            <input asp-for="@Model.Infos[j].priorityInfos[i].IsOn" class="form-check-input" type="checkbox">
+                                            <input asp-for="@Model.Infos[j].priorityInfos[i].Name" hidden value="@Model.Infos[j].priorityInfos[i].Name">
+                                            <label class="form-check-label">@Model.Infos[j].priorityInfos[i].Name</label>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-sm-6">
+                                        <div class="form-check form-switch">
+                                            <input asp-for="@Model.Infos[j].priorityInfos[i].IsOn" class="form-check-input" type="checkbox">
+                                            <input asp-for="@Model.Infos[j].priorityInfos[i].Name" hidden value="@Model.Infos[j].priorityInfos[i].Name">
+                                            <label class="form-check-label">@Model.Infos[j].priorityInfos[i].Name</label>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
 
-				<button type="submit" class="btn btn-primary">提交</button>
-				<a asp-action="Index" class="btn btn-secondary">返回列表</a>
-			</div>
-		</div>
-	</div>
-</form>
-
-
-
-
-@*<form method="post">
-    <div class="form-group row">
-        <label asp-for="RoleName" class="col-sm-2"></label>
-        <div class="col-sm-10">
-            <input class="form-control" asp-for="RoleName">
-            <span class="invalid" asp-validation-for="RoleName"></span>
+                <button type="submit" class="btn btn-primary">提交</button>
+                <a asp-action="Index" class="btn btn-secondary">返回列表</a>
+            </div>
         </div>
     </div>
-
-    <div class="invalid" asp-validation-summary="ModelOnly">
-    </div>
-    <div>
-        @{
-            var keys = Model.AuthorityDic.Keys;
-            foreach (var key in keys)
-            {
-                <div class="form-check">
-                    <label class="col-sm-2">@key</label>
-                    <input class="form-check-input" type="checkbox" asp-for="@Model.AuthorityDic[key]">
-                </div>
-            }
-        }
-    </div>
-</form>*@
+</form>

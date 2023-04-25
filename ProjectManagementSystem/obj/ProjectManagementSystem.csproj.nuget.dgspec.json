@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\admin\\Desktop\\bs\\ProjectManagementSystem\\ProjectManagementSystem.csproj": {}
+    "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\ProjectManagementSystem.csproj": {}
   },
   "projects": {
-    "C:\\Users\\admin\\Desktop\\bs\\ProjectManagementSystem\\ProjectManagementSystem.csproj": {
+    "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\ProjectManagementSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Desktop\\bs\\ProjectManagementSystem\\ProjectManagementSystem.csproj",
+        "projectUniqueName": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\ProjectManagementSystem.csproj",
         "projectName": "ProjectManagementSystem",
-        "projectPath": "C:\\Users\\admin\\Desktop\\bs\\ProjectManagementSystem\\ProjectManagementSystem.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Desktop\\bs\\ProjectManagementSystem\\obj\\",
+        "projectPath": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\ProjectManagementSystem.csproj",
+        "packagesPath": "C:\\Users\\28135\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\28135\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

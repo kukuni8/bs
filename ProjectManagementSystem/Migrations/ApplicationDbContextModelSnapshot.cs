@@ -186,11 +186,11 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("IdCardNo")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Job")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("JobDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -217,6 +217,9 @@ namespace ProjectManagementSystem.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
