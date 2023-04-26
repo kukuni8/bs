@@ -97,28 +97,37 @@ namespace ProjectManagementSystem.Controllers
             var newUser = new UserEditViewModel
             {
 
-                // IdCardNo = user.IdCardNo,
-                BirthDate = user.BirthDate,
                 Email = user.Email,
-                UserName = user.UserName,
-                RoleName = (await _userManager.GetRolesAsync(user))[0],
+                BirthDate = user.BirthDate,
+                About = user.About,
+                Address = user.Address,
+                TrueName = user.TrueName,
+                Department = user.Department,
+                Job = user.Job,
+                JobDate = user.JobDate,
+                RoleName = user.RoleName,
+                Id = id
             };
             return View(newUser);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUser(string id, UserEditViewModel userEditViewModel)
+        public async Task<IActionResult> EditUser(UserEditViewModel model)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
                 return RedirectToAction("Index");
             }
 
-            user.UserName = userEditViewModel.UserName;
-            user.Email = userEditViewModel.Email;
-            //  user.IdCardNo = userEditViewModel.IdCardNo;
-            user.BirthDate = userEditViewModel.BirthDate;
+            user.Email = model.Email;
+            user.BirthDate = model.BirthDate;
+            user.About = model.About;
+            user.Address = model.Address;
+            user.TrueName = model.TrueName;
+            user.Department = model.Department;
+            user.Job = model.Job;
+            user.JobDate = model.JobDate;
 
             var result = await _userManager.UpdateAsync(user);
 
@@ -126,7 +135,7 @@ namespace ProjectManagementSystem.Controllers
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 await _userManager.RemoveFromRolesAsync(user, roles);
-                var newRole = await _roleManager.FindByNameAsync(userEditViewModel.RoleName);
+                var newRole = await _roleManager.FindByNameAsync(model.RoleName);
                 await _userManager.AddToRoleAsync(user, newRole.Name);
                 return RedirectToAction("Index");
             }

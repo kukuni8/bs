@@ -22,7 +22,7 @@ namespace ProjectManagementSystem.Controllers
             var model = new ProjectIndexViewModal
             {
                 projects = projects,
-                HelpProject = new Project(),
+                //HelpProject = new Project(),
             };
             return View(model);
         }

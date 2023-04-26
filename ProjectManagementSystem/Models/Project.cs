@@ -29,6 +29,10 @@ namespace ProjectManagementSystem.Models
         [Required]
         [Display(Name = "预算")]
         public double Budget { get; set; }
+
+        [Display(Name = "目的")]
+        public string Target { get; set; }
+
         [Required]
         [Display(Name = "负责人")]
         public ApplicationUser Functionary { get; set; }
