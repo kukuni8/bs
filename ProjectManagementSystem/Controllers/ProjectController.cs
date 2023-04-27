@@ -19,12 +19,32 @@ namespace ProjectManagementSystem.Controllers
         public async Task<IActionResult> Index()
         {
             var projects = await applicationDbContext.Projects.ToListAsync();
-            var model = new ProjectIndexViewModal
+            var models = new List<ProjectIndexViewModal>();
+            var missions = await applicationDbContext.Missions.Include(a => a.Status).ToListAsync();
+            foreach (var project in projects)
             {
-                projects = projects,
-                //HelpProject = new Project(),
-            };
-            return View(model);
+                var model = new ProjectIndexViewModal
+                {
+                    Id = project.Id,
+                    Name = project.Name,
+                    Description = project.Description,
+                    Deadline = project.Deadline,
+                    CreateTime = project.CreatedDate,
+                };
+                var curMissions = missions.Where(a => a.ProjectId == project.Id).ToList();
+                var curMissionsCount = curMissions.Count() == 0 ? 0f : 1f;
+                var unDealMissionCount = curMissions.Where(a => a.Status.Status == "待处理" && a.Deadline >= DateTime.Now).Count();
+                var compeleteMissionCount = curMissions.Where(a => a.Status.Status == "已完成" && a.Deadline >= DateTime.Now).Count();
+                var inprogressMissionCount = curMissions.Where(a => a.Status.Status == "进行中" && a.Deadline >= DateTime.Now).Count();
+                var timeoutMissionCount = curMissions.Where(a => a.Deadline < DateTime.Now).Count();
+                model.UnDealPercent = unDealMissionCount / curMissionsCount;
+                model.FinishedPercent = compeleteMissionCount / curMissionsCount;
+                model.InProgressPercent = inprogressMissionCount / curMissionsCount;
+                model.TimeOutPercent = timeoutMissionCount / curMissionsCount;
+                models.Add(model);
+            }
+
+            return View(models);
         }
         public async Task<IActionResult> EditProject(int id)
         {
