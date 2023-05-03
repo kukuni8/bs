@@ -22,6 +22,21 @@ namespace ProjectManagementSystem.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ApplicationUserMission", b =>
+                {
+                    b.Property<string>("ExecutorsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("MissionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ExecutorsId", "MissionsId");
+
+                    b.HasIndex("MissionsId");
+
+                    b.ToTable("ApplicationUserMission");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -198,9 +213,6 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("MissionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -236,8 +248,6 @@ namespace ProjectManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MissionId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -264,10 +274,14 @@ namespace ProjectManagementSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FunctionaryId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PutForwardId")
                         .HasColumnType("nvarchar(450)");
@@ -275,55 +289,21 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<string>("Solution")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StatusId")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeId")
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FunctionaryId");
 
+                    b.HasIndex("ProjectId");
+
                     b.HasIndex("PutForwardId");
 
-                    b.HasIndex("StatusId");
-
-                    b.HasIndex("TypeId");
-
                     b.ToTable("Defects");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.DefectStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("StatusName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DefectStatuses");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.DefectType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("TypeName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DefectTypes");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Mission", b =>
@@ -346,19 +326,13 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PriorityId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProjectStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TypeId")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdateDate")
@@ -366,15 +340,7 @@ namespace ProjectManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PriorityId");
-
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("ProjectStatusId");
-
-                    b.HasIndex("StatusId");
-
-                    b.HasIndex("TypeId");
 
                     b.ToTable("Missions");
                 });
@@ -406,54 +372,6 @@ namespace ProjectManagementSystem.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("MissionDialogues");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.MissionPriority", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Priority")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MissionPriority");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.MissionStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MissionStatuses");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.MissionType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("TypeName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MissionTypes");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
@@ -488,7 +406,7 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<string>("PutForwardId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Target")
@@ -503,26 +421,7 @@ namespace ProjectManagementSystem.Migrations
 
                     b.HasIndex("PutForwardId");
 
-                    b.HasIndex("StatusId");
-
                     b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.ProjectStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("StatusName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProjectStatuses");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Risk", b =>
@@ -539,10 +438,14 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FunctionaryId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Incidence")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LevelId")
+                    b.Property<int>("Level")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -554,74 +457,42 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RiskTypeId")
+                    b.Property<string>("PutForwardId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RiskType")
                         .HasColumnType("int");
 
                     b.Property<string>("Solution")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StatusId")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LevelId");
+                    b.HasIndex("FunctionaryId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("RiskTypeId");
-
-                    b.HasIndex("StatusId");
+                    b.HasIndex("PutForwardId");
 
                     b.ToTable("Risks");
                 });
 
-            modelBuilder.Entity("ProjectManagementSystem.Models.RiskLevel", b =>
+            modelBuilder.Entity("ApplicationUserMission", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("ExecutorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("LevelName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RiskLevels");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.RiskStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("StatusName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RiskStatuses");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.RiskType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("TypeName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RiskTypes");
+                    b.HasOne("ProjectManagementSystem.Models.Mission", null)
+                        .WithMany()
+                        .HasForeignKey("MissionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -675,75 +546,36 @@ namespace ProjectManagementSystem.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectManagementSystem.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("ProjectManagementSystem.Models.Mission", null)
-                        .WithMany("Executor")
-                        .HasForeignKey("MissionId");
-                });
-
             modelBuilder.Entity("ProjectManagementSystem.Models.Defect", b =>
                 {
                     b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Functionary")
                         .WithMany()
-                        .HasForeignKey("FunctionaryId");
+                        .HasForeignKey("FunctionaryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagementSystem.Models.Project", "Project")
+                        .WithMany("Defects")
+                        .HasForeignKey("ProjectId");
 
                     b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "PutForward")
                         .WithMany()
                         .HasForeignKey("PutForwardId");
 
-                    b.HasOne("ProjectManagementSystem.Models.DefectStatus", "Status")
-                        .WithMany("Defects")
-                        .HasForeignKey("StatusId");
-
-                    b.HasOne("ProjectManagementSystem.Models.DefectType", "Type")
-                        .WithMany("Defects")
-                        .HasForeignKey("TypeId");
-
                     b.Navigation("Functionary");
 
+                    b.Navigation("Project");
+
                     b.Navigation("PutForward");
-
-                    b.Navigation("Status");
-
-                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Mission", b =>
                 {
-                    b.HasOne("ProjectManagementSystem.Models.MissionPriority", "Priority")
-                        .WithMany("Missions")
-                        .HasForeignKey("PriorityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ProjectManagementSystem.Models.Project", "Project")
                         .WithMany("Missions")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectManagementSystem.Models.ProjectStatus", null)
-                        .WithMany("Missions")
-                        .HasForeignKey("ProjectStatusId");
-
-                    b.HasOne("ProjectManagementSystem.Models.MissionStatus", "Status")
-                        .WithMany("Missions")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectManagementSystem.Models.MissionType", "Type")
-                        .WithMany("Missions")
-                        .HasForeignKey("TypeId");
-
-                    b.Navigation("Priority");
+                        .HasForeignKey("ProjectId");
 
                     b.Navigation("Project");
-
-                    b.Navigation("Status");
-
-                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.MissionDialogue", b =>
@@ -773,100 +605,45 @@ namespace ProjectManagementSystem.Migrations
                         .WithMany()
                         .HasForeignKey("PutForwardId");
 
-                    b.HasOne("ProjectManagementSystem.Models.ProjectStatus", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Functionary");
 
                     b.Navigation("PutForward");
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Risk", b =>
                 {
-                    b.HasOne("ProjectManagementSystem.Models.RiskLevel", "Level")
-                        .WithMany("Risks")
-                        .HasForeignKey("LevelId");
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Functionary")
+                        .WithMany()
+                        .HasForeignKey("FunctionaryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectManagementSystem.Models.Project", "Project")
-                        .WithMany()
+                        .WithMany("Risks")
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("ProjectManagementSystem.Models.RiskType", "RiskType")
-                        .WithMany("Risks")
-                        .HasForeignKey("RiskTypeId");
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "PutForward")
+                        .WithMany()
+                        .HasForeignKey("PutForwardId");
 
-                    b.HasOne("ProjectManagementSystem.Models.RiskStatus", "Status")
-                        .WithMany("Risks")
-                        .HasForeignKey("StatusId");
-
-                    b.Navigation("Level");
+                    b.Navigation("Functionary");
 
                     b.Navigation("Project");
 
-                    b.Navigation("RiskType");
-
-                    b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.DefectStatus", b =>
-                {
-                    b.Navigation("Defects");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.DefectType", b =>
-                {
-                    b.Navigation("Defects");
+                    b.Navigation("PutForward");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Mission", b =>
                 {
                     b.Navigation("Dialogues");
-
-                    b.Navigation("Executor");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.MissionPriority", b =>
-                {
-                    b.Navigation("Missions");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.MissionStatus", b =>
-                {
-                    b.Navigation("Missions");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.MissionType", b =>
-                {
-                    b.Navigation("Missions");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
                 {
+                    b.Navigation("Defects");
+
                     b.Navigation("Missions");
-                });
 
-            modelBuilder.Entity("ProjectManagementSystem.Models.ProjectStatus", b =>
-                {
-                    b.Navigation("Missions");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.RiskLevel", b =>
-                {
-                    b.Navigation("Risks");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.RiskStatus", b =>
-                {
-                    b.Navigation("Risks");
-                });
-
-            modelBuilder.Entity("ProjectManagementSystem.Models.RiskType", b =>
-                {
                     b.Navigation("Risks");
                 });
 #pragma warning restore 612, 618

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ProjectManagementSystem.Data;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 
 namespace ProjectManagementSystem.Models
 {
@@ -35,19 +38,24 @@ namespace ProjectManagementSystem.Models
 
         [Required]
         [Display(Name = "负责人")]
+        public string FunctionaryId { get; set; }
+        [ForeignKey(nameof(FunctionaryId))]
         public ApplicationUser Functionary { get; set; }
         [Display(Name = "提出人")]
+        public string PutForwardId { get; set; }
+        [ForeignKey(nameof(PutForwardId))]
         public ApplicationUser PutForward { get; set; }
 
+
         public List<Mission> Missions { get; set; }
+
+        public List<Risk> Risks { get; set; }
+
+        public List<Defect> Defects { get; set; }
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
-    public class ProjectStatus
-    {
-        public int Id { get; set; }
-        [Required]
-        [Display(Name = "项目状态")]
-        public string StatusName { get; set; }
-        public List<Mission> Missions { get; set; }
-    }
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementSystem.Models;
+using System.Reflection.Emit;
 
 namespace ProjectManagementSystem.Data
 {
@@ -8,29 +10,30 @@ namespace ProjectManagementSystem.Data
     {
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public DbSet<ProjectStatus> ProjectStatuses { get; set; }
-
 
         public DbSet<Defect> Defects { get; set; }
-        public DbSet<DefectType> DefectTypes { get; set; }
-        public DbSet<DefectStatus> DefectStatuses { get; set; }
-
-
 
         public DbSet<Mission> Missions { get; set; }
-        public DbSet<MissionStatus> MissionStatuses { get; set; }
-        public DbSet<MissionPriority> MissionPriority { get; set; }
+
         public DbSet<MissionDialogue> MissionDialogues { get; set; }
-        public DbSet<MissionType> MissionTypes { get; set; }
 
 
         public DbSet<Risk> Risks { get; set; }
-        public DbSet<RiskLevel> RiskLevels { get; set; }
-        public DbSet<RiskStatus> RiskStatuses { get; set; }
-        public DbSet<RiskType> RiskTypes { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // 启用敏感数据记录
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<IdentityUserLogin<string>>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
         }
     }
 }

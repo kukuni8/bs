@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ProjectManagementSystem.Data;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectManagementSystem.Models
 {
@@ -20,27 +22,23 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "缺陷类型")]
         public DefectType Type { get; set; }
 
-        [Display(Name = "负责人")]
-        public ApplicationUser Functionary { get; set; }
-        [Display(Name = "提出人")]
-        public ApplicationUser PutForward { get; set; }
         [Display(Name = "状态")]
         public DefectStatus Status { get; set; }
-    }
-    public class DefectType
-    {
-        public int Id { get; set; }
-        [Display(Name = "缺陷类型")]
-        public string TypeName { get; set; }
+        [Required]
+        [Display(Name = "负责人")]
+        public string FunctionaryId { get; set; }
+        [ForeignKey(nameof(FunctionaryId))]
+        public ApplicationUser Functionary { get; set; }
+        [Display(Name = "提出人")]
+        public string PutForwardId { get; set; }
+        [ForeignKey(nameof(PutForwardId))]
+        public ApplicationUser PutForward { get; set; }
 
-        public List<Defect> Defects { get; set; }
+        public int? ProjectId { get; set; }
+        [Display(Name = "所属项目")]
+        [ForeignKey(nameof(ProjectId))]
+        public Project Project { get; set; }
     }
-    public class DefectStatus
-    {
-        public int Id { get; set; }
-        [Display(Name = "缺陷状态")]
-        public string StatusName { get; set; }
-        public List<Defect> Defects { get; set; }
-    }
+
 
 }

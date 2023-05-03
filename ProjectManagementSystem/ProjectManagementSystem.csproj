@@ -7,28 +7,32 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\FUNDING.yml" />
-	  <None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\ISSUE_TEMPLATE\bug_report.md" />
-	  <None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\ISSUE_TEMPLATE\feature_request.md" />
-	  <None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\move.yml" />
-	  <None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\PULL_REQUEST_TEMPLATE.md" />
-	  <None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\workflows\cypress.yml" />
-	  <None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\workflows\linting.yml" />
-	  <None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\workflows\publishing.yml" />
+		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\FUNDING.yml" />
+		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\ISSUE_TEMPLATE\bug_report.md" />
+		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\ISSUE_TEMPLATE\feature_request.md" />
+		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\move.yml" />
+		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\PULL_REQUEST_TEMPLATE.md" />
+		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\workflows\cypress.yml" />
+		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\workflows\linting.yml" />
+		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\workflows\publishing.yml" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.15" />
-	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.15">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.15" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.15">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.15" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.15">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.15" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.15">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Views\Defect\" />
 	</ItemGroup>
 
 </Project>

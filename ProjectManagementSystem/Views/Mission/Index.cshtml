@@ -1,6 +1,6 @@
 ﻿@using ProjectManagementSystem.ViewModels
 @using ProjectManagementSystem.Data
-@model MissionIndexViewModel
+@*@model MissionIndexViewModel*@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Http
 @inject ApplicationDbContext applicationDbContext
@@ -17,8 +17,8 @@
                 <div class="card mb-3 " data-id="@mission.Id">
                     <div class="card-body">
                         <h5 class="card-title">@mission.Name</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executor.FirstOrDefault().UserName</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">优先级：@mission.Priority.Priority</h6>
+          @*              <h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executor.FirstOrDefault().UserName</h6>*@
+                        <h6 class="card-subtitle mb-2 text-muted">优先级：@mission.Priority</h6>
                     </div>
                 </div>
                 <!-- EditModal -->
@@ -34,7 +34,7 @@
                                                 aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
+                                        @*<form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
                                             <div class="form-group row">
                                                 <input id="missionId" asp-for="@Model.EditId" hidden>
                                                 <label asp-for="@Model.EditName" class="col-sm-2"></label>
@@ -64,11 +64,7 @@
                                             <div class="form-group row">
                                                 <label asp-for="@Model.EditStatus" class="col-sm-2"></label>
                                                 <div class="col-sm-10">
-                                                    <select id="missionStatus" asp-for="@Model.EditStatus" class=" form-control valid">
-                                                        @foreach (var statu in applicationDbContext.MissionStatuses)
-                                                        {
-                                                            <option value="@statu.Status" selected="@Model.EditStatus==@statu.Status">@statu.Status</option>
-                                                        }
+                                                    <select id="missionStatus" asp-for="@Model.EditStatus" asp-items="Html.GetEnumSelectList<MissionStatus>()" class=" form-control valid">
                                                     </select>
                                                     <span class="invalid" asp-validation-for="@Model.EditStatus"></span>
                                                 </div>
@@ -78,11 +74,7 @@
                                                 <label asp-for="@Model.EditPriority" class="col-sm-2"></label>
                                                 <div class="col-sm-10">
 
-                                                    <select id="missionPriority" asp-for="@Model.EditPriority" class="form-control valid">
-                                                        @foreach (var priority in applicationDbContext.MissionPriority)
-                                                        {
-                                                            <option value="@priority.Priority" selected="@Model.EditPriority == @priority.Priority">@priority.Priority</option>
-                                                        }
+                                                    <select id="missionPriority" asp-for="@Model.EditPriority" asp-items="Html.GetEnumSelectList<MissionPriority>()" class="form-control valid">
                                                     </select>
                                                     <span class="invalid" asp-validation-for="@Model.EditPriority"></span>
                                                 </div>
@@ -105,7 +97,7 @@
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
                                                 <button type="submit" class="btn btn-primary">提交</button>
                                             </div>
-                                        </form>
+                                        </form>*@
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +174,7 @@
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="needs-validation" novalidate="" asp-action="AddMission" method="post">
+                     @*   <form class="needs-validation" novalidate="" asp-action="AddMission" method="post">
                             <div class="form-group row">
                                 <label asp-for="@Model.Name" class="col-sm-2"></label>
                                 <div class="col-sm-10">
@@ -210,7 +202,7 @@
                             <div class="form-group row">
                                 <label asp-for="@Model.Status" class="col-sm-2"></label>
                                 <div class="col-sm-10">
-                                    <select asp-for="@Model.Status" asp-items="@new SelectList(applicationDbContext.MissionStatuses.Select(a=>a.Status).ToList())" class="form-control valid">
+                                    <select asp-for="@Model.Status" asp-items="Html.GetEnumSelectList<MissionStatus>()" class="form-control valid">
                                     </select>
                                     <span class="invalid" asp-validation-for="@Model.Status"></span>
                                 </div>
@@ -219,7 +211,7 @@
                             <div class="form-group row">
                                 <label asp-for="@Model.Priority" class="col-sm-2"></label>
                                 <div class="col-sm-10">
-                                    <select asp-for="@Model.Priority" asp-items="@new SelectList(applicationDbContext.MissionPriority.Select(a=>a.Priority).ToList())" class="form-control valid">
+                                    <select asp-for="@Model.Priority" asp-items="Html.GetEnumSelectList<MissionPriority>()" class="form-control valid">
                                     </select>
                                     <span class="invalid" asp-validation-for="@Model.Priority"></span>
                                 </div>
@@ -242,7 +234,7 @@
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
                                 <button type="submit" class="btn btn-primary">提交</button>
                             </div>
-                        </form>
+                        </form>*@
                     </div>
 
 

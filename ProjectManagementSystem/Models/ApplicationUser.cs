@@ -30,5 +30,6 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "角色")]
         public string RoleName { get; set; }
 
+        public List<Mission> Missions { get; set; }
     }
 }
