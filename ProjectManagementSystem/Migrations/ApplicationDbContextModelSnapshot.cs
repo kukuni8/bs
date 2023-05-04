@@ -230,6 +230,9 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<string>("RoleName")
                         .HasColumnType("nvarchar(max)");
 
@@ -255,6 +258,8 @@ namespace ProjectManagementSystem.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -435,11 +440,7 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FunctionaryId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Incidence")
@@ -449,9 +450,6 @@ namespace ProjectManagementSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Probability")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProjectId")
@@ -546,6 +544,13 @@ namespace ProjectManagementSystem.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.Project", null)
+                        .WithMany("ApplicationUsers")
+                        .HasForeignKey("ProjectId");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Defect", b =>
                 {
                     b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Functionary")
@@ -614,9 +619,7 @@ namespace ProjectManagementSystem.Migrations
                 {
                     b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Functionary")
                         .WithMany()
-                        .HasForeignKey("FunctionaryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FunctionaryId");
 
                     b.HasOne("ProjectManagementSystem.Models.Project", "Project")
                         .WithMany("Risks")
@@ -640,6 +643,8 @@ namespace ProjectManagementSystem.Migrations
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
                 {
+                    b.Navigation("ApplicationUsers");
+
                     b.Navigation("Defects");
 
                     b.Navigation("Missions");

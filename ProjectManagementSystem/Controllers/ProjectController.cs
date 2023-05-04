@@ -50,7 +50,7 @@ namespace ProjectManagementSystem.Controllers
         }
         public async Task<IActionResult> ProjectDetail(int id)
         {
-            var project = await applicationDbContext.Projects.FirstOrDefaultAsync(a => a.Id == id);
+            var project = await applicationDbContext.Projects.Include(a => a.Risks).FirstOrDefaultAsync(a => a.Id == id);
             var missions = await applicationDbContext.Missions.Include(a => a.Executors).Where(a => a.ProjectId == project.Id).ToListAsync();
             var model = new ProjectDetailViewModel()
             {
@@ -111,6 +111,24 @@ namespace ProjectManagementSystem.Controllers
                 },
                 EditMission = new ProjectEditMissionViewModel { },
             };
+            model.RiskEditViewModels = project.Risks.Select(r => new RiskEditViewModel
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Incidence = r.Incidence,
+                Solution = r.Solution,
+                CreateDate = r.CreateDate,
+                Status = r.Status,
+                RiskType = r.RiskType,
+                Level = r.Level,
+                Functionary = r.Functionary,
+                FunctionaryId = r.FunctionaryId,
+                PutForward = r.PutForward,
+                PutForwardId = r.PutForwardId,
+                Project = project,
+                ProjectId = project.Id,
+            });
+
             return View(model);
         }
         [HttpPost]

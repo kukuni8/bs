@@ -19,6 +19,8 @@ namespace ProjectManagementSystem.ViewModels
 
         public ProjectDeleteMissionViewModel DeleteMission { get; set; }
 
+        public IEnumerable<RiskEditViewModel> RiskEditViewModels { get; set; }
+
     }
     public class ProjectMissionIndexViewModel
     {
@@ -96,4 +98,5 @@ namespace ProjectManagementSystem.ViewModels
         [Display(Name = "执行者")]
         public List<string> Executors { get; set; }
     }
+
 }

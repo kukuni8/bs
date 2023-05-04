@@ -52,6 +52,8 @@ namespace ProjectManagementSystem.Models
         public List<Risk> Risks { get; set; }
 
         public List<Defect> Defects { get; set; }
+
+        public List<ApplicationUser> ApplicationUsers { get; set; }
         public override string ToString()
         {
             return Name;

@@ -31,5 +31,10 @@ namespace ProjectManagementSystem.Models
         public string RoleName { get; set; }
 
         public List<Mission> Missions { get; set; }
+
+        public override string ToString()
+        {
+            return UserName;
+        }
     }
 }

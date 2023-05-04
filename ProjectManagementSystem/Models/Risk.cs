@@ -11,11 +11,7 @@ namespace ProjectManagementSystem.Models
         public int Id { get; set; }
         [Display(Name = "名称")]
         public string Name { get; set; }
-        [Display(Name = "描述")]
-        public string Description { get; set; }
 
-        [Display(Name = "发生概率")]
-        public string Probability { get; set; }
         [Display(Name = "风险影响")]
         public string Incidence { get; set; }
         [Display(Name = "创建日期")]
@@ -29,8 +25,7 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "风险类型")]
         public RiskType RiskType { get; set; }
 
-        [Required]
-        [Display(Name = "负责人")]
+        [Display(Name = "处理人")]
         public string FunctionaryId { get; set; }
         [ForeignKey(nameof(FunctionaryId))]
         public ApplicationUser Functionary { get; set; }

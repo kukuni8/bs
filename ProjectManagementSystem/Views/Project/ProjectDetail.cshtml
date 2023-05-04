@@ -11,14 +11,17 @@
         <!-- Bordered Tabs -->
         <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-missions" type="button" role="tab" aria-controls="home" aria-selected="true">任务列表</button>
+                <button class="nav-link active" id="mission-tab" data-bs-toggle="tab" data-bs-target="#bordered-missions" type="button" role="tab" aria-controls="home" aria-selected="true">任务列表</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-editProject" type="button" role="tab" aria-controls="profile" aria-selected="false">项目信息</button>
+                <button class="nav-link" id="risk-tab" data-bs-toggle="tab" data-bs-target="#bordered-risks" type="button" role="tab" aria-controls="profile" aria-selected="false">风险列表</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="project-tab" data-bs-toggle="tab" data-bs-target="#bordered-editProject" type="button" role="tab" aria-controls="profile" aria-selected="false">项目信息</button>
             </li>
         </ul>
         <div class="tab-content pt-2" id="borderedTabContent">
-            <div class="tab-pane fade show active" id="bordered-missions" role="tabpanel" aria-labelledby="home-tab">
+            <div class="tab-pane fade show active" id="bordered-missions" role="tabpanel" aria-labelledby="mission-tab">
                 <div class="container">
                     <div class="row">
                         <div class="col-3">
@@ -483,7 +486,7 @@
                                             <div class="form-group row">
                                                 <label asp-for="@Model.AddMission.Priority" class="col-sm-2"></label>
                                                 <div class="col-sm-10">
-                                                    <select asp-for="@Model.AddMission.Priority" asp-items="@@Html.GetEnumSelectList<MissionPriority>()" class="form-control valid">
+                                                    <select asp-for="@Model.AddMission.Priority" asp-items="@Html.GetEnumSelectList<MissionPriority>()" class="form-control valid">
                                                     </select>
                                                     <span class="invalid" asp-validation-for="@Model.AddMission.Priority"></span>
                                                 </div>
@@ -516,7 +519,7 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="bordered-editProject" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="tab-pane fade" id="bordered-editProject" role="tabpanel" aria-labelledby="project-tab">
                 <div class="container">
                     <form asp-action="EditProject" method="post">
                         <div class="form-group row">
@@ -578,6 +581,65 @@
                     </form>
                 </div>
             </div>
+            <div class="tab-pane fade" id="bordered-risks" role="tabpanel" aria-labelledby="risk-tab">
+                <div class="container">
+                    <section class="section">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <h5 class="card-title">风险列表</h5>
+                                            <div class="form-group row">
+                                                <div class="text-end">
+                                                    <a asp-action="AddRisk" asp-controller="Risk" asp-route-projectId="@Model.CurProject.Id" class="btn btn-primary text-end">新风险</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table datatable">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">名称</th>
+                                                    <th scope="col">类型</th>
+                                                    <th scope="col">级别</th>
+                                                    <th scope="col">状态</th>
+                                                    <th scope="col">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var risk in Model.RiskEditViewModels)
+                                                {
+                                                    <tr>
+                                                        <th scope="row">@risk.Id</th>
+                                                        <td>@risk.Name</td>
+                                                        <td>
+                                                            <span class="risk-label gray-color">@risk.RiskType</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="risk-label @(risk.Level == RiskLevel.低风险 ? "low-risk" : risk.Level == RiskLevel.中风险 ? "medium-risk" : "high-risk")">@risk.Level</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="risk-label @(risk.Status == RiskStatus.待审核 ? "status-awaiting" : risk.Status == RiskStatus.已丢弃 ? "status-discarded" : "status-resolved")">@risk.Status</span>
+                                                        </td>
+
+                                                        <td>
+                                                            <a asp-action="EditRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-sm btn-outline-primary">编辑</a>
+                                                            <a asp-action="DeleteRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除风险：@risk.Name 吗？');">删除</a>
+                                                        </td>
+
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
         </div>
         <!-- End Bordered Tabs -->
 
@@ -628,6 +690,4 @@
             }
         });
     </script>
-
-
 }
