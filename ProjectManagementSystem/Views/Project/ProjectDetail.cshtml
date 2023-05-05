@@ -4,6 +4,89 @@
 @model ProjectDetailViewModel
 @inject ApplicationDbContext applicationDbContext
 @inject UserManager<ApplicationUser> userManager
+<style>
+    .priority {
+        font-weight: bold;
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 3px;
+        text-align: center;
+    }
+
+    .priority-low {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .priority-medium {
+        background-color: #ffc107;
+        color: white;
+    }
+
+    .priority-high {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .status-1 {
+        color: #b3b3b3; /* 淡灰色 */
+    }
+
+    .status-2 {
+        color: #add8e6; /* 淡蓝色 */
+    }
+
+    .status-3 {
+        color: #FF8C66; /* 淡橙色 */
+    }
+
+    .status-label {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    .text-priority {
+        color: #6c757d;
+    }
+
+</style>
+<style>
+    .status-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+    }
+
+    .status-text {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .add-button {
+        font-size: 1.5rem;
+        background-color: #ffffff;
+        border: 2px solid #dee2e6;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        line-height: 36px;
+        text-align: center;
+        color: #495057;
+        transition: 0.2s;
+    }
+
+        .add-button:hover {
+            background-color: #f8f9fa;
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+</style>
+
+
+
+
+
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">@Model.ProjectEditViewModel.Name</h5>
@@ -25,22 +108,49 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-3">
-                            <div class="d-grid mx-auto bg-white border border-gray bg-light">
-                                <label class="text text-center">待处理</label>
-                                <button type="button" class="btn text-dark " data-bs-toggle="modal" data-bs-target="#addModal">+</button>
+                            <div class="card">
+                                <div class="card-body status-container">
+                                    <label class="status-text status-1">待处理（@Model.ProjectMissionIndexViewModel.UntreatedMissions.Count()）</label>
+                                    <button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#addModal">+</button>
+                                </div>
                             </div>
-                            <br />
                             @foreach (var mission in Model.ProjectMissionIndexViewModel.UntreatedMissions)
                             {
-                                <div class="card mb-3 " data-id="@mission.Id">
+                                string cardClass = "priority-medium";
+                                if (mission.Priority == MissionPriority.较低)
+                                {
+                                    cardClass = "priority-low";
+                                }
+                                else if (mission.Priority == MissionPriority.紧急)
+                                {
+                                    cardClass = "priority-high";
+                                }
+
+                                string statusClass = "status-1";
+                                if (mission.Status == MissionStatus.待处理)
+                                {
+                                    statusClass = "status-1";
+                                }
+                                else if (mission.Status == MissionStatus.进行中)
+                                {
+                                    statusClass = "status-2";
+                                }
+                                else if (mission.Status == MissionStatus.已完成)
+                                {
+                                    statusClass = "status-3";
+                                }
+
+                                <div class="card mb-3 mission-card" data-id="@mission.Id">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
                                         <div class="card-body">
-                                            <h5 class="card-title">@mission.Name</h5>
+                                            <h5 class="card-title @statusClass">@mission.Name</h5>
                                             <h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executors.First()</h6>
-                                            <h6 class="card-subtitle mb-2 text-muted">优先级：@mission.Priority</h6>
+                                            <span class="text-priority">优先级: </span><span class="priority @cardClass">@mission.Priority</span>
+                                            <!-- 其他内容 -->
                                         </div>
                                     </a>
                                 </div>
+
                                 <!-- EditModal -->
                                 <div class="modal fade bs-example-modal-lg" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
                                      aria-hidden="true">
@@ -159,19 +269,47 @@
                             }
                         </div>
                         <div class="col-3">
-                            <div class="d-grid mx-auto bg-white border border-gray bg-light">
-                                <label class="text text-center">进行中</label>
-                                <button type="button" class="btn text-dark " data-bs-toggle="modal" data-bs-target="#addModal">+</button>
+                            <div class="card">
+                                <div class="card-body status-container">
+                                    <label class="status-text status-2">进行中（@Model.ProjectMissionIndexViewModel.ProcessOnMissions.Count()）</label>
+                                    <button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#addModal">+</button>
+                                </div>
                             </div>
-                            <br />
                             @foreach (var mission in Model.ProjectMissionIndexViewModel.ProcessOnMissions)
                             {
-                                <div class="card mb-3 " data-id="@mission.Id">
+                                string cardClass = "priority-medium";
+                                if (mission.Priority == MissionPriority.较低)
+                                {
+                                    cardClass = "priority-low";
+                                }
+                                else if (mission.Priority == MissionPriority.紧急)
+                                {
+                                    cardClass = "priority-high";
+                                }
+
+                                string statusClass = "status-1";
+                                if (mission.Status == MissionStatus.待处理)
+                                {
+                                    statusClass = "status-1";
+                                }
+                                else if (mission.Status == MissionStatus.进行中)
+                                {
+                                    statusClass = "status-2";
+                                }
+                                else if (mission.Status == MissionStatus.已完成)
+                                {
+                                    statusClass = "status-3";
+                                }
+
+
+
+                                <div class="card mb-3 mission-card" data-id="@mission.Id">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
                                         <div class="card-body">
-                                            <h5 class="card-title">@mission.Name</h5>
+                                            <h5 class="card-title @statusClass">@mission.Name</h5>
                                             <h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executors.First()</h6>
-                                            <h6 class="card-subtitle mb-2 text-muted">优先级：@mission.Priority</h6>
+                                            <span class="text-priority">优先级: </span><span class="priority @cardClass">@mission.Priority</span>
+                                            <!-- 其他内容 -->
                                         </div>
                                     </a>
                                 </div>
@@ -293,19 +431,47 @@
                             }
                         </div>
                         <div class="col-3">
-                            <div class="d-grid mx-auto bg-white border border-gray bg-light">
-                                <label class="text text-center">已完成</label>
-                                <button type="button" class="btn text-dark " data-bs-toggle="modal" data-bs-target="#addModal">+</button>
+                            <div class="card">
+                                <div class="card-body status-container">
+                                    <label class="status-text status-3">已完成（@Model.ProjectMissionIndexViewModel.FinishedMissions.Count()）</label>
+                                    <button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#addModal">+</button>
+                                </div>
                             </div>
-                            <br />
                             @foreach (var mission in Model.ProjectMissionIndexViewModel.FinishedMissions)
                             {
-                                <div class="card mb-3 " data-id="@mission.Id">
+                                string cardClass = "priority-medium";
+                                if (mission.Priority == MissionPriority.较低)
+                                {
+                                    cardClass = "priority-low";
+                                }
+                                else if (mission.Priority == MissionPriority.紧急)
+                                {
+                                    cardClass = "priority-high";
+                                }
+
+                                string statusClass = "status-1";
+                                if (mission.Status == MissionStatus.待处理)
+                                {
+                                    statusClass = "status-1";
+                                }
+                                else if (mission.Status == MissionStatus.进行中)
+                                {
+                                    statusClass = "status-2";
+                                }
+                                else if (mission.Status == MissionStatus.已完成)
+                                {
+                                    statusClass = "status-3";
+                                }
+
+
+
+                                <div class="card mb-3 mission-card" data-id="@mission.Id">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
                                         <div class="card-body">
-                                            <h5 class="card-title">@mission.Name</h5>
+                                            <h5 class="card-title @statusClass">@mission.Name</h5>
                                             <h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executors.First()</h6>
-                                            <h6 class="card-subtitle mb-2 text-muted">优先级：@mission.Priority</h6>
+                                            <span class="text-priority">优先级: </span><span class="priority @cardClass">@mission.Priority</span>
+                                            <!-- 其他内容 -->
                                         </div>
                                     </a>
                                 </div>
