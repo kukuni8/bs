@@ -7,13 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Views\Defect\**" />
-	  <Content Remove="Views\Defect\**" />
-	  <EmbeddedResource Remove="Views\Defect\**" />
-	  <None Remove="Views\Defect\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\FUNDING.yml" />
 		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\ISSUE_TEMPLATE\bug_report.md" />
 		<None Include="wwwroot\assets\bootstrap-select-1.14.0-beta3\.github\ISSUE_TEMPLATE\feature_request.md" />

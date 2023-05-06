@@ -1,119 +1,66 @@
 ﻿@using ProjectManagementSystem.ViewModels;
 @model IEnumerable<ProjectIndexViewModel>
 
-<style>
-    .project-progress {
-        width: 80%;
-    }
-
-    .progress {
-        height: 20px;
-        margin-bottom: 0;
-    }
-
-    .progress-bar {
-        font-size: 12px;
-        line-height: 20px;
-        text-align: center;
-    }
-</style>
 
 
 
 <div class="card">
-    <div class="card-body">
-        <h2 class="card-title">项目列表</h2>
-        <div class="text-right">
-            <a asp-action="AddProject" class="btn btn-outline-primary float-end">新项目</a>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    @foreach (var project in Model)
-                    {
-                        <div class="accordion">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading-@project.Id">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@project.Id" aria-expanded="false" aria-controls="collapse-@project.Id">
+	<div class="card-body">
+		<h2 class="card-title">项目列表</h2>
+		<div class="text-right">
+			<a asp-action="AddProject" class="btn btn-outline-primary float-end">新项目</a>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					@foreach (var project in Model)
+					{
+						<div class="accordion">
+							<div class="accordion-item">
+								<h2 class="accordion-header" id="heading-@project.Id">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@project.Id" aria-expanded="false" aria-controls="collapse-@project.Id">
+										<h4>@project.Name (@project.Status)</h4>
 
-                                        <span class="label" style="width: 10%;">@project.Name</span>
-                                        <div class="project-progress">
-                                            @if (project.FinishedPercent != 0)
-                                            {
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="@project.FinishedPercent" aria-valuemin="0" aria-valuemax="100" style="width: @project.FinishedPercent%">
-                                                        已完成
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (project.InProgressPercent != 0)
-                                            {
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="@project.InProgressPercent" aria-valuemin="0" aria-valuemax="100" style="width: @project.InProgressPercent%">
-                                                        进行中
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (project.TimeOutPercent != 0)
-                                            {
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="@project.TimeOutPercent" aria-valuemin="0" aria-valuemax="100" style="width: @project.TimeOutPercent%">
-                                                        已超时
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (project.UnDealPercent != 0)
-                                            {
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-secondary" role="progressbar" aria-valuenow="@project.UnDealPercent" aria-valuemin="0" aria-valuemax="100" style="width: @project.UnDealPercent%">
-                                                        待处理
-                                                    </div>
-                                                </div>
-                                            }
-
-                                        </div>
-
-
-                                    </button>
-                                </h2>
-                                <div id="collapse-@project.Id" class="accordion-collapse collapse" aria-labelledby="heading-@project.Id" data-bs-parent=".accordion">
-                                    <div class="accordion-body">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label class="form-control">创建日期: @project.CreatedDate.ToString("d")</label>
-                                            </div>
-                                            <div class="col-md-3 offset-6">
-                                                <label class="form-control">截止日期: @project.Deadline.ToString("d")</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <label class="form-control">项目描述:</label>
-                                                <textarea class="form-control" rows="5" readonly>@project.Description</textarea>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-3">
-                                                <a asp-action="ProjectDetail" asp-route-id="@project.Id" class="btn btn-outline-primary w-100">详情</a>
-                                            </div>
-                                            <div class="col-md-3 offset-6">
-                                                <form asp-action="DeleteProject" asp-route-id="@project.Id" onsubmit="return confirm('确认删除?')">
-                                                    <button type="submit" class="btn btn-outline-danger w-100">删除</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+									</button>
+								</h2>
+								<div id="collapse-@project.Id" class="accordion-collapse collapse" aria-labelledby="heading-@project.Id" data-bs-parent=".accordion">
+									<div class="accordion-body">
+										<div class="row">
+											<div class="col-md-3">
+												<label class="form-control">创建日期: @project.CreatedDate.ToString("d")</label>
+											</div>
+											<div class="col-md-3 offset-6">
+												<label class="form-control">截止日期: @project.Deadline.ToString("d")</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col">
+												<label class="form-control">项目描述:</label>
+												<textarea class="form-control" rows="5" readonly>@project.Description</textarea>
+											</div>
+										</div>
+										<div class="row mt-3">
+											<div class="col-md-3">
+												<a asp-action="ProjectDetail" asp-route-id="@project.Id" class="btn btn-outline-primary w-100">详情</a>
+											</div>
+											<div class="col-md-3 offset-6">
+												<form asp-action="DeleteProject" asp-route-id="@project.Id" onsubmit="return confirm('确认删除?')">
+													<button type="submit" class="btn btn-outline-danger w-100">删除</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
 
 
-                    }
-                </div>
-            </div>
-        </div>
+					}
+				</div>
+			</div>
+		</div>
 
 
-    </div>
+	</div>
 </div>

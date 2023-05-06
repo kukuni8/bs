@@ -279,7 +279,6 @@ namespace ProjectManagementSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FunctionaryId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -555,9 +554,7 @@ namespace ProjectManagementSystem.Migrations
                 {
                     b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Functionary")
                         .WithMany()
-                        .HasForeignKey("FunctionaryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FunctionaryId");
 
                     b.HasOne("ProjectManagementSystem.Models.Project", "Project")
                         .WithMany("Defects")

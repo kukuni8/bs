@@ -9,97 +9,105 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = ProjectManagementSystem
 build_property.RootNamespace = ProjectManagementSystem
-build_property.ProjectDir = C:\Users\28135\Desktop\bs\ProjectManagementSystem\
+build_property.ProjectDir = C:\Users\admin\Desktop\bs\ProjectManagementSystem\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\28135\Desktop\bs\ProjectManagementSystem
+build_property.MSBuildProjectDirectory = C:\Users\admin\Desktop\bs\ProjectManagementSystem
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Account/Index.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Account/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Account/Login.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Account/Register.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Home/Index.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Defect/AddDefect.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVmZWN0XEFkZERlZmVjdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Defect/EditDefect.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVmZWN0XEVkaXREZWZlY3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Home/Privacy.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Mission/Index.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Mission/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWlzc2lvblxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Project/AddProject.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Project/AddProject.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvamVjdFxBZGRQcm9qZWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Project/Index.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Project/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvamVjdFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Project/ProjectDetail.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Project/ProjectDetail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvamVjdFxQcm9qZWN0RGV0YWlsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Risk/AddRisk.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Risk/AddRisk.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmlza1xBZGRSaXNrLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Risk/EditRisk.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Risk/EditRisk.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmlza1xFZGl0Umlzay5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Role/AddRole.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Role/AddRole.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZVxBZGRSb2xlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Role/EditRole.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Role/EditRole.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZVxFZGl0Um9sZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Role/Index.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Role/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Shared/Error.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/User/AddUser.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/User/AddUser.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxBZGRVc2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/User/EditUser.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/User/EditUser.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxFZGl0VXNlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/User/Index.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/User/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/_ViewImports.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/_ViewStart.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Shared/_Layout.cshtml]
+[C:/Users/admin/Desktop/bs/ProjectManagementSystem/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-8cg1qmgljl

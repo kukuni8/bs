@@ -5,82 +5,82 @@
 @inject ApplicationDbContext applicationDbContext
 @inject UserManager<ApplicationUser> userManager
 <style>
-    .priority {
-        font-weight: bold;
-        display: inline-block;
-        padding: 2px 8px;
-        border-radius: 3px;
-        text-align: center;
-    }
+	.priority {
+		font-weight: bold;
+		display: inline-block;
+		padding: 2px 8px;
+		border-radius: 3px;
+		text-align: center;
+	}
 
-    .priority-low {
-        background-color: #28a745;
-        color: white;
-    }
+	.priority-low {
+		background-color: #28a745;
+		color: white;
+	}
 
-    .priority-medium {
-        background-color: #ffc107;
-        color: white;
-    }
+	.priority-medium {
+		background-color: #ffc107;
+		color: white;
+	}
 
-    .priority-high {
-        background-color: #dc3545;
-        color: white;
-    }
+	.priority-high {
+		background-color: #dc3545;
+		color: white;
+	}
 
-    .status-1 {
-        color: #b3b3b3; /* 淡灰色 */
-    }
+	.status-1 {
+		color: #b3b3b3; /* 淡灰色 */
+	}
 
-    .status-2 {
-        color: #add8e6; /* 淡蓝色 */
-    }
+	.status-2 {
+		color: #add8e6; /* 淡蓝色 */
+	}
 
-    .status-3 {
-        color: #FF8C66; /* 淡橙色 */
-    }
+	.status-3 {
+		color: #FF8C66; /* 淡橙色 */
+	}
 
-    .status-label {
-        font-size: 0.85rem;
-        color: #6c757d;
-    }
+	.status-label {
+		font-size: 0.85rem;
+		color: #6c757d;
+	}
 
-    .text-priority {
-        color: #6c757d;
-    }
+	.text-priority {
+		color: #6c757d;
+	}
 
 </style>
 <style>
-    .status-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-    }
+	.status-container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 10px 20px;
+	}
 
-    .status-text {
-        font-size: 1.1rem;
-        font-weight: 600;
-    }
+	.status-text {
+		font-size: 1.1rem;
+		font-weight: 600;
+	}
 
-    .add-button {
-        font-size: 1.5rem;
-        background-color: #ffffff;
-        border: 2px solid #dee2e6;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        line-height: 36px;
-        text-align: center;
-        color: #495057;
-        transition: 0.2s;
-    }
+	.add-button {
+		font-size: 1.5rem;
+		background-color: #ffffff;
+		border: 2px solid #dee2e6;
+		border-radius: 50%;
+		width: 40px;
+		height: 40px;
+		line-height: 36px;
+		text-align: center;
+		color: #495057;
+		transition: 0.2s;
+	}
 
-        .add-button:hover {
-            background-color: #f8f9fa;
-            border-color: #6c757d;
-            color: #6c757d;
-        }
+		.add-button:hover {
+			background-color: #f8f9fa;
+			border-color: #6c757d;
+			color: #6c757d;
+		}
 </style>
 
 
@@ -88,772 +88,861 @@
 
 
 <div class="card">
-    <div class="card-body">
-        <h5 class="card-title">@Model.ProjectEditViewModel.Name</h5>
+	<div class="card-body">
+		<h5 class="card-title">@Model.ProjectEditViewModel.Name</h5>
 
-        <!-- Bordered Tabs -->
-        <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="mission-tab" data-bs-toggle="tab" data-bs-target="#bordered-missions" type="button" role="tab" aria-controls="home" aria-selected="true">任务列表</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="risk-tab" data-bs-toggle="tab" data-bs-target="#bordered-risks" type="button" role="tab" aria-controls="profile" aria-selected="false">风险列表</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="project-tab" data-bs-toggle="tab" data-bs-target="#bordered-editProject" type="button" role="tab" aria-controls="profile" aria-selected="false">项目信息</button>
-            </li>
-        </ul>
-        <div class="tab-content pt-2" id="borderedTabContent">
-            <div class="tab-pane fade show active" id="bordered-missions" role="tabpanel" aria-labelledby="mission-tab">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="card">
-                                <div class="card-body status-container">
-                                    <label class="status-text status-1">待处理（@Model.ProjectMissionIndexViewModel.UntreatedMissions.Count()）</label>
-                                    <button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#addModal">+</button>
-                                </div>
-                            </div>
-                            @foreach (var mission in Model.ProjectMissionIndexViewModel.UntreatedMissions)
-                            {
-                                string cardClass = "priority-medium";
-                                if (mission.Priority == MissionPriority.较低)
-                                {
-                                    cardClass = "priority-low";
-                                }
-                                else if (mission.Priority == MissionPriority.紧急)
-                                {
-                                    cardClass = "priority-high";
-                                }
+		<!-- Bordered Tabs -->
+		<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+			<li class="nav-item" role="presentation">
+				<button class="nav-link active" id="look-tab" data-bs-toggle="tab" data-bs-target="#bordered-look" type="button" role="tab" aria-controls="home" aria-selected="true">项目看板</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="mission-tab" data-bs-toggle="tab" data-bs-target="#bordered-missions" type="button" role="tab" aria-controls="home" aria-selected="true">任务列表</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="risk-tab" data-bs-toggle="tab" data-bs-target="#bordered-risks" type="button" role="tab" aria-controls="profile" aria-selected="false">风险列表</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="defect-tab" data-bs-toggle="tab" data-bs-target="#bordered-defects" type="button" role="tab" aria-controls="profile" aria-selected="false">缺陷列表</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#bordered-users" type="button" role="tab" aria-controls="profile" aria-selected="false">项目人员</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="project-tab" data-bs-toggle="tab" data-bs-target="#bordered-editProject" type="button" role="tab" aria-controls="profile" aria-selected="false">项目信息</button>
+			</li>
+		</ul>
+		<div class="tab-content pt-2" id="borderedTabContent">
+			<div class="tab-pane fade show active" id="bordered-looks" role="tabpanel" aria-labelledby="look-tab"></div>
+			<div class="tab-pane fade" id="bordered-missions" role="tabpanel" aria-labelledby="mission-tab">
+				<div class="container">
+					<div class="row">
+						<div class="col-3">
+							<div class="card">
+								<div class="card-body status-container">
+									<label class="status-text status-1">待处理（@Model.ProjectMissionIndexViewModel.UntreatedMissions.Count()）</label>
+									<button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#addModal">+</button>
+								</div>
+							</div>
+							@foreach (var mission in Model.ProjectMissionIndexViewModel.UntreatedMissions)
+							{
+								string cardClass = "priority-medium";
+								if (mission.Priority == MissionPriority.较低)
+								{
+									cardClass = "priority-low";
+								}
+								else if (mission.Priority == MissionPriority.紧急)
+								{
+									cardClass = "priority-high";
+								}
 
-                                string statusClass = "status-1";
-                                if (mission.Status == MissionStatus.待处理)
-                                {
-                                    statusClass = "status-1";
-                                }
-                                else if (mission.Status == MissionStatus.进行中)
-                                {
-                                    statusClass = "status-2";
-                                }
-                                else if (mission.Status == MissionStatus.已完成)
-                                {
-                                    statusClass = "status-3";
-                                }
+								string statusClass = "status-1";
+								if (mission.Status == MissionStatus.待处理)
+								{
+									statusClass = "status-1";
+								}
+								else if (mission.Status == MissionStatus.进行中)
+								{
+									statusClass = "status-2";
+								}
+								else if (mission.Status == MissionStatus.已完成)
+								{
+									statusClass = "status-3";
+								}
 
-                                <div class="card mb-3 mission-card" data-id="@mission.Id">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
-                                        <div class="card-body">
-                                            <h5 class="card-title @statusClass">@mission.Name</h5>
-                                            <h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executors.First()</h6>
-                                            <span class="text-priority">优先级: </span><span class="priority @cardClass">@mission.Priority</span>
-                                            <!-- 其他内容 -->
-                                        </div>
-                                    </a>
-                                </div>
+								<div class="card mb-3 mission-card" data-id="@mission.Id">
+									<a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
+										<div class="card-body">
+											<h5 class="card-title @statusClass">@mission.Name</h5>
+											<h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executors.First()</h6>
+											<span class="text-priority">优先级: </span><span class="priority @cardClass">@mission.Priority</span>
+											<!-- 其他内容 -->
+										</div>
+									</a>
+								</div>
 
-                                <!-- EditModal -->
-                                <div class="modal fade bs-example-modal-lg" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="editModalLabel">编辑任务</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
-                                                            <div class="form-group row">
-                                                                <input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
-                                                                <label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
-                                                                    <div class="invalid-feedback">请输入任务的名称</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
-                                                                    <div class="invalid-feedback">请输入任务的所属项目</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
-                                                                    <div class="invalid-feedback">请输入任务的截止日期</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Status" class="form-control valid">
-                                                                        @foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
-                                                                        {
-                                                                            if (status.Value == ((int)mission.Status).ToString())
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Priority" class="form-control valid">
-                                                                        @foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
-                                                                        {
-                                                                            if (priority.Value == ((int)mission.Priority).ToString())
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
-                                                                        @{
-                                                                            foreach (var item in userManager.Users)
-                                                                            {
-                                                                                <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
+								<!-- EditModal -->
+								<div class="modal fade bs-example-modal-lg" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
+									 aria-hidden="true">
+									<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+										<div class="modal-body">
+											<div class="container-fluid">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="editModalLabel">编辑任务</h5>
+														<button type="button" class="btn-close" data-bs-dismiss="modal"
+																aria-label="Close"></button>
+													</div>
+													<div class="modal-body">
+														<form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
+															<div class="form-group row">
+																<input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
+																<label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
+																	<div class="invalid-feedback">请输入任务的名称</div>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
+																	<div class="invalid-feedback">请输入任务的所属项目</div>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
+																	<span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
+																	<div class="invalid-feedback">请输入任务的截止日期</div>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<select asp-for="@Model.EditMission.Status" class="form-control valid">
+																		@foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
+																		{
+																			if (status.Value == ((int)mission.Status).ToString())
+																			{
+																				<option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
+																			}
+																			else
+																			{
+																				<option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
+																			}
+																		}
+																	</select>
+																	<span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<select asp-for="@Model.EditMission.Priority" class="form-control valid">
+																		@foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
+																		{
+																			if (priority.Value == ((int)mission.Priority).ToString())
+																			{
+																				<option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
+																			}
+																			else
+																			{
+																				<option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
+																			}
+																		}
+																	</select>
+																	<span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
+																		@{
+																			foreach (var item in Model.UserIndexModels.Select(a => a.Name))
+																			{
+																				<option value="@item" selected="@mission.Executors.Contains(item)">@item.</option>
+																			}
+																		}
+																	</select>
 
-                                                                    <div class="invalid-feedback">请选择执行人</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="modal-footer">
-                                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                                                                <button type="submit" class="btn btn-primary">提交</button>
-                                                                <a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                        <div class="col-3">
-                            <div class="card">
-                                <div class="card-body status-container">
-                                    <label class="status-text status-2">进行中（@Model.ProjectMissionIndexViewModel.ProcessOnMissions.Count()）</label>
-                                    <button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#addModal">+</button>
-                                </div>
-                            </div>
-                            @foreach (var mission in Model.ProjectMissionIndexViewModel.ProcessOnMissions)
-                            {
-                                string cardClass = "priority-medium";
-                                if (mission.Priority == MissionPriority.较低)
-                                {
-                                    cardClass = "priority-low";
-                                }
-                                else if (mission.Priority == MissionPriority.紧急)
-                                {
-                                    cardClass = "priority-high";
-                                }
+																	<div class="invalid-feedback">请选择执行人</div>
+																</div>
+															</div>
+															<br />
+															<div class="modal-footer">
+																<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+																<button type="submit" class="btn btn-primary">提交</button>
+																<a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							}
+						</div>
+						<div class="col-3">
+							<div class="card">
+								<div class="card-body status-container">
+									<label class="status-text status-2">进行中（@Model.ProjectMissionIndexViewModel.ProcessOnMissions.Count()）</label>
+									<button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#addModal">+</button>
+								</div>
+							</div>
+							@foreach (var mission in Model.ProjectMissionIndexViewModel.UntreatedMissions)
+							{
+								string cardClass = "priority-medium";
+								if (mission.Priority == MissionPriority.较低)
+								{
+									cardClass = "priority-low";
+								}
+								else if (mission.Priority == MissionPriority.紧急)
+								{
+									cardClass = "priority-high";
+								}
 
-                                string statusClass = "status-1";
-                                if (mission.Status == MissionStatus.待处理)
-                                {
-                                    statusClass = "status-1";
-                                }
-                                else if (mission.Status == MissionStatus.进行中)
-                                {
-                                    statusClass = "status-2";
-                                }
-                                else if (mission.Status == MissionStatus.已完成)
-                                {
-                                    statusClass = "status-3";
-                                }
+								string statusClass = "status-1";
+								if (mission.Status == MissionStatus.待处理)
+								{
+									statusClass = "status-1";
+								}
+								else if (mission.Status == MissionStatus.进行中)
+								{
+									statusClass = "status-2";
+								}
+								else if (mission.Status == MissionStatus.已完成)
+								{
+									statusClass = "status-3";
+								}
 
+								<div class="card mb-3 mission-card" data-id="@mission.Id">
+									<a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
+										<div class="card-body">
+											<h5 class="card-title @statusClass">@mission.Name</h5>
+											<h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executors.First()</h6>
+											<span class="text-priority">优先级: </span><span class="priority @cardClass">@mission.Priority</span>
+											<!-- 其他内容 -->
+										</div>
+									</a>
+								</div>
 
+								<!-- EditModal -->
+								<div class="modal fade bs-example-modal-lg" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
+									 aria-hidden="true">
+									<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+										<div class="modal-body">
+											<div class="container-fluid">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="editModalLabel">编辑任务</h5>
+														<button type="button" class="btn-close" data-bs-dismiss="modal"
+																aria-label="Close"></button>
+													</div>
+													<div class="modal-body">
+														<form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
+															<div class="form-group row">
+																<input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
+																<label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
+																	<div class="invalid-feedback">请输入任务的名称</div>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
+																	<div class="invalid-feedback">请输入任务的所属项目</div>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
+																	<span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
+																	<div class="invalid-feedback">请输入任务的截止日期</div>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<select asp-for="@Model.EditMission.Status" class="form-control valid">
+																		@foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
+																		{
+																			if (status.Value == ((int)mission.Status).ToString())
+																			{
+																				<option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
+																			}
+																			else
+																			{
+																				<option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
+																			}
+																		}
+																	</select>
+																	<span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<select asp-for="@Model.EditMission.Priority" class="form-control valid">
+																		@foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
+																		{
+																			if (priority.Value == ((int)mission.Priority).ToString())
+																			{
+																				<option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
+																			}
+																			else
+																			{
+																				<option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
+																			}
+																		}
+																	</select>
+																	<span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
+																		@{
+																			foreach (var item in Model.UserIndexModels.Select(a => a.Name))
+																			{
+																				<option value="@item" selected="@mission.Executors.Contains(item)">@item.</option>
+																			}
+																		}
+																	</select>
 
-                                <div class="card mb-3 mission-card" data-id="@mission.Id">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
-                                        <div class="card-body">
-                                            <h5 class="card-title @statusClass">@mission.Name</h5>
-                                            <h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executors.First()</h6>
-                                            <span class="text-priority">优先级: </span><span class="priority @cardClass">@mission.Priority</span>
-                                            <!-- 其他内容 -->
-                                        </div>
-                                    </a>
-                                </div>
-                                <!-- EditModal -->
-                                <div class="modal fade bs-example-modal-lg" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="editModalLabel">编辑任务</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
-                                                            <div class="form-group row">
-                                                                <input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
-                                                                <label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
-                                                                    <div class="invalid-feedback">请输入任务的名称</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
-                                                                    <div class="invalid-feedback">请输入任务的所属项目</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
-                                                                    <div class="invalid-feedback">请输入任务的截止日期</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Status" class="form-control valid">
-                                                                        @foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
-                                                                        {
-                                                                            if (status.Value == ((int)mission.Status).ToString())
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Priority" class="form-control valid">
-                                                                        @foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
-                                                                        {
-                                                                            if (priority.Value == ((int)mission.Priority).ToString())
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
-                                                                        @{
-                                                                            foreach (var item in userManager.Users)
-                                                                            {
-                                                                                <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
+																	<div class="invalid-feedback">请选择执行人</div>
+																</div>
+															</div>
+															<br />
+															<div class="modal-footer">
+																<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+																<button type="submit" class="btn btn-primary">提交</button>
+																<a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							}
+						</div>
+						<div class="col-3">
+							<div class="card">
+								<div class="card-body status-container">
+									<label class="status-text status-3">已完成（@Model.ProjectMissionIndexViewModel.FinishedMissions.Count()）</label>
+									<button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#addModal">+</button>
+								</div>
+							</div>
+							@foreach (var mission in Model.ProjectMissionIndexViewModel.UntreatedMissions)
+							{
+								string cardClass = "priority-medium";
+								if (mission.Priority == MissionPriority.较低)
+								{
+									cardClass = "priority-low";
+								}
+								else if (mission.Priority == MissionPriority.紧急)
+								{
+									cardClass = "priority-high";
+								}
 
-                                                                    <div class="invalid-feedback">请选择执行人</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="modal-footer">
-                                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                                                                <button type="submit" class="btn btn-primary">提交</button>
-                                                                <a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                        <div class="col-3">
-                            <div class="card">
-                                <div class="card-body status-container">
-                                    <label class="status-text status-3">已完成（@Model.ProjectMissionIndexViewModel.FinishedMissions.Count()）</label>
-                                    <button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#addModal">+</button>
-                                </div>
-                            </div>
-                            @foreach (var mission in Model.ProjectMissionIndexViewModel.FinishedMissions)
-                            {
-                                string cardClass = "priority-medium";
-                                if (mission.Priority == MissionPriority.较低)
-                                {
-                                    cardClass = "priority-low";
-                                }
-                                else if (mission.Priority == MissionPriority.紧急)
-                                {
-                                    cardClass = "priority-high";
-                                }
+								string statusClass = "status-1";
+								if (mission.Status == MissionStatus.待处理)
+								{
+									statusClass = "status-1";
+								}
+								else if (mission.Status == MissionStatus.进行中)
+								{
+									statusClass = "status-2";
+								}
+								else if (mission.Status == MissionStatus.已完成)
+								{
+									statusClass = "status-3";
+								}
 
-                                string statusClass = "status-1";
-                                if (mission.Status == MissionStatus.待处理)
-                                {
-                                    statusClass = "status-1";
-                                }
-                                else if (mission.Status == MissionStatus.进行中)
-                                {
-                                    statusClass = "status-2";
-                                }
-                                else if (mission.Status == MissionStatus.已完成)
-                                {
-                                    statusClass = "status-3";
-                                }
+								<div class="card mb-3 mission-card" data-id="@mission.Id">
+									<a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
+										<div class="card-body">
+											<h5 class="card-title @statusClass">@mission.Name</h5>
+											<h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executors.First()</h6>
+											<span class="text-priority">优先级: </span><span class="priority @cardClass">@mission.Priority</span>
+											<!-- 其他内容 -->
+										</div>
+									</a>
+								</div>
 
+								<!-- EditModal -->
+								<div class="modal fade bs-example-modal-lg" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
+									 aria-hidden="true">
+									<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+										<div class="modal-body">
+											<div class="container-fluid">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="editModalLabel">编辑任务</h5>
+														<button type="button" class="btn-close" data-bs-dismiss="modal"
+																aria-label="Close"></button>
+													</div>
+													<div class="modal-body">
+														<form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
+															<div class="form-group row">
+																<input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
+																<label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
+																	<div class="invalid-feedback">请输入任务的名称</div>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
+																	<div class="invalid-feedback">请输入任务的所属项目</div>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
+																	<span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
+																	<div class="invalid-feedback">请输入任务的截止日期</div>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<select asp-for="@Model.EditMission.Status" class="form-control valid">
+																		@foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
+																		{
+																			if (status.Value == ((int)mission.Status).ToString())
+																			{
+																				<option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
+																			}
+																			else
+																			{
+																				<option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
+																			}
+																		}
+																	</select>
+																	<span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<select asp-for="@Model.EditMission.Priority" class="form-control valid">
+																		@foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
+																		{
+																			if (priority.Value == ((int)mission.Priority).ToString())
+																			{
+																				<option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
+																			}
+																			else
+																			{
+																				<option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
+																			}
+																		}
+																	</select>
+																	<span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
+																</div>
+															</div>
+															<br />
+															<div class="form-group row">
+																<label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
+																<div class="col-sm-10">
+																	<select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
+																		@{
+																			foreach (var item in Model.UserIndexModels.Select(a => a.Name))
+																			{
+																				<option value="@item" selected="@mission.Executors.Contains(item)">@item.</option>
+																			}
+																		}
+																	</select>
 
-
-                                <div class="card mb-3 mission-card" data-id="@mission.Id">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
-                                        <div class="card-body">
-                                            <h5 class="card-title @statusClass">@mission.Name</h5>
-                                            <h6 class="card-subtitle mb-2 text-muted">执行人：@mission.Executors.First()</h6>
-                                            <span class="text-priority">优先级: </span><span class="priority @cardClass">@mission.Priority</span>
-                                            <!-- 其他内容 -->
-                                        </div>
-                                    </a>
-                                </div>
-                                <!-- EditModal -->
-                                <div class="modal fade bs-example-modal-lg" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="editModalLabel">编辑任务</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
-                                                            <div class="form-group row">
-                                                                <input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
-                                                                <label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
-                                                                    <div class="invalid-feedback">请输入任务的名称</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
-                                                                    <div class="invalid-feedback">请输入任务的所属项目</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
-                                                                    <div class="invalid-feedback">请输入任务的截止日期</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Status" class="form-control valid">
-                                                                        @foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
-                                                                        {
-                                                                            if (status.Value == ((int)mission.Status).ToString())
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Priority" class="form-control valid">
-                                                                        @foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
-                                                                        {
-                                                                            if (priority.Value == ((int)mission.Priority).ToString())
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
-                                                                        @{
-                                                                            foreach (var item in userManager.Users)
-                                                                            {
-                                                                                <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-
-                                                                    <div class="invalid-feedback">请选择执行人</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="modal-footer">
-                                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                                                                <button type="submit" class="btn btn-primary">提交</button>
-                                                                <a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-                <!-- AddModal -->
-                <div class="modal fade bs-example-modal-lg" id="addModal" tabindex="-1" aria-labelledby="addModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                        <div class="modal-body">
-                            <div class="container-fluid">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="addModalLabel">添加任务</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form class="needs-validation" novalidate="" asp-action="AddMission" method="post">
-                                            <div class="form-group row">
-                                                <label asp-for="@Model.AddMission.Name" class="col-sm-2"></label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" asp-for="@Model.AddMission.Name" required>
-                                                    <div class="invalid-feedback">请输入任务的名称</div>
-                                                </div>
-                                            </div>
-                                            <br />
-                                            <div class="form-group row">
-                                                <label asp-for="@Model.AddMission.ProjectName" class="col-sm-2"></label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.AddMission.ProjectName" readonly>
-                                                    <div class="invalid-feedback">请输入任务的所属项目</div>
-                                                </div>
-                                            </div>
-                                            <br />
-                                            <div class="form-group row">
-                                                <label asp-for="@Model.AddMission.Description" class="col-sm-2"></label>
-                                                <div class="col-sm-10">
-                                                    <textarea asp-for="@Model.AddMission.Description" class="form-control" aria-label="With textarea"></textarea>
-                                                    <span class="invalid" asp-validation-for="@Model.AddMission.Description"></span>
-                                                </div>
-                                            </div>
-                                            <br />
-                                            <div class="form-group row">
-                                                <label asp-for="@Model.AddMission.Deadline" class="col-sm-2"></label>
-                                                <div class="col-sm-10">
-                                                    <input class="form-control" asp-for="@Model.AddMission.Deadline" value="@DateTime.Now.ToString("yyyy-MM-dd")" required="">
-                                                    <div class="invalid-feedback">请输入任务的截止日期</div>
-                                                </div>
-                                            </div>
-                                            <br />
-                                            <div class="form-group row">
-                                                <label asp-for="@Model.AddMission.Status" class="col-sm-2"></label>
-                                                <div class="col-sm-10">
-                                                    <select asp-for=@Model.AddMission.Status asp-items="@Html.GetEnumSelectList<MissionStatus>()" class="form-control valid">
-                                                    </select>
-                                                    <span class="invalid" asp-validation-for="@Model.AddMission.Status"></span>
-                                                </div>
-                                            </div>
-                                            <br />
-                                            <div class="form-group row">
-                                                <label asp-for="@Model.AddMission.Priority" class="col-sm-2"></label>
-                                                <div class="col-sm-10">
-                                                    <select asp-for="@Model.AddMission.Priority" asp-items="@Html.GetEnumSelectList<MissionPriority>()" class="form-control valid">
-                                                    </select>
-                                                    <span class="invalid" asp-validation-for="@Model.AddMission.Priority"></span>
-                                                </div>
-                                            </div>
-                                            <br />
-                                            <div class="form-group row">
-                                                <label asp-for="@Model.AddMission.Executors" class="col-sm-2"></label>
-                                                <div class="col-sm-10">
-                                                    <select asp-for=@Model.AddMission.Executors class="selectpicker form-control valid" data-live-search="true" multiple required="">
-                                                        @foreach (var item in userManager.Users.Select(a => a.UserName))
-                                                        {
-                                                            <option value="@item">@item</option>
-                                                        }
-                                                    </select>
-                                                    <div class="invalid-feedback">请选择执行人</div>
-                                                </div>
-                                            </div>
-                                            <br />
-                                            <div class="modal-footer">
-                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                                                <button type="submit" class="btn btn-primary">提交</button>
-                                            </div>
-                                        </form>
-                                    </div>
+																	<div class="invalid-feedback">请选择执行人</div>
+																</div>
+															</div>
+															<br />
+															<div class="modal-footer">
+																<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+																<button type="submit" class="btn btn-primary">提交</button>
+																<a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							}
+						</div>
+					</div>
+				</div>
+				<!-- AddModal -->
+				<div class="modal fade bs-example-modal-lg" id="addModal" tabindex="-1" aria-labelledby="addModalLabel"
+					 aria-hidden="true">
+					<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="addModalLabel">添加任务</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+												aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										<form class="needs-validation" novalidate="" asp-action="AddMission" method="post">
+											<div class="form-group row">
+												<label asp-for="@Model.AddMission.Name" class="col-sm-2"></label>
+												<div class="col-sm-10">
+													<input type="text" class="form-control" asp-for="@Model.AddMission.Name" required>
+													<div class="invalid-feedback">请输入任务的名称</div>
+												</div>
+											</div>
+											<br />
+											<div class="form-group row">
+												<label asp-for="@Model.AddMission.ProjectName" class="col-sm-2"></label>
+												<div class="col-sm-10">
+													<input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.AddMission.ProjectName" readonly>
+													<div class="invalid-feedback">请输入任务的所属项目</div>
+												</div>
+											</div>
+											<br />
+											<div class="form-group row">
+												<label asp-for="@Model.AddMission.Description" class="col-sm-2"></label>
+												<div class="col-sm-10">
+													<textarea asp-for="@Model.AddMission.Description" class="form-control" aria-label="With textarea"></textarea>
+													<span class="invalid" asp-validation-for="@Model.AddMission.Description"></span>
+												</div>
+											</div>
+											<br />
+											<div class="form-group row">
+												<label asp-for="@Model.AddMission.Deadline" class="col-sm-2"></label>
+												<div class="col-sm-10">
+													<input class="form-control" asp-for="@Model.AddMission.Deadline" value="@DateTime.Now.ToString("yyyy-MM-dd")" required="">
+													<div class="invalid-feedback">请输入任务的截止日期</div>
+												</div>
+											</div>
+											<br />
+											<div class="form-group row">
+												<label asp-for="@Model.AddMission.Status" class="col-sm-2"></label>
+												<div class="col-sm-10">
+													<select asp-for=@Model.AddMission.Status asp-items="@Html.GetEnumSelectList<MissionStatus>()" class="form-control valid">
+													</select>
+													<span class="invalid" asp-validation-for="@Model.AddMission.Status"></span>
+												</div>
+											</div>
+											<br />
+											<div class="form-group row">
+												<label asp-for="@Model.AddMission.Priority" class="col-sm-2"></label>
+												<div class="col-sm-10">
+													<select asp-for="@Model.AddMission.Priority" asp-items="@Html.GetEnumSelectList<MissionPriority>()" class="form-control valid">
+													</select>
+													<span class="invalid" asp-validation-for="@Model.AddMission.Priority"></span>
+												</div>
+											</div>
+											<br />
+											<div class="form-group row">
+												<label asp-for="@Model.AddMission.Executors" class="col-sm-2"></label>
+												<div class="col-sm-10">
+													<select asp-for=@Model.AddMission.Executors class="selectpicker form-control valid" data-live-search="true" multiple required="">
+														@foreach (var item in Model.UserIndexModels.Select(a => a.Name))
+														{
+															<option value="@item">@item</option>
+														}
+													</select>
+													<div class="invalid-feedback">请选择执行人</div>
+												</div>
+											</div>
+											<br />
+											<div class="modal-footer">
+												<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+												<button type="submit" class="btn btn-primary">提交</button>
+											</div>
+										</form>
+									</div>
 
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="bordered-editProject" role="tabpanel" aria-labelledby="project-tab">
-                <div class="container">
-                    <form asp-action="EditProject" method="post">
-                        <div class="form-group row">
-                            <input asp-for="ProjectEditViewModel.Id" value="@Model.CurProject.Id" hidden>
-                            <label asp-for="ProjectEditViewModel.Name" class="col-sm-2"></label>
-                            <div class="col-sm-10">
-                                <input asp-for="ProjectEditViewModel.Name" value="@Model.ProjectEditViewModel.Name" class="form-control exchange-element" required disabled>
-                                <div class="invalid-feedback">请输入项目名称</div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="form-group row">
-                            <label asp-for="ProjectEditViewModel.Description" class="col-sm-2"></label>
-                            <div class="col-sm-10">
-                                <textarea asp-for="ProjectEditViewModel.Description" class="form-control exchange-element" disabled></textarea>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="form-group row">
-                            <label asp-for="ProjectEditViewModel.CreatedDate" class="col-sm-2"></label>
-                            <div class="col-sm-10">
-                                <input asp-for="ProjectEditViewModel.CreatedDate" type="date" value="@Model.ProjectEditViewModel.CreatedDate.ToString("yyyy-MM-dd")" class="form-control exchange-element" disabled>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="form-group row">
-                            <label asp-for="ProjectEditViewModel.Deadline" class="col-sm-2"></label>
-                            <div class="col-sm-10">
-                                <input asp-for="ProjectEditViewModel.Deadline" value="@Model.ProjectEditViewModel.Deadline.ToString("yyyy-MM-dd")" class="form-control exchange-element" disabled>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="form-group row">
-                            <label asp-for="ProjectEditViewModel.Status" class="col-sm-2"></label>
-                            <div class="col-sm-10">
-                                <select asp-for="ProjectEditViewModel.Status" asp-items="@Html.GetEnumSelectList<ProjectStatus>()" class="form-control exchange-element" disabled></select>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="form-group row">
-                            <label asp-for="ProjectEditViewModel.PutForward" class="col-sm-2"></label>
-                            <div class="col-sm-10">
-                                <select asp-for="ProjectEditViewModel.PutForward" asp-items="new SelectList(applicationDbContext.Users.Select(a=>a.UserName))" class="form-control exchange-element" disabled></select>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="form-group row">
-                            <label asp-for="ProjectEditViewModel.Functionary" class="col-sm-2"></label>
-                            <div class="col-sm-10">
-                                <select asp-for="ProjectEditViewModel.Functionary" asp-items="new SelectList(applicationDbContext.Users.Select(a=>a.UserName))" class="form-control exchange-element" disabled></select>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="col-6 offset-3">
-                            <div class="form-group row">
-                                <button class="btn btn-primary text-center" id="exchangeBtn">编辑</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="bordered-risks" role="tabpanel" aria-labelledby="risk-tab">
-                <div class="container">
-                    <section class="section">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <h5 class="card-title">风险列表</h5>
-                                            <div class="form-group row">
-                                                <div class="text-end">
-                                                    <a asp-action="AddRisk" asp-controller="Risk" asp-route-projectId="@Model.CurProject.Id" class="btn btn-primary text-end">新风险</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <table class="table datatable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">名称</th>
-                                                    <th scope="col">类型</th>
-                                                    <th scope="col">级别</th>
-                                                    <th scope="col">状态</th>
-                                                    <th scope="col">操作</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var risk in Model.RiskEditViewModels)
-                                                {
-                                                    <tr>
-                                                        <th scope="row">@risk.Id</th>
-                                                        <td>@risk.Name</td>
-                                                        <td>
-                                                            <span class="risk-label gray-color">@risk.RiskType</span>
-                                                        </td>
-                                                        <td>
-                                                            <span class="risk-label @(risk.Level == RiskLevel.低风险 ? "low-risk" : risk.Level == RiskLevel.中风险 ? "medium-risk" : "high-risk")">@risk.Level</span>
-                                                        </td>
-                                                        <td>
-                                                            <span class="risk-label @(risk.Status == RiskStatus.待审核 ? "status-awaiting" : risk.Status == RiskStatus.已丢弃 ? "status-discarded" : "status-resolved")">@risk.Status</span>
-                                                        </td>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="bordered-risks" role="tabpanel" aria-labelledby="risk-tab">
+				<div class="container">
+					<section class="section">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="card">
+									<div class="card-body">
+										<div class="row">
+											<h5 class="card-title">风险列表</h5>
+											<div class="form-group row">
+												<div class="text-end">
+													<a asp-action="AddRisk" asp-controller="Risk" asp-route-projectId="@Model.CurProject.Id" class="btn btn-primary text-end">新风险</a>
+												</div>
+											</div>
+										</div>
+										<table class="table datatable">
+											<thead>
+												<tr>
+													<th scope="col">#</th>
+													<th scope="col">名称</th>
+													<th scope="col">类型</th>
+													<th scope="col">级别</th>
+													<th scope="col">状态</th>
+													<th scope="col">操作</th>
+												</tr>
+											</thead>
+											<tbody>
+												@foreach (var risk in Model.RiskEditViewModels)
+												{
+													<tr>
+														<th scope="row">@risk.Id</th>
+														<td>@risk.Name</td>
+														<td>
+															<span class="risk-label gray-color">@risk.RiskType</span>
+														</td>
+														<td>
+															<span class="risk-label @(risk.Level == RiskLevel.低风险 ? "low-risk" : risk.Level == RiskLevel.中风险 ? "medium-risk" : "high-risk")">@risk.Level</span>
+														</td>
+														<td>
+															<span class="risk-label @(risk.Status == RiskStatus.待审核 ? "status-awaiting" : risk.Status == RiskStatus.已丢弃 ? "status-discarded" : "status-resolved")">@risk.Status</span>
+														</td>
 
-                                                        <td>
-                                                            <a asp-action="EditRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-sm btn-outline-primary">编辑</a>
-                                                            <a asp-action="DeleteRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除风险：@risk.Name 吗？');">删除</a>
-                                                        </td>
+														<td>
+															<a asp-action="EditRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-sm btn-outline-primary">编辑</a>
+															<a asp-action="DeleteRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除风险：@risk.Name 吗？');">删除</a>
+														</td>
 
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+													</tr>
+												}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
 
-                </div>
-            </div>
-        </div>
-        <!-- End Bordered Tabs -->
+				</div>
+			</div>
+			<div class="tab-pane fade" id="bordered-defects" role="tabpanel" aria-labelledby="defect-tab">
+				<div class="container">
+					<section class="section">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="card">
+									<div class="card-body">
+										<div class="row">
+											<h5 class="card-title">缺陷列表</h5>
+											<div class="form-group row">
+												<div class="text-end">
+													<a asp-action="AddDefect" asp-controller="Defect" asp-route-projectId="@Model.CurProject.Id" class="btn btn-primary text-end">新缺陷</a>
+												</div>
+											</div>
+										</div>
+										<table class="table datatable">
+											<thead>
+												<tr>
+													<th scope="col">#</th>
+													<th scope="col">名称</th>
+													<th scope="col">类型</th>
+													<th scope="col">状态</th>
+													<th scope="col">提出人</th>
+													<th scope="col">操作</th>
+												</tr>
+											</thead>
+											<tbody>
+												@foreach (var defect in Model.DefectEditViewModels)
+												{
+													<tr>
+														<th scope="row">@defect.Id</th>
+														<td>@defect.Name</td>
+														<td>
+															<span class="risk-label gray-color">@defect.Type</span>
+														</td>
+														<td>
+															<span class="risk-label @(defect.Status == DefectStatus.待审核 ? "status-awaiting" : defect.Status == DefectStatus.处理中 ? "status-discarded" : "status-resolved")">@defect.Status</span>
+														</td>
+														<td>@defect.Name</td>
+														<td>
+															<a asp-action="EditDefect" asp-controller="Defect" asp-route-defectId="@defect.Id" class="btn btn-sm btn-outline-primary">编辑</a>
+															<a asp-action="DeleteDefect" asp-controller="Defect" asp-route-defectId="@defect.Id" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除缺陷：@defect.Name 吗？');">删除</a>
+														</td>
+													</tr>
+												}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
 
-    </div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="bordered-users" role="tabpanel" aria-labelledby="user-tab">
+				<div class="container">
+					@foreach (var user in Model.UserIndexModels)
+					{
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-sm">
+										<strong>用户名:</strong> @user.Name
+									</div>
+									<div class="col-sm">
+										<strong>角色:</strong> @user.RoleName
+									</div>
+									<div class="col-sm">
+										<strong>部门:</strong> @user.Department
+									</div>
+									<div class="col-sm">
+										<strong>职位:</strong> @user.Job
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+
+				</div>
+			</div>
+			<div class="tab-pane fade" id="bordered-editProject" role="tabpanel" aria-labelledby="project-tab">
+				<div class="container">
+					<form asp-action="EditProject" method="post">
+						<div class="form-group row">
+							<input asp-for="ProjectEditViewModel.Id" value="@Model.CurProject.Id" hidden>
+							<label asp-for="ProjectEditViewModel.Name" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<input asp-for="ProjectEditViewModel.Name" value="@Model.ProjectEditViewModel.Name" class="form-control exchange-element" required disabled>
+								<div class="invalid-feedback">请输入项目名称</div>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="ProjectEditViewModel.Description" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<textarea asp-for="ProjectEditViewModel.Description" class="form-control exchange-element" disabled></textarea>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="ProjectEditViewModel.CreatedDate" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<input asp-for="ProjectEditViewModel.CreatedDate" type="date" value="@Model.ProjectEditViewModel.CreatedDate.ToString("yyyy-MM-dd")" class="form-control exchange-element" disabled>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="ProjectEditViewModel.Deadline" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<input asp-for="ProjectEditViewModel.Deadline" value="@Model.ProjectEditViewModel.Deadline.ToString("yyyy-MM-dd")" class="form-control exchange-element" disabled>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="ProjectEditViewModel.Status" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<select asp-for="ProjectEditViewModel.Status" asp-items="@Html.GetEnumSelectList<ProjectStatus>()" class="form-control exchange-element" disabled></select>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="ProjectEditViewModel.PutForward" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<select asp-for="ProjectEditViewModel.PutForward" asp-items="new SelectList(applicationDbContext.Users.Select(a=>a.UserName))" class="form-control exchange-element" disabled></select>
+							</div>
+						</div>
+						<br />
+						<div class="form-group row">
+							<label asp-for="ProjectEditViewModel.Functionary" class="col-sm-2"></label>
+							<div class="col-sm-10">
+								<select asp-for="ProjectEditViewModel.Functionary" asp-items="new SelectList(applicationDbContext.Users.Select(a=>a.UserName))" class="form-control exchange-element" disabled></select>
+							</div>
+						</div>
+						<br />
+						<div class="col-6 offset-3">
+							<div class="form-group row">
+								<button class="btn btn-primary text-center" id="exchangeBtn">编辑</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- End Bordered Tabs -->
+
+	</div>
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            // 初始化select元素
-            $('.selectpicker').selectpicker();
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $("#exchangeBtn").click(function (event) {
-                event.preventDefault(); // 阻止表单默认提交事件
-                var btnText = $(this).text();
-                var form = $(this).closest('form');
+	<script type="text/javascript">
+		$(document).ready(function () {
+			// 初始化select元素
+			$('.selectpicker').selectpicker();
+		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			$("#exchangeBtn").click(function (event) {
+				event.preventDefault(); // 阻止表单默认提交事件
+				var btnText = $(this).text();
+				var form = $(this).closest('form');
 
-                if (btnText === "编辑") {
-                    $(this).text("保存");
-                    $(".exchange-element").prop("disabled", false);
-                } else {
-                    $(this).text("编辑");
-                    $(".exchange-element").prop("disabled", true);
+				if (btnText === "编辑") {
+					$(this).text("保存");
+					$(".exchange-element").prop("disabled", false);
+				} else {
+					$(this).text("编辑");
+					$(".exchange-element").prop("disabled", true);
 
-                    // 在提交表单之前启用所有字段，以确保所有数据都包含在请求中
-                    $(".exchange-element").prop("disabled", false);
+					// 在提交表单之前启用所有字段，以确保所有数据都包含在请求中
+					$(".exchange-element").prop("disabled", false);
 
-                    // 提交表单
-                    form.submit();
-                }
-            });
-        });
+					// 提交表单
+					form.submit();
+				}
+			});
+		});
 
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const tab = urlParams.get('tab');
-            if (tab) {
-                const tabElement = document.querySelector(`[data-bs-target="#${tab}"]`);
-                if (tabElement) {
-                    const tabInstance = new bootstrap.Tab(tabElement);
-                    tabInstance.show();
-                }
-            }
-        });
-    </script>
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const urlParams = new URLSearchParams(window.location.search);
+			const tab = urlParams.get('tab');
+			if (tab) {
+				const tabElement = document.querySelector(`[data-bs-target="#${tab}"]`);
+				if (tabElement) {
+					const tabInstance = new bootstrap.Tab(tabElement);
+					tabInstance.show();
+				}
+			}
+		});
+	</script>
 }
