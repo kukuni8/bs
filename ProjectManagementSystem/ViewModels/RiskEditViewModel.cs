@@ -27,17 +27,17 @@ namespace ProjectManagementSystem.ViewModels
         public RiskType RiskType { get; set; }
 
         [Display(Name = "处理人")]
-        public string FunctionaryId { get; set; }
+        public int FunctionaryId { get; set; }
         [ForeignKey(nameof(FunctionaryId))]
         public ApplicationUser Functionary { get; set; }
         [Display(Name = "提出人")]
-        public string PutForwardId { get; set; }
+        public int PutForwardId { get; set; }
         [Display(Name = "提出人")]
         [ForeignKey(nameof(PutForwardId))]
         public ApplicationUser PutForward { get; set; }
 
 
-        public int? ProjectId { get; set; }
+        public int ProjectId { get; set; }
         [Display(Name = "所属项目")]
         [ForeignKey(nameof(ProjectId))]
         public Project Project { get; set; }

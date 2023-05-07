@@ -32,7 +32,6 @@ namespace ProjectManagementSystem.Controllers
             {
                 ProjectId = projectId,
                 Project = project,
-                PutForward = await userManager.FindByNameAsync(User.Identity.Name),
                 PutForwardId = (await userManager.FindByNameAsync(User.Identity.Name)).Id,
             };
             return View(model);
@@ -68,10 +67,10 @@ namespace ProjectManagementSystem.Controllers
                 RiskType = risk.RiskType,
                 Level = risk.Level,
                 PutForwardId = risk.PutForwardId,
-                PutForward = await userManager.FindByIdAsync(risk.PutForwardId),
+                PutForward = await userManager.FindByIdAsync(risk.PutForwardId.ToString()),
                 Functionary = risk.Functionary,
                 FunctionaryId = risk.FunctionaryId,
-                ProjectId = risk.ProjectId,
+                ProjectId = risk.RiskProjectId,
                 Project = risk.Project,
             };
             return View(model);
@@ -90,20 +89,20 @@ namespace ProjectManagementSystem.Controllers
             risk.RiskType = model.RiskType;
             risk.Level = model.Level;
             risk.PutForwardId = model.PutForwardId;
-            risk.PutForward = await userManager.FindByIdAsync(model.PutForwardId);
+            risk.PutForward = await userManager.FindByIdAsync(model.PutForwardId.ToString());
             risk.FunctionaryId = model.FunctionaryId;
-            risk.Functionary = await userManager.FindByIdAsync(model.FunctionaryId);
-            risk.ProjectId = model.ProjectId;
+            risk.Functionary = await userManager.FindByIdAsync(model.FunctionaryId.ToString());
+            risk.RiskProjectId = model.ProjectId;
             risk.Project = await applicationDbContext.Projects.FirstOrDefaultAsync(a => a.Id == model.ProjectId);
             applicationDbContext.Risks.Update(risk);
             applicationDbContext.SaveChanges();
-            return RedirectToAction("ProjectDetail", "Project", new { id = risk.ProjectId, tab = "bordered-risks" });
+            return RedirectToAction("ProjectDetail", "Project", new { id = risk.RiskProjectId, tab = "bordered-risks" });
         }
 
         public async Task<IActionResult> DeleteRisk(int riskId)
         {
             var risk = await applicationDbContext.Risks.FirstOrDefaultAsync(a => a.Id == riskId);
-            var projectId = risk.ProjectId;
+            var projectId = risk.RiskProjectId;
             applicationDbContext.Risks.Remove(risk);
             applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", "Project", new { id = projectId, tab = "bordered-risks" });

@@ -17,26 +17,28 @@ namespace ProjectManagementSystem.Models
 
         [Display(Name = "创建日期")]
         public DateTime CreateDate { get; set; }
+
         [Display(Name = "解决方案")]
         public string Solution { get; set; }
+
         [Display(Name = "缺陷类型")]
         public DefectType Type { get; set; }
 
         [Display(Name = "状态")]
         public DefectStatus Status { get; set; }
-        [Required]
+
+        public int FunctionaryId { get; set; }
         [Display(Name = "负责人")]
-        public string FunctionaryId { get; set; }
-        [ForeignKey(nameof(FunctionaryId))]
         public ApplicationUser Functionary { get; set; }
+
+        public int PutForwardId { get; set; }
+
         [Display(Name = "提出人")]
-        public string PutForwardId { get; set; }
-        [ForeignKey(nameof(PutForwardId))]
         public ApplicationUser PutForward { get; set; }
 
-        public int? ProjectId { get; set; }
+        public int DefectProjectId { get; set; }
         [Display(Name = "所属项目")]
-        [ForeignKey(nameof(ProjectId))]
+        [ForeignKey(nameof(DefectProjectId))]
         public Project Project { get; set; }
     }
 

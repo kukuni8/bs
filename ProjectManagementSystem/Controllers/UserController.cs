@@ -30,7 +30,7 @@ namespace ProjectManagementSystem.Controllers
                 var year = (timespan.Days / 365).ToString() + "年";
                 var newUser = new UserIndexViewModel()
                 {
-                    Id = user?.Id,
+                    Id = user.Id,
                     UserName = user?.UserName,
                     Department = user?.Department,
                     Job = user?.Job,

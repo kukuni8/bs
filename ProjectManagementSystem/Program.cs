@@ -7,84 +7,83 @@ using ProjectManagementSystem.Models;
 
 namespace ProjectManagementSystem
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
-			builder.Services.AddControllersWithViews();
-			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-			builder.Services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseSqlServer(connectionString, b => b.MigrationsAssembly("ProjectManagementSystem")));
+            // Add services to the container.
+            builder.Services.AddControllersWithViews();
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString, b => b.MigrationsAssembly("ProjectManagementSystem")));
 
-			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-			{
-				options.Password.RequireNonAlphanumeric = false;
-				options.Password.RequireLowercase = false;
-				options.Password.RequireUppercase = false;
-				options.Password.RequiredLength = 1;
-				//options.SignIn.RequireConfirmedAccount = true;
-			})
-		   .AddSignInManager<SignInManager<ApplicationUser>>()
-		   .AddDefaultTokenProviders()
-		   .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 1;
+            })
+            .AddSignInManager<SignInManager<ApplicationUser>>()
+            .AddDefaultTokenProviders()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
-			builder.Services.AddAuthorization(options =>
-			{
-				options.AddPolicy("用户添加", policy => policy.RequireClaim("用户添加"));
-				options.AddPolicy("用户编辑", policy => policy.RequireClaim("用户编辑"));
-				options.AddPolicy("用户删除", policy => policy.RequireClaim("用户删除"));
 
-				options.AddPolicy("角色添加", policy => policy.RequireClaim("角色添加"));
-				options.AddPolicy("角色编辑", policy => policy.RequireClaim("角色编辑"));
-				options.AddPolicy("角色删除", policy => policy.RequireClaim("角色删除"));
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("用户添加", policy => policy.RequireClaim("用户添加"));
+                options.AddPolicy("用户编辑", policy => policy.RequireClaim("用户编辑"));
+                options.AddPolicy("用户删除", policy => policy.RequireClaim("用户删除"));
 
-				options.AddPolicy("项目添加", policy => policy.RequireClaim("项目添加"));
-				options.AddPolicy("项目编辑", policy => policy.RequireClaim("项目编辑"));
-				options.AddPolicy("项目删除", policy => policy.RequireClaim("项目删除"));
+                options.AddPolicy("角色添加", policy => policy.RequireClaim("角色添加"));
+                options.AddPolicy("角色编辑", policy => policy.RequireClaim("角色编辑"));
+                options.AddPolicy("角色删除", policy => policy.RequireClaim("角色删除"));
 
-				options.AddPolicy("任务添加", policy => policy.RequireClaim("任务添加"));
-				options.AddPolicy("任务编辑", policy => policy.RequireClaim("任务编辑"));
-				options.AddPolicy("任务删除", policy => policy.RequireClaim("任务删除"));
+                options.AddPolicy("项目添加", policy => policy.RequireClaim("项目添加"));
+                options.AddPolicy("项目编辑", policy => policy.RequireClaim("项目编辑"));
+                options.AddPolicy("项目删除", policy => policy.RequireClaim("项目删除"));
 
-				options.AddPolicy("风险添加", policy => policy.RequireClaim("风险添加"));
-				options.AddPolicy("风险编辑", policy => policy.RequireClaim("风险编辑"));
-				options.AddPolicy("风险删除", policy => policy.RequireClaim("风险删除"));
+                options.AddPolicy("任务添加", policy => policy.RequireClaim("任务添加"));
+                options.AddPolicy("任务编辑", policy => policy.RequireClaim("任务编辑"));
+                options.AddPolicy("任务删除", policy => policy.RequireClaim("任务删除"));
 
-				options.AddPolicy("缺陷添加", policy => policy.RequireClaim("缺陷添加"));
-				options.AddPolicy("缺陷编辑", policy => policy.RequireClaim("缺陷编辑"));
-				options.AddPolicy("缺陷删除", policy => policy.RequireClaim("缺陷删除"));
-			});
+                options.AddPolicy("风险添加", policy => policy.RequireClaim("风险添加"));
+                options.AddPolicy("风险编辑", policy => policy.RequireClaim("风险编辑"));
+                options.AddPolicy("风险删除", policy => policy.RequireClaim("风险删除"));
 
-			builder.Services.AddHttpContextAccessor();
-			var app = builder.Build();
+                options.AddPolicy("缺陷添加", policy => policy.RequireClaim("缺陷添加"));
+                options.AddPolicy("缺陷编辑", policy => policy.RequireClaim("缺陷编辑"));
+                options.AddPolicy("缺陷删除", policy => policy.RequireClaim("缺陷删除"));
+            });
 
-			// Configure the HTTP request pipeline.
-			if (!app.Environment.IsDevelopment())
-			{
-				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
-			}
+            builder.Services.AddHttpContextAccessor();
+            var app = builder.Build();
 
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-			app.UseRouting();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-			app.UseAuthentication();
-			app.UseAuthorization();
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
 
-			app.MapControllerRoute(
-				name: "default",
-				pattern: "{controller=Account}/{action=Login}/{id?}");
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Account}/{action=Login}/{id?}");
 
-			app.Run();
-		}
-	}
+            app.Run();
+        }
+    }
 }

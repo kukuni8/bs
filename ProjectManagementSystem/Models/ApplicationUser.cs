@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProjectManagementSystem.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser<int>
     {
 
         [DataType(DataType.Date)]
@@ -30,7 +30,30 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "角色")]
         public string RoleName { get; set; }
 
-        public List<Mission> Missions { get; set; }
+        // 与Project的关系
+        public List<Project> Projects { get; set; }
+        public List<ProjectUser> ProjectUsers { get; set; }
+        public List<Project> PutForwardProjects { get; set; }
+        public List<Project> FunctionaryProjects { get; set; }
+
+        // 与Mission的关系
+        public List<Mission> PutForwardMissions { get; set; }
+        public List<Mission> ExecuteMissions { get; set; }
+        public List<MissionExecutor> MissionExecutors { get; set; }
+
+
+
+        // 与Defect的关系
+        public List<Defect> PutForwardDefects { get; set; }
+        public List<Defect> FunctionaryDefects { get; set; }
+
+        // 与Risk的关系
+        public List<Risk> PutForwardRisks { get; set; }
+        public List<Risk> FunctionaryRisks { get; set; }
+
+
+        // 与MissionDialogue的关系
+        public List<MissionDialogue> MissionDialogues { get; set; }
 
         public override string ToString()
         {

@@ -26,13 +26,15 @@ namespace ProjectManagementSystem.ViewModels
 
         public List<ApplicationUser> UsersInProject { get; set; }
 
-        [Required]
+
+
+        public int FunctionaryId { get; set; }
         [Display(Name = "处理人")]
-        public string FunctionaryId { get; set; }
         [ForeignKey(nameof(FunctionaryId))]
         public ApplicationUser Functionary { get; set; }
+
+        public int PutForwardId { get; set; }
         [Display(Name = "提出人")]
-        public string PutForwardId { get; set; }
         [ForeignKey(nameof(PutForwardId))]
         public ApplicationUser PutForward { get; set; }
 

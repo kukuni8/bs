@@ -11,11 +11,13 @@ namespace ProjectManagementSystem.Controllers
     {
         private readonly ApplicationDbContext applicationDbContext;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ProjectController(ApplicationDbContext applicationDbContext, SignInManager<ApplicationUser> signInManager)
+        public ProjectController(ApplicationDbContext applicationDbContext, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             this.applicationDbContext = applicationDbContext;
             this.signInManager = signInManager;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -31,9 +33,9 @@ namespace ProjectManagementSystem.Controllers
                     Name = project.Name,
                     Description = project.Description,
                     Deadline = project.Deadline,
-                    CreatedDate = project.CreatedDate,
+                    CreatedDate = project.CreateDate,
                 };
-                var curMissions = missions.Where(a => a.ProjectId == project.Id).ToList();
+                var curMissions = missions.Where(a => a.MissionProjectId == project.Id).ToList();
                 var curMissionsCount = curMissions.Count() == 0 ? 1 : curMissions.Count();
                 var unDealMissionCount = curMissions.Where(a => a.Status == MissionStatus.待处理 && a.Deadline >= DateTime.Now).Count();
                 var compeleteMissionCount = curMissions.Where(a => a.Status == MissionStatus.进行中 && a.Deadline >= DateTime.Now).Count();
@@ -51,7 +53,7 @@ namespace ProjectManagementSystem.Controllers
         public async Task<IActionResult> ProjectDetail(int id)
         {
             var project = await applicationDbContext.Projects.Include(a => a.Risks).FirstOrDefaultAsync(a => a.Id == id);
-            var missions = await applicationDbContext.Missions.Include(a => a.Executors).Where(a => a.ProjectId == project.Id).ToListAsync();
+            var missions = await applicationDbContext.Missions.Include(a => a.Executors).Where(a => a.MissionProjectId == project.Id).ToListAsync();
             var model = new ProjectDetailViewModel()
             {
                 ProjectEditViewModel = new ProjectEditViewModel()
@@ -60,7 +62,7 @@ namespace ProjectManagementSystem.Controllers
                     Name = project.Name,
                     Deadline = project.Deadline,
                     Description = project.Description,
-                    CreatedDate = project.CreatedDate,
+                    CreatedDate = project.CreateDate,
                     Functionary = (await applicationDbContext.Users.FirstOrDefaultAsync(a => a.Id == project.FunctionaryId)).UserName,
                     PutForward = (await applicationDbContext.Users.FirstOrDefaultAsync(a => a.Id == project.PutForwardId)).UserName,
                 },
@@ -137,8 +139,8 @@ namespace ProjectManagementSystem.Controllers
             var project = await applicationDbContext.Projects.FirstOrDefaultAsync(a => a.Id == model.ProjectEditViewModel.Id);
             project.Name = model.ProjectEditViewModel.Name;
             project.Description = model.ProjectEditViewModel.Description;
-            project.CreatedDate = model.ProjectEditViewModel.CreatedDate;
-            project.UpdatedDate = DateTime.Now;
+            project.CreateDate = model.ProjectEditViewModel.CreatedDate;
+            project.UpdateDate = DateTime.Now;
             project.Deadline = model.ProjectEditViewModel.Deadline;
             project.Budget = model.ProjectEditViewModel.Budget;
             project.FunctionaryId = (await applicationDbContext.ApplicationUsers.FirstOrDefaultAsync(a => a.UserName == model.ProjectEditViewModel.Functionary)).Id;
@@ -164,7 +166,7 @@ namespace ProjectManagementSystem.Controllers
             {
                 Name = model.Name,
                 Description = model.Description,
-                CreatedDate = DateTime.Now,
+                CreateDate = DateTime.Now,
                 Deadline = DateTime.Now,
                 FunctionaryId = (await applicationDbContext.ApplicationUsers.FirstOrDefaultAsync(a => a.UserName == model.Functionary)).Id,
                 PutForwardId = (await applicationDbContext.ApplicationUsers.FirstOrDefaultAsync(a => a.UserName == model.PutForward)).Id,
@@ -200,7 +202,8 @@ namespace ProjectManagementSystem.Controllers
                 CreateDate = DateTime.Now,
                 Priority = curMission.Priority,
                 Status = curMission.Status,
-                ProjectId = project.Id,
+                MissionProjectId = project.Id,
+                PutForwardId = (await userManager.FindByNameAsync(User.Identity.Name)).Id,
                 Executors = new List<ApplicationUser>(),
             };
             List<ApplicationUser> users = new List<ApplicationUser>();
@@ -231,7 +234,7 @@ namespace ProjectManagementSystem.Controllers
             mission.CreateDate = DateTime.Now;
             mission.Priority = curMission.Priority;
             mission.Status = curMission.Status;
-            mission.ProjectId = project.Id;
+            mission.MissionProjectId = project.Id;
             mission.Executors.Clear();
 
             List<ApplicationUser> users = new List<ApplicationUser>();
@@ -249,7 +252,7 @@ namespace ProjectManagementSystem.Controllers
         {
             var missionId = id;
             var mission = await applicationDbContext.Missions.FirstOrDefaultAsync(c => c.Id == missionId);
-            var projectId = mission.ProjectId;
+            var projectId = mission.MissionProjectId;
             applicationDbContext.Missions.Remove(mission);
             applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", new { id = projectId });
