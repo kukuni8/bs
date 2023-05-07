@@ -125,7 +125,38 @@
             </li>
         </ul>
         <div class="tab-content pt-2" id="borderedTabContent">
-            <div class="tab-pane fade show active" id="bordered-looks" role="tabpanel" aria-labelledby="look-tab"></div>
+            <div class="tab-pane fade show active" id="bordered-looks" role="tabpanel" aria-labelledby="look-tab">
+                <div class="container">
+                    <!-- Reports -->
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <li class="dropdown-header text-start">
+                                        <h6>Filter</h6>
+                                    </li>
+
+                                    <li><a class="dropdown-item" href="#">Today</a></li>
+                                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="card-body">
+                                <h5 class="card-title">任务状态情况</h5>
+
+                                <!-- Line Chart -->
+                                <div id="reportsChart"></div>
+                                <!-- End Line Chart -->
+
+                            </div>
+
+                        </div>
+                    </div><!-- End Reports -->
+                </div>
+            </div>
             <div class="tab-pane fade" id="bordered-missions" role="tabpanel" aria-labelledby="mission-tab">
                 <div class="container">
                     <div class="row">
@@ -213,9 +244,33 @@
                                                             </div>
                                                             <br />
                                                             <div class="form-group row">
+                                                                <label asp-for="@Model.EditMission.CreateDate" class="col-sm-2"></label>
+                                                                <div class="col-sm-10">
+                                                                    <input value="@mission.CreateDate.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.CreateDate" required>
+                                                                    <div class="invalid-feedback">请输入任务的创建日期</div>
+                                                                </div>
+                                                            </div>
+                                                            <br />
+                                                            <div class="form-group row">
+                                                                <label asp-for="@Model.EditMission.StartDate" class="col-sm-2"></label>
+                                                                <div class="col-sm-10">
+                                                                    <input value="@mission.StartDate.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.StartDate" required>
+                                                                    <div class="invalid-feedback">请输入任务的更新时间日期</div>
+                                                                </div>
+                                                            </div>
+                                                            <br />
+                                                            <div class="form-group row">
                                                                 <label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
                                                                 <div class="col-sm-10">
                                                                     <input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
+                                                                    <div class="invalid-feedback">请输入任务的截止日期</div>
+                                                                </div>
+                                                            </div>
+                                                            <br />
+                                                            <div class="form-group row">
+                                                                <label asp-for="@Model.EditMission.FinishedTime" class="col-sm-2"></label>
+                                                                <div class="col-sm-10">
+                                                                    <input value="@mission.FinishedTime.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.FinishedTime" required>
                                                                     <div class="invalid-feedback">请输入任务的截止日期</div>
                                                                 </div>
                                                             </div>
@@ -945,10 +1000,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
             </div>
             <div class="tab-pane fade" id="bordered-editProject" role="tabpanel" aria-labelledby="project-tab">
                 <div class="container">
@@ -1083,5 +1134,58 @@
             });
         });
 
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#reportsChart"), {
+                series: [{
+                    name: '待处理',
+                    data: [31, 40, 28, 51, 42, 82, 56],
+                }, {
+                    name: '进行中',
+                    data: [11, 32, 45, 32, 34, 52, 41]
+                }, {
+                    name: '已完成',
+                    data: [15, 11, 32, 18, 9, 24, 11]
+                }],
+                chart: {
+                    height: 350,
+                    type: 'area',
+                    toolbar: {
+                        show: false
+                    },
+                },
+                markers: {
+                    size: 4
+                },
+                colors: ['#AAAAAA', '#4169E1', '#00FF00'],
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.3,
+                        opacityTo: 0.4,
+                        stops: [0, 90, 100]
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 2
+                },
+                xaxis: {
+                    type: 'date',
+                    categories: ["2023/5/1", "2023/5/2", "2023/5/3", "2023/5/4", "2023/5/5", "2023/5/6", "2023/5/7"]
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd/MM/yy HH:mm'
+                    },
+                }
+            }).render();
+        });
     </script>
     }

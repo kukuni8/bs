@@ -88,6 +88,8 @@ namespace ProjectManagementSystem.Controllers
                                             Description = a.Description,
                                             Deadline = a.Deadline,
                                             CreateDate = a.CreateDate,
+                                            StartDate = DateTime.Now,
+                                            FinishedTime = DateTime.Now,
                                             Priority = a.Priority,
                                             Status = a.Status,
                                             Executors = a.MissionExecutors.Select(a => a.ApplicationUser.UserName).ToList(),
@@ -100,6 +102,8 @@ namespace ProjectManagementSystem.Controllers
                                             Description = a.Description,
                                             Deadline = a.Deadline,
                                             CreateDate = a.CreateDate,
+                                            StartDate = DateTime.Now,
+                                            FinishedTime = DateTime.Now,
                                             Priority = a.Priority,
                                             Status = a.Status,
                                             Executors = a.MissionExecutors.Select(a => a.ApplicationUser.UserName).ToList(),
@@ -112,6 +116,8 @@ namespace ProjectManagementSystem.Controllers
                                             Description = a.Description,
                                             Deadline = a.Deadline,
                                             CreateDate = a.CreateDate,
+                                            StartDate = DateTime.Now,
+                                            FinishedTime = DateTime.Now,
                                             Priority = a.Priority,
                                             Status = a.Status,
                                             Executors = a.MissionExecutors.Select(a => a.ApplicationUser.UserName).ToList(),
@@ -262,6 +268,8 @@ namespace ProjectManagementSystem.Controllers
                 Description = curMission.Description,
                 Deadline = curMission.Deadline,
                 CreateDate = DateTime.Now,
+                StartDate = curMission.StartDate,
+                FinishedTime = curMission.FinishedTime,
                 Priority = curMission.Priority,
                 Status = curMission.Status,
                 Project = project,
@@ -298,7 +306,10 @@ namespace ProjectManagementSystem.Controllers
             mission.Name = curMission.Name;
             mission.Description = curMission.Description;
             mission.Deadline = curMission.Deadline;
-            mission.CreateDate = DateTime.Now;
+            mission.CreateDate = curMission.CreateDate;
+            mission.StartDate = DateTime.Now;
+            mission.FinishedTime = DateTime.Now;
+            mission.Deadline = curMission.Deadline;
             mission.Priority = curMission.Priority;
             mission.Status = curMission.Status;
             mission.Project.Id = project.Id;

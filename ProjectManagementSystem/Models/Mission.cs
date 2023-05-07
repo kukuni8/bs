@@ -17,12 +17,15 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "创建日期")]
         [DataType(DataType.Date)]
         public DateTime CreateDate { get; set; }
-        [Display(Name = "更新日期")]
+        [Display(Name = "开始日期")]
         [DataType(DataType.Date)]
-        public DateTime UpdateDate { get; set; }
+        public DateTime StartDate { get; set; }
         [Display(Name = "截止日期")]
         [DataType(DataType.Date)]
         public DateTime Deadline { get; set; }
+        [Display(Name = "完成时间")]
+        [DataType(DataType.Date)]
+        public DateTime FinishedTime { get; set; }
         [Display(Name = "优先级")]
         public MissionPriority Priority { get; set; }
         [Display(Name = "状态")]
