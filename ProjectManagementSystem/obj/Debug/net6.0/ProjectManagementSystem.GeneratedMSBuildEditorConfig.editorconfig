@@ -28,6 +28,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Defect/AddDefect.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVmZWN0XEFkZERlZmVjdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Defect/EditDefect.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVmZWN0XEVkaXREZWZlY3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/28135/Desktop/bs/ProjectManagementSystem/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

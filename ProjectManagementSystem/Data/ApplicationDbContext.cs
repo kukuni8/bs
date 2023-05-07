@@ -9,12 +9,13 @@ namespace ProjectManagementSystem.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        public DbSet<Project> Projects { get; set; }
         public DbSet<Defect> Defects { get; set; }
         public DbSet<Mission> Missions { get; set; }
         public DbSet<MissionDialogue> MissionDialogues { get; set; }
         public DbSet<Risk> Risks { get; set; }
-
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectUser> ProjectUsers { get; set; }
+        public DbSet<MissionExecutor> MissionExecutors { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -30,13 +31,34 @@ namespace ProjectManagementSystem.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ProjectUser>()
+                .HasKey(pu => new { pu.ProjectId, pu.ApplicationUserId });
+
+            modelBuilder.Entity<Project>()
+            .HasMany(p => p.ProjectUsers)
+            .WithOne(pu => pu.Project)
+            .HasForeignKey(pu => pu.ProjectId);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.ProjectUsers)
+                .WithOne(pu => pu.ApplicationUser)
+                .HasForeignKey(pu => pu.ApplicationUserId);
+
+            modelBuilder.Entity<MissionExecutor>()
+                .HasKey(me => new { me.ApplicationUserId, me.MissionId });
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.MissionExecutors)
+                .WithOne(me => me.ApplicationUser)
+                .HasForeignKey(me => me.ApplicationUserId);
+
+            modelBuilder.Entity<Mission>()
+                .HasMany(u => u.MissionExecutors)
+                .WithOne(me => me.Mission)
+                .HasForeignKey(me => me.MissionId);
+
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
 
-            //项目参与人员和用户是多对多
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(a => a.Projects)
-                .WithMany(p => p.Users)
-                .UsingEntity<ProjectUser>();
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(a => a.PutForwardProjects)
@@ -57,10 +79,6 @@ namespace ProjectManagementSystem.Data
                 .HasForeignKey(P => P.PutForwardId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(a => a.ExecuteMissions)
-                .WithMany(p => p.Executors)
-                .UsingEntity<MissionExecutor>();
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(a => a.PutForwardDefects)
@@ -90,24 +108,6 @@ namespace ProjectManagementSystem.Data
                 .HasMany(a => a.MissionDialogues)
                 .WithOne(p => p.Speaker)
                 .HasForeignKey(P => P.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Project>()
-                .HasMany<Mission>()
-                .WithOne(m => m.Project)
-                .HasForeignKey(m => m.MissionProjectId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Project>()
-                .HasMany<Defect>()
-                .WithOne(d => d.Project)
-                .HasForeignKey(d => d.DefectProjectId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Project>()
-                .HasMany<Risk>()
-                .WithOne(r => r.Project)
-                .HasForeignKey(r => r.RiskProjectId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Project>()

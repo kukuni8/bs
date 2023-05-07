@@ -1,7 +1,8 @@
 ﻿@using ProjectManagementSystem.ViewModels
+@using ProjectManagementSystem.Data
 @model IEnumerable<UserIndexViewModel>
 @using Microsoft.AspNetCore.Identity;
-@inject RoleManager<IdentityRole> roleManager;
+@inject RoleManager<IdentityRole<int>> roleManager;
 @inject UserManager<ApplicationUser> userManager;
 @{
     ViewBag.Title = "用户列表";
@@ -33,9 +34,9 @@
                         <tbody>
                             @foreach (var user in Model)
                             {
-                                var u = await userManager.FindByNameAsync(user.UserName);
-                                var roleNames = await userManager.GetRolesAsync(u);
-                                var roleName = roleNames == null || roleNames.Count == 0 ? "" : roleNames.First();
+                                    var u = await userManager.FindByNameAsync(user.UserName);
+                                    var roleNames = await userManager.GetRolesAsync(u);
+                                var roleName = roleNames == null || roleNames.Count() == 0 ? "" : roleNames.First();
                                 <tr>
                                     <td>@user.UserName</td>
                                     <td>@user.TrueName</td>

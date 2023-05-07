@@ -12,12 +12,12 @@
 //    public class MissionController : Controller
 //    {
 //        private readonly ApplicationDbContext applicationDbContext;
-//        private readonly UserManager<ApplicationUser> userManager;
+//        private readonly UserManager<ApplicationUser><ApplicationUser> UserManager<ApplicationUser>;
 
-//        public MissionController(ApplicationDbContext applicationDbContext, UserManager<ApplicationUser> userManager)
+//        public MissionController(ApplicationDbContext applicationDbContext, UserManager<ApplicationUser><ApplicationUser> UserManager<ApplicationUser>)
 //        {
 //            this.applicationDbContext = applicationDbContext;
-//            this.userManager = userManager;
+//            this.UserManager<ApplicationUser> = UserManager<ApplicationUser>;
 //        }
 
 //        public async Task<IActionResult> Index()
@@ -73,7 +73,7 @@
 //            foreach (var name in names)
 //            {
 //                mission.Executor ??= new List<ApplicationUser>();
-//                mission.Executor.Add(await userManager.Users.FirstOrDefaultAsync(a => a.UserName == name));
+//                mission.Executor.Add(await UserManager<ApplicationUser>.Users.FirstOrDefaultAsync(a => a.UserName == name));
 //            }
 //            await applicationDbContext.Missions.AddAsync(mission);
 //            applicationDbContext.SaveChanges();
@@ -106,7 +106,7 @@
 //            mission.Priority = model.Priority;
 //            mission.Status = model.Status;
 //            mission.Executor.Clear();
-//            mission.Executor.AddRange(await userManager.Users.AsNoTracking().Where(a => model.EditExecutor.Contains(a.UserName)).ToListAsync());
+//            mission.Executor.AddRange(await UserManager<ApplicationUser>.Users.AsNoTracking().Where(a => model.EditExecutor.Contains(a.UserName)).ToListAsync());
 
 //            applicationDbContext.SaveChanges();
 //            return RedirectToAction("Index");

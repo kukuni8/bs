@@ -31,18 +31,16 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "风险类型")]
         public RiskType RiskType { get; set; }
 
-        public int FunctionaryId { get; set; }
+        public int? FunctionaryId { get; set; }
         [Display(Name = "负责人")]
         public ApplicationUser Functionary { get; set; }
 
 
-        public int PutForwardId { get; set; }
+        public int? PutForwardId { get; set; }
         [Display(Name = "提出人")]
         public ApplicationUser PutForward { get; set; }
 
-        public int RiskProjectId { get; set; }
         [Display(Name = "所属项目")]
-        [ForeignKey(nameof(RiskProjectId))]
         public Project Project { get; set; }
     }
 }

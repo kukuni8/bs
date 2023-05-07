@@ -39,7 +39,7 @@ namespace ProjectManagementSystem.ViewModels
         public ApplicationUser PutForward { get; set; }
 
 
-        public int? ProjectId { get; set; }
+        public int ProjectId { get; set; }
         [Display(Name = "所属项目")]
         [ForeignKey(nameof(ProjectId))]
         public Project Project { get; set; }

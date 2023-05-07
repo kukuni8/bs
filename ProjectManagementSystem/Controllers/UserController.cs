@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagementSystem.Data;
 using ProjectManagementSystem.Models;
 using ProjectManagementSystem.ViewModels;
 
@@ -11,18 +12,19 @@ namespace ProjectManagementSystem.Controllers
 
     public class UserController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-
-        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
+        private readonly ApplicationDbContext applicationDbContext;
+        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole<int>> roleManager, ApplicationDbContext applicationDbContext)
         {
-            _userManager = userManager;
+            this.applicationDbContext = applicationDbContext;
+            this.userManager = userManager;
             _roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = await userManager.Users.ToListAsync();
             var model = new List<UserIndexViewModel>();
             foreach (var user in users)
             {
@@ -31,11 +33,11 @@ namespace ProjectManagementSystem.Controllers
                 var newUser = new UserIndexViewModel()
                 {
                     Id = user.Id,
-                    UserName = user?.UserName,
+                    UserName = user.UserName,
                     Department = user?.Department,
-                    Job = user?.Job,
-                    TrueName = user?.TrueName,
-                    RoleName = user?.RoleName,
+                    Job = user.Job,
+                    TrueName = user.TrueName,
+                    RoleName = user.RoleName,
                     JobYear = year,
                     Age = user.BirthDate == default ? " " : (DateTime.Now.Year - user.BirthDate.Year).ToString() + "岁",
                 };
@@ -73,12 +75,14 @@ namespace ProjectManagementSystem.Controllers
                 JobDate = userAddViewModel.JobDate,
             };
 
-            var result = await _userManager.CreateAsync(user, userAddViewModel.Password);
+            var result = await userManager.CreateAsync(user, userAddViewModel.Password);
 
             if (result.Succeeded)
             {
                 var role = await _roleManager.FindByNameAsync(userAddViewModel.RoleName);
-                await _userManager.AddToRoleAsync(user, role.Name);
+                user.RoleName = role.Name;
+                await userManager.UpdateAsync(user);
+                await userManager.AddToRoleAsync(user, role.Name);
                 return RedirectToAction("Index");
             }
 
@@ -93,7 +97,7 @@ namespace ProjectManagementSystem.Controllers
 
         public async Task<IActionResult> EditUser(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await userManager.FindByIdAsync(id);
             var newUser = new UserEditViewModel
             {
 
@@ -114,7 +118,7 @@ namespace ProjectManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(UserEditViewModel model)
         {
-            var user = await _userManager.FindByIdAsync(model.Id);
+            var user = await userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
                 return RedirectToAction("Index");
@@ -129,29 +133,28 @@ namespace ProjectManagementSystem.Controllers
             user.Job = model.Job;
             user.JobDate = model.JobDate;
 
-            var result = await _userManager.UpdateAsync(user);
+            var result = await userManager.UpdateAsync(user);
 
             if (result.Succeeded)
             {
-                var roles = await _userManager.GetRolesAsync(user);
-                await _userManager.RemoveFromRolesAsync(user, roles);
+                var roles = await userManager.GetRolesAsync(user);
+                await userManager.RemoveFromRolesAsync(user, roles);
                 var newRole = await _roleManager.FindByNameAsync(model.RoleName);
-                await _userManager.AddToRoleAsync(user, newRole.Name);
+                await userManager.AddToRoleAsync(user, newRole.Name);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError(string.Empty, "更新用户信息时发生错误");
             return View(user);
         }
 
-        [HttpPost]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
-                var role = await _userManager.GetRolesAsync(user);
-                await _userManager.RemoveFromRolesAsync(user, role);
-                var result = await _userManager.DeleteAsync(user);
+                var role = await userManager.GetRolesAsync(user);
+                await userManager.RemoveFromRolesAsync(user, role);
+                var result = await userManager.DeleteAsync(user);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -164,7 +167,19 @@ namespace ProjectManagementSystem.Controllers
                 ModelState.AddModelError(string.Empty, "用户找不到");
             }
 
-            return View("Index", await _userManager.Users.ToListAsync());
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DeleteUserFromProject(int userId, int projectId)
+        {
+            var pu = new ProjectUser
+            {
+                ApplicationUserId = userId,
+                ProjectId = projectId,
+            };
+            applicationDbContext.ProjectUsers.Remove(pu);
+            await applicationDbContext.SaveChangesAsync();
+            return RedirectToAction("ProjectDetail", "Project", new { id = projectId, tab = "bordered-users" });
         }
     }
 }

@@ -18,18 +18,23 @@ namespace ProjectManagementSystem.Models
         public double Budget { get; set; }
 
         public int PutForwardId { get; set; }
+        [ForeignKey(nameof(PutForwardId))]
         public ApplicationUser PutForward { get; set; }
 
         public int FunctionaryId { get; set; }
         [ForeignKey(nameof(FunctionaryId))]
         public ApplicationUser Functionary { get; set; }
 
-        public List<ApplicationUser> Users { get; set; }
         public List<ProjectUser> ProjectUsers { get; set; }
 
         public List<Mission> Missions { get; set; }
         public List<Defect> Defects { get; set; }
         public List<Risk> Risks { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
 

@@ -1,10 +1,12 @@
 ﻿using ProjectManagementSystem.Data;
-using System.ComponentModel.DataAnnotations;
+using ProjectManagementSystem.Models;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
-namespace ProjectManagementSystem.Models
+namespace ProjectManagementSystem.ViewModels
 {
-    public class Defect
+    public class DefectEditViewModel
     {
         [Display(Name = "编号")]
         public int Id { get; set; }
@@ -17,10 +19,8 @@ namespace ProjectManagementSystem.Models
 
         [Display(Name = "创建日期")]
         public DateTime CreateDate { get; set; }
-
         [Display(Name = "解决方案")]
         public string Solution { get; set; }
-
         [Display(Name = "缺陷类型")]
         public DefectType Type { get; set; }
 
@@ -31,14 +31,14 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "负责人")]
         public ApplicationUser Functionary { get; set; }
 
-
         public int? PutForwardId { get; set; }
+
         [Display(Name = "提出人")]
         public ApplicationUser PutForward { get; set; }
 
+        public int ProjectId { get; set; }
         [Display(Name = "所属项目")]
+
         public Project Project { get; set; }
     }
-
-
 }

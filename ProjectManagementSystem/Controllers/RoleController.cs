@@ -16,14 +16,14 @@ namespace ProjectManagementSystem.Controllers
 
     public class RoleController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
 
         public RoleController(
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole<int>> roleManager)
         {
-            _userManager = userManager;
+            this.userManager = userManager;
             _roleManager = roleManager;
         }
 
@@ -71,7 +71,7 @@ namespace ProjectManagementSystem.Controllers
                 return View(roleAddViewModel);
             }
 
-            var role = new IdentityRole
+            var role = new IdentityRole<int>
             {
                 Name = roleAddViewModel.RoleName
             };
@@ -135,7 +135,7 @@ namespace ProjectManagementSystem.Controllers
                 return View(roleEditViewModel);
             }
 
-            var role = await _roleManager.FindByIdAsync(roleEditViewModel.RoleId);
+            var role = await _roleManager.FindByIdAsync(roleEditViewModel.RoleId.ToString());
 
             role.Name = roleEditViewModel.RoleName;
 

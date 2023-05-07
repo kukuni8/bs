@@ -9,7 +9,7 @@ namespace ProjectManagementSystem.ViewModels
 {
     public class RoleEditViewModel
     {
-        public string RoleId { get; set; }
+        public int RoleId { get; set; }
         [Required]
         [Display(Name = "角色名称")]
         public string RoleName { get; set; }

@@ -27,18 +27,20 @@ namespace ProjectManagementSystem.Controllers
 
         public async Task<IActionResult> AddRisk(int projectId)
         {
-            var project = await applicationDbContext.Projects.FirstOrDefaultAsync(a => a.Id == projectId);
+            var project = await applicationDbContext.Projects.Include(p => p.Risks).FirstOrDefaultAsync(a => a.Id == projectId);
             var model = new RiskAddViewModel
             {
                 ProjectId = projectId,
                 Project = project,
                 PutForwardId = (await userManager.FindByNameAsync(User.Identity.Name)).Id,
+                PutForward = await userManager.FindByNameAsync(User.Identity.Name),
             };
             return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> AddRisk(RiskAddViewModel model)
         {
+            var project = await applicationDbContext.Projects.FirstOrDefaultAsync(a => a.Id == model.ProjectId);
             var risk = new Risk();
             risk.Name = model.Name;
             risk.CreateDate = DateTime.Now;
@@ -46,7 +48,7 @@ namespace ProjectManagementSystem.Controllers
             risk.RiskType = model.RiskType;
             risk.Level = model.Level;
             risk.Incidence = model.Incidence;
-            risk.Project = await applicationDbContext.Projects.FirstOrDefaultAsync(a => a.Id == model.ProjectId);
+            risk.Project = project;
             risk.PutForwardId = (await userManager.FindByNameAsync(User.Identity.Name)).Id;
             await applicationDbContext.Risks.AddAsync(risk);
             await applicationDbContext.SaveChangesAsync();
@@ -70,8 +72,8 @@ namespace ProjectManagementSystem.Controllers
                 PutForward = await userManager.FindByIdAsync(risk.PutForwardId.ToString()),
                 Functionary = risk.Functionary,
                 FunctionaryId = risk.FunctionaryId,
-                ProjectId = risk.RiskProjectId,
                 Project = risk.Project,
+                ProjectId = risk.Project.Id,
             };
             return View(model);
         }
@@ -79,7 +81,7 @@ namespace ProjectManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> EditRisk(RiskEditViewModel model)
         {
-            var risk = await applicationDbContext.Risks.FirstOrDefaultAsync(a => a.Id == model.Id);
+            var risk = await applicationDbContext.Risks.Include(a => a.Project).FirstOrDefaultAsync(a => a.Id == model.Id);
             risk.Id = model.Id;
             risk.Name = model.Name;
             risk.Incidence = model.Incidence;
@@ -91,18 +93,17 @@ namespace ProjectManagementSystem.Controllers
             risk.PutForwardId = model.PutForwardId;
             risk.PutForward = await userManager.FindByIdAsync(model.PutForwardId.ToString());
             risk.FunctionaryId = model.FunctionaryId;
-            risk.Functionary = await userManager.FindByIdAsync(model.FunctionaryId.ToString());
-            risk.RiskProjectId = model.ProjectId;
+            risk.Functionary = model.Functionary;
             risk.Project = await applicationDbContext.Projects.FirstOrDefaultAsync(a => a.Id == model.ProjectId);
             applicationDbContext.Risks.Update(risk);
             applicationDbContext.SaveChanges();
-            return RedirectToAction("ProjectDetail", "Project", new { id = risk.RiskProjectId, tab = "bordered-risks" });
+            return RedirectToAction("ProjectDetail", "Project", new { id = risk.Project.Id, tab = "bordered-risks" });
         }
 
         public async Task<IActionResult> DeleteRisk(int riskId)
         {
-            var risk = await applicationDbContext.Risks.FirstOrDefaultAsync(a => a.Id == riskId);
-            var projectId = risk.RiskProjectId;
+            var risk = await applicationDbContext.Risks.Include(A => A.Project).FirstOrDefaultAsync(a => a.Id == riskId);
+            var projectId = risk.Project.Id;
             applicationDbContext.Risks.Remove(risk);
             applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", "Project", new { id = projectId, tab = "bordered-risks" });

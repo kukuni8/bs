@@ -13,6 +13,8 @@ namespace ProjectManagementSystem.ViewModels
 
         public Project CurProject { get; set; }
 
+        public int CurProjectId { get; set; }
+
         public ProjectAddMissionViewModel AddMission { get; set; }
 
         public ProjectEditMissionViewModel EditMission { get; set; }
@@ -20,6 +22,12 @@ namespace ProjectManagementSystem.ViewModels
         public ProjectDeleteMissionViewModel DeleteMission { get; set; }
 
         public IEnumerable<RiskEditViewModel> RiskEditViewModels { get; set; }
+
+        public IEnumerable<DefectEditViewModel> DefectEditViewModels { get; set; }
+
+        public IEnumerable<ProjectUserIndexViewModel> ProjectUserIndexViewModels { get; set; }
+
+        public List<ProjectUserNotInProjectModel> UsersNotInThisProject { get; set; }
 
     }
     public class ProjectMissionIndexViewModel
@@ -52,14 +60,14 @@ namespace ProjectManagementSystem.ViewModels
         [Display(Name = "状态")]
         public MissionStatus Status { get; set; }
 
-        public int ProjectId { get; set; }
-
         [Display(Name = "所属项目")]
         public string ProjectName { get; set; }
+
+        public int ProjectId { get; set; }
+
         [Display(Name = "执行者")]
         public List<string> Executors { get; set; }
     }
-
     public class ProjectEditMissionViewModel
     {
         [Display(Name = "编号")]
@@ -97,6 +105,26 @@ namespace ProjectManagementSystem.ViewModels
 
         [Display(Name = "执行者")]
         public List<string> Executors { get; set; }
+    }
+
+    public class ProjectUserIndexViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string RoleName { get; set; }
+        public string Department { get; set; }
+        public string Job { get; set; }
+
+    }
+
+    public class ProjectUserNotInProjectModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string RoleName { get; set; }
+        public string Department { get; set; }
+        public string Job { get; set; }
+        public bool IsSelected { get; set; }
     }
 
 }

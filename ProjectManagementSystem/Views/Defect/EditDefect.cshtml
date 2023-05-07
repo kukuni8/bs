@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using ProjectManagementSystem.ViewModels
 @using ProjectManagementSystem.Data
-@model RiskEditViewModel
+@model DefectEditViewModel
 @inject UserManager<ApplicationUser> userManager
 <style>
     textarea.auto-resize {
@@ -28,9 +28,9 @@
 
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">编辑风险</h5>
+        <h5 class="card-title">编辑缺陷</h5>
         <div class="container">
-            <form asp-action="EditRisk" asp-controller="Risk" method="post">
+            <form asp-action="EditDefect" asp-controller="Defect" method="post">
                 <div class="form-group row">
                     <input asp-for="ProjectId" value="@Model.ProjectId" hidden>
                     <input asp-for="PutForwardId" value="@Model.PutForwardId" hidden>
@@ -38,7 +38,7 @@
                     <label asp-for="Name" class="col-sm-2"></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" asp-for="@Model.Name" required="">
-                        <div class="invalid-feedback">请输入风险名称</div>
+                        <div class="invalid-feedback">请输入缺陷名称</div>
                     </div>
                 </div>
                 <br />
@@ -59,14 +59,6 @@
                 </div>
                 <br />
                 <div class="form-group row">
-                    <label asp-for="Incidence" class="col-sm-2"></label>
-                    <div class="col-sm-10">
-                        <textarea type="text" class="form-control auto-resize" asp-for="Incidence"></textarea>
-                        <div class="invalid-feedback">请输入风险影响 </div>
-                    </div>
-                </div>
-                <br />
-                <div class="form-group row">
                     <label asp-for="Solution" class="col-sm-2"></label>
                     <div class="col-sm-10">
                         <textarea type="text" class="form-control auto-resize" asp-for="Solution"></textarea>
@@ -75,26 +67,18 @@
                 </div>
                 <br />
                 <div class="form-group row">
-                    <label asp-for="Level" class="col-sm-2"></label>
-                    <div class="col-sm-10">
-                        <select class="form-control" asp-for="Level" asp-items="@Html.GetEnumSelectList<RiskLevel>()"></select>
-                        <div class="invalid-feedback">请输入风险等级</div>
-                    </div>
-                </div>
-                <br />
-                <div class="form-group row">
                     <label asp-for="Status" class="col-sm-2"></label>
                     <div class="col-sm-10">
-                        <select class="form-control" asp-for="Status" asp-items="@Html.GetEnumSelectList<RiskStatus>()"></select>
-                        <div class="invalid-feedback">请输入风险状态</div>
+                        <select class="form-control" asp-for="Status" asp-items="@Html.GetEnumSelectList<DefectStatus>()"></select>
+                        <div class="invalid-feedback">请输入缺陷状态</div>
                     </div>
                 </div>
                 <br />
                 <div class="form-group row">
-                    <label asp-for="RiskType" class="col-sm-2"></label>
+                    <label asp-for="Type" class="col-sm-2"></label>
                     <div class="col-sm-10">
-                        <select class="form-control" asp-for="RiskType" asp-items="@Html.GetEnumSelectList<RiskType>()"></select>
-                        <div class="invalid-feedback">请输入风险类型</div>
+                        <select class="form-control" asp-for="Type" asp-items="@Html.GetEnumSelectList<DefectType>()"></select>
+                        <div class="invalid-feedback">请输入缺陷类型</div>
                     </div>
                 </div>
                 <br />

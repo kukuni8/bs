@@ -1,18 +1,18 @@
 ﻿@using ProjectManagementSystem.Data
 @using ProjectManagementSystem.ViewModels
-@model RiskAddViewModel
+@model DefectAddViewModel
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">添加风险</h5>
+        <h5 class="card-title">添加缺陷</h5>
         <div class="container">
-            <form asp-action="AddRisk" asp-controller="Risk" method="post">
+            <form asp-action="AddDefect" asp-controller="Defect" method="post">
                 <div class="form-group row">
                     <input asp-for="ProjectId" value="@Model.ProjectId" hidden>
-                    <input asp-for="PutForward" value="@Model.PutForwardId" hidden>
+                    <input asp-for="PutForwardId" value="@Model.PutForwardId" hidden>
                     <label asp-for="Name" class="col-sm-2"></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" asp-for="@Model.Name" required="">
-                        <div class="invalid-feedback">请输入风险名称</div>
+                        <div class="invalid-feedback">请输入缺陷名称</div>
                     </div>
                 </div>
                 <br />
@@ -20,39 +20,31 @@
                     <label asp-for="Project" class="col-sm-2"></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control readonly-input" asp-for="Project" value="@Model.Project" readonly>
-                        <div class="invalid-feedback">请输入风险名称</div>
+                        <div class="invalid-feedback">请输入缺陷所属项目名称</div>
                     </div>
                 </div>
                 <br />
                 <div class="form-group row">
-                    <label asp-for="Incidence" class="col-sm-2"></label>
+                    <label asp-for="Description" class="col-sm-2"></label>
                     <div class="col-sm-10">
-                        <textarea type="text" class="form-control" asp-for="Incidence"></textarea>
+                        <textarea type="text" class="form-control" asp-for="Description"></textarea>
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <br />
                 <div class="form-group row">
-                    <label asp-for="Level" class="col-sm-2"></label>
+                    <label asp-for="Type" class="col-sm-2"></label>
                     <div class="col-sm-10">
-                        <select class="form-control" asp-for="Level" asp-items="@Html.GetEnumSelectList<RiskLevel>()"></select>
-                        <div class="invalid-feedback">请输入风险名称</div>
+                        <select class="form-control" asp-for="Type" asp-items="@Html.GetEnumSelectList<DefectType>()"></select>
+                        <div class="invalid-feedback">请输入缺陷类型</div>
                     </div>
                 </div>
                 <br />
                 <div class="form-group row">
                     <label asp-for="Status" class="col-sm-2"></label>
                     <div class="col-sm-10">
-                        <select class="form-control" asp-for="Status" asp-items="@Html.GetEnumSelectList<RiskStatus>()"></select>
-                        <div class="invalid-feedback">请输入风险名称</div>
-                    </div>
-                </div>
-                <br />
-                <div class="form-group row">
-                    <label asp-for="RiskType" class="col-sm-2"></label>
-                    <div class="col-sm-10">
-                        <select class="form-control" asp-for="RiskType" asp-items="@Html.GetEnumSelectList<RiskType>()"></select>
-                        <div class="invalid-feedback">请输入风险名称</div>
+                        <select class="form-control" asp-for="Status" asp-items="@Html.GetEnumSelectList<DefectStatus>()"></select>
+                        <div class="invalid-feedback">请输入缺陷状态</div>
                     </div>
                 </div>
                 <br />
@@ -60,13 +52,13 @@
                     <label asp-for="PutForward" class="col-sm-2"></label>
                     <div class="col-sm-10">
                         <input class="form-control readonly-input" asp-for="PutForward" value="@Model.PutForward" readonly>
-                        <div class="invalid-feedback">请输入风险名称</div>
+                        <div class="invalid-feedback">请输入提出人</div>
                     </div>
                 </div>
                 <br />
                 <div class="form-group row">
                     <div class="text-center">
-                        <a asp-action="ReturnDetail" asp-route-projectId="@Model.ProjectId" class="btn btn-secondary">返回</a>
+                        <a asp-action="ReturnDetail" asp-asp-controller="Defect" asp-route-projectId="@Model.ProjectId" class="btn btn-secondary">返回</a>
                         <button type="submit" class="btn btn-primary">保存</button>
                     </div>
                 </div>

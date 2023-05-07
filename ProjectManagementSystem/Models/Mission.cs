@@ -28,15 +28,12 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "状态")]
         public MissionStatus Status { get; set; }
 
-        public int MissionProjectId { get; set; }
         [Display(Name = "所属项目")]
-        [ForeignKey(nameof(MissionProjectId))]
         public Project Project { get; set; }
 
-        public int PutForwardId { get; set; }
+        public int? PutForwardId { get; set; }
         public ApplicationUser PutForward { get; set; }
 
-        public List<ApplicationUser> Executors { get; set; }
         public List<MissionExecutor> MissionExecutors { get; set; }
         public List<MissionDialogue> Dialogues { get; set; }
 

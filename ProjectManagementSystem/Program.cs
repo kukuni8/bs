@@ -14,6 +14,7 @@ namespace ProjectManagementSystem
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddScoped<UserManager<ApplicationUser>>();
             builder.Services.AddControllersWithViews();
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -25,11 +26,12 @@ namespace ProjectManagementSystem
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 1;
+                options.User.AllowedUserNameCharacters = null;
             })
+            .AddRoleManager<RoleManager<IdentityRole<int>>>()
             .AddSignInManager<SignInManager<ApplicationUser>>()
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<ApplicationDbContext>();
-
 
 
             builder.Services.AddAuthorization(options =>

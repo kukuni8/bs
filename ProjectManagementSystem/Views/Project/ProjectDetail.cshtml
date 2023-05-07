@@ -82,8 +82,20 @@
             color: #6c757d;
         }
 </style>
+<style>
+    .custom-card-body {
+        display: flex;
+        align-items: center;
+        height: 100%; /* 设置 custom-card-body 高度为 100%，以便填充整个卡片 */
+    }
+</style>
 
-
+<style>
+    .custom-td {
+        width: 16.66%; /* 设置每列的宽度占总宽度的 1/6 */
+        text-align: center; /* 设置文本居中对齐 */
+    }
+</style>
 
 
 
@@ -94,17 +106,27 @@
         <!-- Bordered Tabs -->
         <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="mission-tab" data-bs-toggle="tab" data-bs-target="#bordered-missions" type="button" role="tab" aria-controls="home" aria-selected="true">任务列表</button>
+                <button class="nav-link active" id="look-tab" data-bs-toggle="tab" data-bs-target="#bordered-looks" type="button" role="tab" aria-controls="home" aria-selected="true">总览</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="mission-tab" data-bs-toggle="tab" data-bs-target="#bordered-missions" type="button" role="tab" aria-controls="home" aria-selected="true">任务列表</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="risk-tab" data-bs-toggle="tab" data-bs-target="#bordered-risks" type="button" role="tab" aria-controls="profile" aria-selected="false">风险列表</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="defect-tab" data-bs-toggle="tab" data-bs-target="#bordered-defects" type="button" role="tab" aria-controls="home" aria-selected="true">缺陷列表</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#bordered-users" type="button" role="tab" aria-controls="profile" aria-selected="false">项目人员</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="project-tab" data-bs-toggle="tab" data-bs-target="#bordered-editProject" type="button" role="tab" aria-controls="profile" aria-selected="false">项目信息</button>
             </li>
         </ul>
         <div class="tab-content pt-2" id="borderedTabContent">
-            <div class="tab-pane fade show active" id="bordered-missions" role="tabpanel" aria-labelledby="mission-tab">
+            <div class="tab-pane fade show active" id="bordered-looks" role="tabpanel" aria-labelledby="look-tab"></div>
+            <div class="tab-pane fade" id="bordered-missions" role="tabpanel" aria-labelledby="mission-tab">
                 <div class="container">
                     <div class="row">
                         <div class="col-3">
@@ -617,9 +639,10 @@
                                             </div>
                                             <br />
                                             <div class="form-group row">
+                                                <input asp-for="@Model.AddMission.ProjectId" value="@Model.CurProject.Id" hidden />
                                                 <label asp-for="@Model.AddMission.ProjectName" class="col-sm-2"></label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.AddMission.ProjectName" readonly>
+                                                    <input type="text" value="@Model.CurProject" class="form-control" asp-for="@Model.AddMission.ProjectName" readonly>
                                                     <div class="invalid-feedback">请输入任务的所属项目</div>
                                                 </div>
                                             </div>
@@ -685,6 +708,248 @@
                     </div>
                 </div>
             </div>
+            <div class="tab-pane fade" id="bordered-risks" role="tabpanel" aria-labelledby="risk-tab">
+                <div class="container">
+                    <section class="section">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <h5 class="card-title">风险列表</h5>
+                                            <div class="form-group row">
+                                                <div class="text-end">
+                                                    <a asp-action="AddRisk" asp-controller="Risk" asp-route-projectId="@Model.CurProject.Id" class="btn btn-primary text-end">新风险</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table datatable">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">名称</th>
+                                                    <th scope="col">类型</th>
+                                                    <th scope="col">级别</th>
+                                                    <th scope="col">状态</th>
+                                                    <th scope="col">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var risk in Model.RiskEditViewModels)
+                                                {
+                                                    <tr>
+                                                        <th scope="row">@risk.Id</th>
+                                                        <td>@risk.Name</td>
+                                                        <td>
+                                                            <span class="risk-label gray-color">@risk.RiskType</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="risk-label @(risk.Level == RiskLevel.低风险 ? "low-risk" : risk.Level == RiskLevel.中风险 ? "medium-risk" : "high-risk")">@risk.Level</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="risk-label @(risk.Status == RiskStatus.待审核 ? "status-awaiting" : risk.Status == RiskStatus.已丢弃 ? "status-discarded" : "status-resolved")">@risk.Status</span>
+                                                        </td>
+
+                                                        <td>
+                                                            <a asp-action="EditRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-sm btn-outline-primary">编辑</a>
+                                                            <a asp-action="DeleteRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除风险：@risk.Name 吗？');">删除</a>
+                                                        </td>
+
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="bordered-defects" role="tabpanel" aria-labelledby="defect-tab">
+                <div class="container">
+                    <section class="section">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <h5 class="card-title">缺陷列表</h5>
+                                            <div class="form-group row">
+                                                <div class="text-end">
+                                                    <a asp-action="AddDefect" asp-controller="Defect" asp-route-projectId="@Model.CurProject.Id" class="btn btn-primary text-end">新缺陷</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table datatable">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">名称</th>
+                                                    <th scope="col">类型</th>
+                                                    <th scope="col">状态</th>
+                                                    <th scope="col">提出人</th>
+                                                    <th scope="col">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var defect in Model.DefectEditViewModels)
+                                                {
+                                                    <tr>
+                                                        <th scope="row">@defect.Id</th>
+                                                        <td>@defect.Name</td>
+                                                        <td>
+                                                            <span class="risk-label gray-color">@defect.Type.</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="risk-label @(defect.Status == DefectStatus.待审核 ? "status-awaiting" : defect.Status == DefectStatus.处理中 ? "status-discarded" : "status-resolved")">@defect.Status</span>
+                                                        </td>
+                                                        <td>@defect.PutForward</td>
+                                                        <td>
+                                                            <a asp-action="EditDefect" asp-controller="Defect" asp-route-Id="@defect.Id" class="btn btn-sm btn-outline-primary">编辑</a>
+                                                            <a asp-action="DeleteDefect" asp-controller="Defect" asp-route-Id="@defect.Id" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除缺陷：@defect.Name 吗？');">删除</a>
+                                                        </td>
+
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="bordered-users" role="tabpanel" aria-labelledby="user-tab">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <h5 class="card-title">项目人员</h5>
+                                    </div>
+                                    <div class="row">
+                                        <div class="card">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                                添加人员
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input class="form-control mt-2 float-right" id="searchInput" type="text" placeholder="搜索...">
+                                        </div>
+                                        <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">添加人员</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form method="post" asp-action="AddUserToProject">
+                                                        <div class="modal-body">
+                                                            <div class="modal-body">
+                                                                <input type="text" class="form-control" placeholder="输入用户名进行搜索" id="searchuser">
+                                                                <hr>
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>用户名</th>
+                                                                            <th>角色</th>
+                                                                            <th>部门</th>
+                                                                            <th>职位</th>
+                                                                            <th>添加</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @for (int i = 0; i < Model.UsersNotInThisProject.Count; i++)
+                                                                        {
+                                                                            var user = Model.UsersNotInThisProject[i];
+                                                                            <tr>
+                                                                                <input asp-for="@Model.UsersNotInThisProject[i].Id" value="@Model.UsersNotInThisProject[i].Id" hidden>
+                                                                                <input asp-for="@Model.CurProjectId" value="@Model.CurProject.Id" hidden>
+                                                                                <td>@user.Name</td>
+                                                                                <td>@user.RoleName</td>
+                                                                                <td>@user.Department</td>
+                                                                                <td>@user.Job</td>
+                                                                                <td>
+                                                                                    <div class="form-check">
+                                                                                        <input type="checkbox" class="form-check-input" asp-for="@Model.UsersNotInThisProject[i].IsSelected" )>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                                            <button type="submit" class="btn btn-primary">添加</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 下面是之前的卡片表格代码 -->
+                                    <div class="row">
+                                        <div class="col">
+                                            <!-- Card 1 -->
+                                            <div class="card mt-3" style="height:60px;">
+                                                <div class="custom-card-body">
+                                                    <table class="table table-borderless mb-0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="custom-td">用户</td>
+                                                                <td class="custom-td">角色</td>
+                                                                <td class="custom-td">部门</td>
+                                                                <td class="custom-td">岗位</td>
+                                                                <td class="custom-td">操作</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            @foreach (var user in Model.ProjectUserIndexViewModels)
+                                            {
+                                                <div class="card mt-3" data-searchable>
+                                                    <div class="custom-card-body">
+                                                        <table class="table table-borderless mb-0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="custom-td">@user.Name</td>
+                                                                    <td class="custom-td">@user.RoleName</td>
+                                                                    <td class="custom-td">@user.Department</td>
+                                                                    <td class="custom-td">@user.Job</td>
+                                                                    <td class="custom-td"><a asp-action="DeleteUserFromProject" asp-controller="User" asp-route-userId="@user.Id" asp-route-PROJECTId="@Model.CurProject.Id" class="btn btn-outline-danger" onclick="return confirm('确定要删除风险：@user.Name 吗？');">删除</a></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
             <div class="tab-pane fade" id="bordered-editProject" role="tabpanel" aria-labelledby="project-tab">
                 <div class="container">
                     <form asp-action="EditProject" method="post">
@@ -747,65 +1012,6 @@
                     </form>
                 </div>
             </div>
-            <div class="tab-pane fade" id="bordered-risks" role="tabpanel" aria-labelledby="risk-tab">
-                <div class="container">
-                    <section class="section">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <h5 class="card-title">风险列表</h5>
-                                            <div class="form-group row">
-                                                <div class="text-end">
-                                                    <a asp-action="AddRisk" asp-controller="Risk" asp-route-projectId="@Model.CurProject.Id" class="btn btn-primary text-end">新风险</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <table class="table datatable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">名称</th>
-                                                    <th scope="col">类型</th>
-                                                    <th scope="col">级别</th>
-                                                    <th scope="col">状态</th>
-                                                    <th scope="col">操作</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var risk in Model.RiskEditViewModels)
-                                                {
-                                                    <tr>
-                                                        <th scope="row">@risk.Id</th>
-                                                        <td>@risk.Name</td>
-                                                        <td>
-                                                            <span class="risk-label gray-color">@risk.RiskType</span>
-                                                        </td>
-                                                        <td>
-                                                            <span class="risk-label @(risk.Level == RiskLevel.低风险 ? "low-risk" : risk.Level == RiskLevel.中风险 ? "medium-risk" : "high-risk")">@risk.Level</span>
-                                                        </td>
-                                                        <td>
-                                                            <span class="risk-label @(risk.Status == RiskStatus.待审核 ? "status-awaiting" : risk.Status == RiskStatus.已丢弃 ? "status-discarded" : "status-resolved")">@risk.Status</span>
-                                                        </td>
-
-                                                        <td>
-                                                            <a asp-action="EditRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-sm btn-outline-primary">编辑</a>
-                                                            <a asp-action="DeleteRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除风险：@risk.Name 吗？');">删除</a>
-                                                        </td>
-
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                </div>
-            </div>
         </div>
         <!-- End Bordered Tabs -->
 
@@ -856,4 +1062,26 @@
             }
         });
     </script>
-}
+    <script>
+        $(document).ready(function () {
+            $("#searchInput").on("keyup", function () {
+                let value = $(this).val().toLowerCase();
+                $("[data-searchable]").filter(function () {
+                    // 在这里，我们搜索每个卡片中表格的文本内容
+                    $(this).toggle($(this).find("table").text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#searchuser').on('keyup', function () {
+                var value = $(this).val().toLowerCase();
+                $('table tbody tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+    </script>
+    }

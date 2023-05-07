@@ -31,14 +31,12 @@ namespace ProjectManagementSystem.Models
         public string RoleName { get; set; }
 
         // 与Project的关系
-        public List<Project> Projects { get; set; }
         public List<ProjectUser> ProjectUsers { get; set; }
         public List<Project> PutForwardProjects { get; set; }
         public List<Project> FunctionaryProjects { get; set; }
 
         // 与Mission的关系
         public List<Mission> PutForwardMissions { get; set; }
-        public List<Mission> ExecuteMissions { get; set; }
         public List<MissionExecutor> MissionExecutors { get; set; }
 
 

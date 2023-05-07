@@ -2,7 +2,7 @@
 @using ProjectManagementSystem.ViewModels
 @using ProjectManagementSystem.Data
 @model UserAddViewModel
-@inject RoleManager<IdentityRole> roleManager;
+@inject RoleManager<IdentityRole<int>> roleManager;
 @{
     ViewBag.Title = "添加用户";
 }
