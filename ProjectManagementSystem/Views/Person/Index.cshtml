@@ -1,0 +1,36 @@
+﻿@using ProjectManagementSystem.ViewModels
+@model PersonIndexViewModel
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div class="card rounded">
+                <div class="card-body text-white bg-secondary text-center">
+                    <br>
+                    <h2>待处理任务</h2>
+                    <h3>@Model.UndealMissionCount</h3>
+                    <a asp-action="Index" asp-controller="Mission" asp-route-Status="0" class="btn btn-light text-secondary" disabled="@((Model.UndealMissionCount == 0))">查看</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card rounded">
+                <div class="card-body text-white bg-info text-center">
+                    <br>
+                    <h2>进行中任务</h2>
+                    <h3>@Model.InprogressMissionCount</h3>
+                    <a asp-action="Index" asp-controller="Mission" asp-route-Status="1" class="btn btn-light text-info" disabled="@((Model.InprogressMissionCount == 0))">查看</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card rounded">
+                <div class="card-body text-white bg-success text-center">
+                    <br>
+                    <h2>已完成任务</h2>
+                    <h3>@Model.FinishedMissionCount</h3>
+                    <a asp-action="Index" asp-controller="Mission" asp-route-Status="2" class="btn btn-light text-sucess" disabled="@((Model.FinishedMissionCount == 0))">查看</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
