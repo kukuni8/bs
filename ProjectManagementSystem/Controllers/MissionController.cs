@@ -51,7 +51,7 @@ namespace ProjectManagementSystem.Controllers
                 .Include(m => m.PutForward)
                 .Include(m => m.MissionExecutors).ThenInclude(me => me.ApplicationUser)
                 .Include(m => m.Dialogues)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(m => m.Id == id);
             var model = new MissionEditViewModel
             {
                 Id = mission.Id,
@@ -60,6 +60,7 @@ namespace ProjectManagementSystem.Controllers
                 CreateDate = mission.CreateDate,
                 Deadline = mission.Deadline,
                 Priority = mission.Priority,
+                Status = mission.Status,
                 StartDate = mission.StartDate,
                 PutForward = mission.PutForward,
                 Project = mission.Project,
@@ -96,7 +97,7 @@ namespace ProjectManagementSystem.Controllers
                     MissionId = mission.Id,
                     Speaker = user,
                     CreateDate = DateTime.Now,
-                    Content = $"修改了任务描述",
+                    Content = $"修改了任务描述:{model.Description}",
                 };
                 applicationDbContext.MissionDialogues.Add(dia);
             }
@@ -107,11 +108,11 @@ namespace ProjectManagementSystem.Controllers
                     MissionId = mission.Id,
                     Speaker = user,
                     CreateDate = DateTime.Now,
-                    Content = $"将任务截止时间改为{model.Deadline.Date}",
+                    Content = $"将任务截止时间改为{model.Deadline.ToString("yyyy-MM-dd")}",
                 };
                 applicationDbContext.MissionDialogues.Add(dia);
             }
-            if (mission.Priority == model.Priority)
+            if (mission.Priority != model.Priority)
             {
                 var dia = new MissionDialogue
                 {
@@ -122,7 +123,7 @@ namespace ProjectManagementSystem.Controllers
                 };
                 applicationDbContext.MissionDialogues.Add(dia);
             }
-            if (mission.Status == model.Status)
+            if (mission.Status != model.Status)
             {
                 var dia = new MissionDialogue
                 {
@@ -146,7 +147,7 @@ namespace ProjectManagementSystem.Controllers
                         MissionId = mission.Id,
                         Speaker = user,
                         CreateDate = DateTime.Now,
-                        Content = $"将{name}移除了该任务",
+                        Content = $"将用户{name}移出了该任务",
                     };
                     applicationDbContext.MissionDialogues.Add(dia);
                 }
@@ -160,10 +161,21 @@ namespace ProjectManagementSystem.Controllers
                         MissionId = mission.Id,
                         Speaker = user,
                         CreateDate = DateTime.Now,
-                        Content = $"将{userName}添加到了该任务",
+                        Content = $"将用户{userName}添加到了该任务",
                     };
                     applicationDbContext.MissionDialogues.Add(dia);
                 }
+            }
+            if (!string.IsNullOrEmpty(model.Content))
+            {
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = model.Content,
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
             }
             mission.Name = model.Name;
             mission.Description = model.Description;
@@ -189,7 +201,7 @@ namespace ProjectManagementSystem.Controllers
             }
             applicationDbContext.Missions.Update(mission);
             applicationDbContext.SaveChanges();
-            return RedirectToAction("Index", (int)mission.Status);
+            return RedirectToAction("EditMission", new { id = mission.Id });
         }
 
 
