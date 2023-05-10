@@ -20,6 +20,8 @@ namespace ProjectManagementSystem.Data
         public DbSet<Book> Books { get; set; }
         public DbSet<Resource> Resources { get; set; }
         public DbSet<ResourceChange> ResourceChanges { get; set; }
+        public DbSet<Fund> Funds { get; set; }
+        public DbSet<FundChange> FundChanges { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -34,6 +36,15 @@ namespace ProjectManagementSystem.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Project>()
+             .HasOne(p => p.Fund)
+             .WithOne(f => f.Project)
+             .HasForeignKey<Fund>(f => f.ProjectId);
+
+            modelBuilder.Entity<Fund>()
+             .Property(f => f.Amount)
+             .HasColumnType("decimal(18, 2)");
 
             modelBuilder.Entity<ProjectUser>()
                 .HasKey(pu => new { pu.ProjectId, pu.ApplicationUserId });

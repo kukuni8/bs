@@ -342,6 +342,57 @@ namespace ProjectManagementSystem.Migrations
                     b.ToTable("Defects");
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.Fund", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId")
+                        .IsUnique();
+
+                    b.ToTable("Funds");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.FundChange", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ChangeType")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FundId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FundId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FundChanges");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Mission", b =>
                 {
                     b.Property<int>("Id")
@@ -724,6 +775,32 @@ namespace ProjectManagementSystem.Migrations
                     b.Navigation("PutForward");
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.Fund", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.Project", "Project")
+                        .WithOne("Fund")
+                        .HasForeignKey("ProjectManagementSystem.Models.Fund", "ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.FundChange", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.Fund", "Fund")
+                        .WithMany("Changes")
+                        .HasForeignKey("FundId");
+
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "User")
+                        .WithMany("FundChanges")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Fund");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Mission", b =>
                 {
                     b.HasOne("ProjectManagementSystem.Models.Project", "Project")
@@ -886,6 +963,8 @@ namespace ProjectManagementSystem.Migrations
 
                     b.Navigation("FunctionaryRisks");
 
+                    b.Navigation("FundChanges");
+
                     b.Navigation("MissionDialogues");
 
                     b.Navigation("MissionExecutors");
@@ -905,6 +984,11 @@ namespace ProjectManagementSystem.Migrations
                     b.Navigation("ResourceChanges");
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.Fund", b =>
+                {
+                    b.Navigation("Changes");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Mission", b =>
                 {
                     b.Navigation("Dialogues");
@@ -917,6 +1001,8 @@ namespace ProjectManagementSystem.Migrations
                     b.Navigation("Books");
 
                     b.Navigation("Defects");
+
+                    b.Navigation("Fund");
 
                     b.Navigation("Missions");
 

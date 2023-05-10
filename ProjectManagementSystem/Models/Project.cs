@@ -25,6 +25,8 @@ namespace ProjectManagementSystem.Models
         [ForeignKey(nameof(FunctionaryId))]
         public ApplicationUser Functionary { get; set; }
 
+        public Fund Fund { get; set; }
+
         public List<ProjectUser> ProjectUsers { get; set; }
 
         public List<Mission> Missions { get; set; }

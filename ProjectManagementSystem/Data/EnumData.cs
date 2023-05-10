@@ -65,4 +65,9 @@
         其他通知,
     }
 
+    public enum FundChangeType
+    {
+        增加,
+        减少,
+    }
 }
