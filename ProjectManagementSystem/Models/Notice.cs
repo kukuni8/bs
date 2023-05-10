@@ -10,5 +10,6 @@ namespace ProjectManagementSystem.Models
         public NoticeType NoticeType { get; set; }
         public string Information { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+        public Project Project { get; set; }
     }
 }

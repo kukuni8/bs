@@ -31,6 +31,13 @@ namespace ProjectManagementSystem.ViewModels
 
         public IEnumerable<BookIndexViewModel> BookIndexViewModels { get; set; }
 
+        public IEnumerable<ResourceIndexViewModel> ResourceIndexViewModels { get; set; }
+
+        public ResourceAddViewModel ResourceAddViewModel { get; set; }
+
+        public ResourceChangeViewModel UseResourceViewModel { get; set; }
+
+        public ResourceChangeViewModel AddResourceViewModel { get; set; }
     }
     public class ProjectMissionIndexViewModel
     {

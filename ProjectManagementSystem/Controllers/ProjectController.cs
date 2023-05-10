@@ -69,6 +69,8 @@ namespace ProjectManagementSystem.Controllers
                 .ThenInclude(m => m.Dialogues)
                 .Include(p => p.ProjectUsers)
                 .Include(p => p.Books)
+                .Include(p => p.Resources)
+                .ThenInclude(r => r.Changes)
                 .FirstOrDefaultAsync(a => a.Id == id);
             var missions = project.Missions;
             var model = new ProjectDetailViewModel()
@@ -199,6 +201,16 @@ namespace ProjectManagementSystem.Controllers
                 CoverImage = b.CoverImage,
                 ProjectId = project.Id,
                 Summary = b.Summary,
+            });
+            model.ResourceIndexViewModels = project.Resources.Select(r => new ResourceIndexViewModel
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Description = r.Description,
+                ProjectId = project.Id,
+                Number = r.Number,
+                ImagePath = r.ImagePath,
+                ResourceChanges = r.Changes,
             });
             return View(model);
         }

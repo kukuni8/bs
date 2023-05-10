@@ -55,6 +55,8 @@ namespace ProjectManagementSystem.Models
 
         public List<Notice> Notices { get; set; }
 
+        public List<ResourceChange> ResourceChanges { get; set; }
+
         public override string ToString()
         {
             return UserName;

@@ -456,9 +456,14 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<int>("NoticeType")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Notices");
                 });
@@ -520,6 +525,71 @@ namespace ProjectManagementSystem.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("ProjectUsers");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Resource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Resources");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.ResourceChange", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ResourceChanges");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Risk", b =>
@@ -714,7 +784,13 @@ namespace ProjectManagementSystem.Migrations
                         .WithMany("Notices")
                         .HasForeignKey("ApplicationUserId");
 
+                    b.HasOne("ProjectManagementSystem.Models.Project", "Project")
+                        .WithMany("Notices")
+                        .HasForeignKey("ProjectId");
+
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
@@ -753,6 +829,30 @@ namespace ProjectManagementSystem.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Resource", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.Project", "Project")
+                        .WithMany("Resources")
+                        .HasForeignKey("ProjectId");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.ResourceChange", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.Resource", "Resource")
+                        .WithMany("Changes")
+                        .HasForeignKey("ResourceId");
+
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "User")
+                        .WithMany("ResourceChanges")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Resource");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Risk", b =>
@@ -801,6 +901,8 @@ namespace ProjectManagementSystem.Migrations
                     b.Navigation("PutForwardProjects");
 
                     b.Navigation("PutForwardRisks");
+
+                    b.Navigation("ResourceChanges");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Mission", b =>
@@ -818,9 +920,18 @@ namespace ProjectManagementSystem.Migrations
 
                     b.Navigation("Missions");
 
+                    b.Navigation("Notices");
+
                     b.Navigation("ProjectUsers");
 
+                    b.Navigation("Resources");
+
                     b.Navigation("Risks");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Resource", b =>
+                {
+                    b.Navigation("Changes");
                 });
 #pragma warning restore 612, 618
         }

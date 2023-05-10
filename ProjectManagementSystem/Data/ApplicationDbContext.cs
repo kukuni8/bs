@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementSystem.Models;
-using System.Reflection.Emit;
+
 
 namespace ProjectManagementSystem.Data
 {
@@ -18,6 +18,8 @@ namespace ProjectManagementSystem.Data
         public DbSet<MissionExecutor> MissionExecutors { get; set; }
         public DbSet<Notice> Notices { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Resource> Resources { get; set; }
+        public DbSet<ResourceChange> ResourceChanges { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

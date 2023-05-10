@@ -31,7 +31,8 @@ namespace ProjectManagementSystem.Models
         public List<Defect> Defects { get; set; }
         public List<Risk> Risks { get; set; }
         public List<Book> Books { get; set; }
-
+        public List<Notice> Notices { get; set; }
+        public List<Resource> Resources { get; set; }
 
         public override string ToString()
         {

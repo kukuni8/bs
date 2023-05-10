@@ -20,7 +20,7 @@ namespace ProjectManagementSystem.Controllers
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             // 检查用户是否已登录
             if (!User.Identity.IsAuthenticated)
@@ -30,38 +30,11 @@ namespace ProjectManagementSystem.Controllers
 
             var model = new HomeIndexViewModel();
 
-            // 获取当前登录的用户
-            var user = await userManager.GetUserAsync(User);
 
-            // 查询当前用户的未读通知
-            var notices = await applicationDbContext.Notices.Where(n => n.ApplicationUser.Id == user.Id && !n.IsRead).ToListAsync();
-
-            // 将未读通知添加到 ViewModel
-            model.Notifications = notices;
 
             return View(model);
         }
 
-        public async Task<IActionResult> NotificationDropdown()
-        {
-            // 检查用户是否已登录
-            if (!User.Identity.IsAuthenticated)
-            {
-                return PartialView("_NotificationDropdown", new List<Notice>());
-            }
-
-            // 获取当前登录的用户
-            var user = await userManager.GetUserAsync(User);
-
-            // 查询当前用户的未读通知
-            var notices = await applicationDbContext.Notices
-                .Where(n => n.ApplicationUser.Id == user.Id && !n.IsRead)
-                .OrderByDescending(n => n.CreateTime)
-                .ToListAsync();
-
-            // 返回分布页视图并传递未读通知
-            return PartialView("_NotificationDropdown", notices);
-        }
 
 
 
