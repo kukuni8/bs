@@ -1,0 +1,93 @@
+﻿@using ProjectManagementSystem.ViewModels
+@using ProjectManagementSystem.Data
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+@inject ApplicationDbContext applicationDbContext
+@inject UserManager<ApplicationUser> userManager
+@model MissionIndexViewModel
+
+<style>
+    .custom-td {
+        width: 16.66%; /* 设置每列的宽度占总宽度的 1/6 */
+        text-align: center; /* 设置文本居中对齐 */
+    }
+</style>
+<style>
+    .priority {
+        font-weight: bold;
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 3px;
+        text-align: center;
+    }
+
+    .priority-low {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .priority-medium {
+        background-color: #ffc107;
+        color: white;
+    }
+
+    .priority-high {
+        background-color: #dc3545;
+        color: white;
+    }
+</style>
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+            <!-- Card 1 -->
+            <div class="card mt-3" style="height:50px;">
+                <div class="custom-card-body">
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="custom-td">名称</td>
+                                <td class="custom-td">状态</td>
+                                <td class="custom-td">优先级</td>
+                                <td class="custom-td">截止时间</td>
+                                <td class="custom-td">所属项目</td>
+                                <td class="custom-td">操作</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @foreach (var mission in Model.Missions)
+            {
+                string cardClass = "priority-medium";
+                if (mission.Priority == MissionPriority.较低)
+                {
+                    cardClass = "priority-low";
+                }
+                else if (mission.Priority == MissionPriority.紧急)
+                {
+                    cardClass = "priority-high";
+                }
+                <div class="card mt-3" data-searchable>
+                    <div class="custom-card-body">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                                <tr>
+                                    <td class="custom-td">@mission.Name</td>
+                                    <td class="custom-td">@mission.Status</td>
+                                    <td class="custom-td">
+                                        <div class="priority @cardClass">@mission.Priority</div>
+                                    </td>
+                                    <td class="custom-td">@mission.Deadline.ToString("yy-MM-dd")</td>
+                                    <td class="custom-td">@mission.Project</td>
+                                    <td class="custom-td"><a asp-action="EditMission" asp-controller="Mission" asp-route-Id="@mission.Id">编辑</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>

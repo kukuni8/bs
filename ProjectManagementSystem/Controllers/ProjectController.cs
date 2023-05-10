@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementSystem.Data;
 using ProjectManagementSystem.Models;
@@ -13,8 +14,10 @@ namespace ProjectManagementSystem.Controllers
         private readonly ApplicationDbContext applicationDbContext;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
-
-        public ProjectController(ApplicationDbContext applicationDbContext, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        public ProjectController(ApplicationDbContext applicationDbContext,
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager
+          )
         {
             this.applicationDbContext = applicationDbContext;
             this.signInManager = signInManager;
@@ -62,7 +65,10 @@ namespace ProjectManagementSystem.Controllers
                 .Include(p => p.Missions)
                 .ThenInclude(m => m.MissionExecutors)
                 .ThenInclude(me => me.ApplicationUser)
+                .Include(p => p.Missions)
+                .ThenInclude(m => m.Dialogues)
                 .Include(p => p.ProjectUsers)
+                .Include(p => p.Books)
                 .FirstOrDefaultAsync(a => a.Id == id);
             var missions = project.Missions;
             var model = new ProjectDetailViewModel()
@@ -93,6 +99,7 @@ namespace ProjectManagementSystem.Controllers
                                             Priority = a.Priority,
                                             Status = a.Status,
                                             Executors = a.MissionExecutors.Select(a => a.ApplicationUser.UserName).ToList(),
+                                            Dialogues = a.Dialogues,
                                         }),
                     UntreatedMissions = missions.Where(a => a.Status == MissionStatus.待处理)
                                         .Select(a => new ProjectEditMissionViewModel
@@ -107,6 +114,7 @@ namespace ProjectManagementSystem.Controllers
                                             Priority = a.Priority,
                                             Status = a.Status,
                                             Executors = a.MissionExecutors.Select(a => a.ApplicationUser.UserName).ToList(),
+                                            Dialogues = a.Dialogues,
                                         }),
                     ProcessOnMissions = missions.Where(a => a.Status == MissionStatus.进行中)
                                         .Select(a => new ProjectEditMissionViewModel
@@ -121,6 +129,7 @@ namespace ProjectManagementSystem.Controllers
                                             Priority = a.Priority,
                                             Status = a.Status,
                                             Executors = a.MissionExecutors.Select(a => a.ApplicationUser.UserName).ToList(),
+                                            Dialogues = a.Dialogues,
                                         }),
                 },
                 CurProject = project,
@@ -181,6 +190,16 @@ namespace ProjectManagementSystem.Controllers
                 RoleName = u.RoleName,
                 IsSelected = false,
             }).ToListAsync();
+
+            model.BookIndexViewModels = project.Books.Select(b => new BookIndexViewModel
+            {
+                Id = b.Id,
+                Name = b.Name,
+                Content = b.Content,
+                CoverImage = b.CoverImage,
+                ProjectId = project.Id,
+                Summary = b.Summary,
+            });
             return View(model);
         }
         [HttpPost]
@@ -262,6 +281,7 @@ namespace ProjectManagementSystem.Controllers
             var excutors = model.AddMission.Executors;
             var curMission = model.AddMission;
             var project = await applicationDbContext.Projects.FirstOrDefaultAsync(a => a.Id == curMission.ProjectId);
+            var user = (await userManager.FindByNameAsync(User.Identity.Name));
             var mission = new Mission()
             {
                 Name = curMission.Name,
@@ -273,69 +293,236 @@ namespace ProjectManagementSystem.Controllers
                 Priority = curMission.Priority,
                 Status = curMission.Status,
                 Project = project,
-                PutForwardId = (await userManager.FindByNameAsync(User.Identity.Name)).Id,
+                PutForwardId = user.Id,
                 MissionExecutors = new List<MissionExecutor>(),
             };
-            List<ApplicationUser> users = new List<ApplicationUser>();
-            foreach (var user in excutors)
+            await applicationDbContext.Missions.AddAsync(mission);
+            applicationDbContext.SaveChanges(true);
+            if (!string.IsNullOrEmpty(mission.Name))
             {
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = $"创建了任务{mission.Name}",
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
+            }
+            if (!string.IsNullOrEmpty(mission.Priority.ToString()))
+            {
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = $"把任务优先级设置为{mission.Priority}",
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
+            }
+            if (!string.IsNullOrEmpty(mission.Status.ToString()))
+            {
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = $"把任务状态设置为{mission.Status}",
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
+            }
+            if (true)
+            {
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = $"把任务截止设置为{mission.Deadline}",
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
+            }
+            List<ApplicationUser> users = new List<ApplicationUser>();
+            foreach (var userName in excutors)
+            {
+                var curUser = await applicationDbContext.Users.FirstOrDefaultAsync(a => a.UserName == userName);
                 var me = new MissionExecutor
                 {
-                    ApplicationUser = await applicationDbContext.Users.FirstOrDefaultAsync(a => a.UserName == user),
+                    ApplicationUser = curUser,
                     Mission = mission,
                 };
                 mission.MissionExecutors.Add(me);
-            }
+                var notice = new Notice
+                {
+                    ApplicationUser = curUser,
+                    NoticeType = NoticeType.任务通知,
+                    Information = $"{await userManager.FindByNameAsync(User.Identity.Name)}给你分配了一个任务",
+                    IsRead = false,
+                };
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = $"把{curUser.UserName}加入了任务",
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
+                applicationDbContext.Missions.Update(mission);
+                await applicationDbContext.Notices.AddAsync(notice);
 
-            await applicationDbContext.Missions.AddAsync(mission);
-            applicationDbContext.SaveChanges(true);
+            }
+            applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", "Project", new { id = mission.Project.Id, tab = "bordered-missions" });
         }
 
-        public async Task<IActionResult> EditMission([Bind("EditMission")] ProjectDetailViewModel model)
+        public async Task<IActionResult> EditMission([Bind("EditMission")] ProjectDetailViewModel proModel)
         {
-            if (!ModelState.IsValid)
+            var model = proModel.EditMission;
+            var mission = await applicationDbContext.Missions.Include(m => m.Project).Include(m => m.Dialogues).FirstOrDefaultAsync(m => m.Id == model.Id);
+            var creaeDate = DateTime.Now;
+
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+
+            if (mission.Name != model.Name)
             {
-                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = $"将任务名称改为{model.Name}",
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
             }
-            var excutors = model.EditMission.Executors;
-            var curMission = model.EditMission;
-            var project = await applicationDbContext.Projects.FirstOrDefaultAsync(a => a.Name == model.EditMission.ProjectName);
-            var mission = await applicationDbContext.Missions.Include(a => a.MissionExecutors).FirstOrDefaultAsync(a => a.Id == model.EditMission.Id);
 
-            mission.Name = curMission.Name;
-            mission.Description = curMission.Description;
-            mission.Deadline = curMission.Deadline;
-            mission.CreateDate = curMission.CreateDate;
-            mission.StartDate = DateTime.Now;
-            mission.FinishedTime = DateTime.Now;
-            mission.Deadline = curMission.Deadline;
-            mission.Priority = curMission.Priority;
-            mission.Status = curMission.Status;
-            mission.Project.Id = project.Id;
-            mission.MissionExecutors.Clear();
-
-            List<ApplicationUser> users = new List<ApplicationUser>();
-            foreach (var user in excutors)
+            if (mission.Description != model.Description)
             {
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = $"修改了任务描述:{model.Description}",
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
+            }
+            if (mission.Deadline.Date != model.Deadline.Date)
+            {
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = $"将任务截止时间改为{model.Deadline.ToString("yyyy-MM-dd")}",
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
+            }
+            if (mission.Priority != model.Priority)
+            {
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = $"将任务优先级设置为{model.Priority.ToString()}",
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
+            }
+            if (mission.Status != model.Status)
+            {
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = $"将任务状态设置为{model.Status.ToString()}",
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
+            }
+            var excuterNames = await applicationDbContext.MissionExecutors
+                .Where(me => me.MissionId == mission.Id)
+                .Select(me => me.ApplicationUser.UserName)
+                .ToListAsync();
+            foreach (var name in excuterNames)
+            {
+                if (!model.Executors.Contains(name))
+                {
+                    var dia = new MissionDialogue
+                    {
+                        MissionId = mission.Id,
+                        Speaker = user,
+                        CreateDate = DateTime.Now,
+                        Content = $"将用户{name}移出了该任务",
+                    };
+                    applicationDbContext.MissionDialogues.Add(dia);
+                }
+            }
+            foreach (var userName in model.Executors)
+            {
+                if (!excuterNames.Contains(userName))
+                {
+                    var dia = new MissionDialogue
+                    {
+                        MissionId = mission.Id,
+                        Speaker = user,
+                        CreateDate = DateTime.Now,
+                        Content = $"将用户{userName}添加到了该任务",
+                    };
+                    applicationDbContext.MissionDialogues.Add(dia);
+                }
+            }
+            if (!string.IsNullOrEmpty(model.Content))
+            {
+                var dia = new MissionDialogue
+                {
+                    MissionId = mission.Id,
+                    Speaker = user,
+                    CreateDate = DateTime.Now,
+                    Content = model.Content,
+                };
+                applicationDbContext.MissionDialogues.Add(dia);
+            }
+            mission.Name = model.Name;
+            mission.Description = model.Description;
+            mission.Deadline = model.Deadline;
+            mission.Priority = model.Priority;
+            mission.Status = model.Status;
+            var missionExcuters = await applicationDbContext.MissionExecutors
+                .Where(me => me.MissionId == mission.Id)
+                .ToListAsync();
+            foreach (var ex in missionExcuters)
+            {
+                applicationDbContext.MissionExecutors.Remove(ex);
+            }
+            foreach (var ex in model.Executors)
+            {
+                var au = await userManager.FindByNameAsync(ex);
                 var me = new MissionExecutor
                 {
-                    ApplicationUser = await applicationDbContext.Users.FirstOrDefaultAsync(a => a.UserName == user),
-                    Mission = mission,
+                    MissionId = mission.Id,
+                    ApplicationUserId = au.Id,
                 };
-                mission.MissionExecutors.Add(me);
+                await applicationDbContext.MissionExecutors.AddAsync(me);
             }
             applicationDbContext.Missions.Update(mission);
-            applicationDbContext.SaveChanges(true);
+            applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", "Project", new { id = mission.Project.Id, tab = "bordered-missions" });
         }
 
         public async Task<IActionResult> DeleteMission(int id)
         {
             var missionId = id;
-            var mission = await applicationDbContext.Missions.Include(m => m.Project).FirstOrDefaultAsync(c => c.Id == missionId);
+            var mission = await applicationDbContext.Missions
+                .Include(m => m.MissionExecutors)
+                .Include(m => m.Dialogues)
+                .Include(m => m.Project)
+                .FirstOrDefaultAsync(c => c.Id == missionId);
             var projectId = mission.Project.Id;
-            applicationDbContext.Missions.Remove(mission);
+            var dias = mission.Dialogues;
+            applicationDbContext.MissionDialogues.RemoveRange(dias);
+            var mes = mission.MissionExecutors;
+            applicationDbContext.MissionExecutors.RemoveRange(mes);
+            var res = applicationDbContext.Missions.Remove(mission);
             applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", "Project", new { id = mission.Project.Id, tab = "bordered-missions" });
         }

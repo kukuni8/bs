@@ -1,0 +1,89 @@
+﻿@using ProjectManagementSystem.Data;
+@model List<ProjectManagementSystem.Models.Notice>
+
+<li id="notificationViewComponent" class="nav-item dropdown">
+
+    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+        <i class="bi bi-bell"></i>
+        <span class="badge bg-primary badge-number">@Model.Count</span>
+    </a><!-- End Notification Icon -->
+
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+        <li class="dropdown-header">
+            你有<span>@Model.Count</span>条通知
+            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">查看所有通知</span></a>
+        </li>
+        @foreach (var notice in Model)
+        {
+            var iconType = "bi bi-exclamation-circle text-warning";
+            if (notice.NoticeType == NoticeType.任务通知)
+                iconType = "bi bi-clipboard-minus text-success";
+            if (notice.NoticeType == NoticeType.风险通知)
+                iconType = "bi bi-gear-fill text-danger";
+            if (notice.NoticeType == NoticeType.其他通知)
+                iconType = "bi bi-info-circle text-primary";
+            if (notice.NoticeType == NoticeType.缺陷通知)
+                iconType = "bi bi-exclamation-circle text-warning";
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+                <i class="@iconType"></i>
+                <div>
+                    <h4>@notice.NoticeType.ToString()</h4>
+                    <p>@notice.Information</p>
+                    <p>@($"{(DateTime.Now - notice.CreateTime).TotalHours:0}时{(DateTime.Now - notice.CreateTime).TotalMinutes:0}分")以前</p>
+                </div>
+            </li>
+        }
+
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+        <li class="dropdown-footer">
+            <a href="#">Show all notifications</a>
+        </li>
+
+    </ul><!-- End Notification Dropdown Items -->
+
+</li><!-- End Notification Nav -->
+
+<script>
+    @*    var connection = new signalR.HubConnectionBuilder().withUrl("/notificationHub").build();
+
+        connection.on("ReceiveNotification", function () {
+        console.log("ReceiveNotification event triggered");
+        updateNotification();
+        });
+
+
+        connection.start().then(function () {
+        console.log("SignalR connected.");
+        }).catch(function (err) {
+        console.error("SignalR connection error: ", err.toString());
+        });
+
+        connection.onclose(function (error) {
+        console.error("SignalR connection closed:", error);
+        });
+
+        @*    function updateNotification() {
+        $.ajax({
+        url: '/Notification/Invoke',
+        type: 'GET',
+        success: function (result) {
+        console.log('Notification updated:', result);
+        $('#notificationViewComponent').html(result);
+        },
+        error: function (xhr, status, error) {
+        console.error("Notification update error: ", error);
+        }
+        });
+        }*@
+</script>
+
+
+
+
+

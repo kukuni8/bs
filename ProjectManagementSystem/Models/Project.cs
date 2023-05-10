@@ -30,6 +30,8 @@ namespace ProjectManagementSystem.Models
         public List<Mission> Missions { get; set; }
         public List<Defect> Defects { get; set; }
         public List<Risk> Risks { get; set; }
+        public List<Book> Books { get; set; }
+
 
         public override string ToString()
         {

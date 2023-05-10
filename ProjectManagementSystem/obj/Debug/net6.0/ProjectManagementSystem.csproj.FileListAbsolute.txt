@@ -302,3 +302,4 @@ C:\Users\28135\Desktop\bs\ProjectManagementSystem\obj\Debug\net6.0\refint\Projec
 C:\Users\28135\Desktop\bs\ProjectManagementSystem\obj\Debug\net6.0\ProjectManagementSystem.pdb
 C:\Users\28135\Desktop\bs\ProjectManagementSystem\obj\Debug\net6.0\ProjectManagementSystem.genruntimeconfig.cache
 C:\Users\28135\Desktop\bs\ProjectManagementSystem\obj\Debug\net6.0\ref\ProjectManagementSystem.dll
+C:\Users\28135\Desktop\bs\ProjectManagementSystem\bin\Debug\net6.0\libman.json

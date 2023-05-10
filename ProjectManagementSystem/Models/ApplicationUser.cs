@@ -53,6 +53,8 @@ namespace ProjectManagementSystem.Models
         // 与MissionDialogue的关系
         public List<MissionDialogue> MissionDialogues { get; set; }
 
+        public List<Notice> Notices { get; set; }
+
         public override string ToString()
         {
             return UserName;

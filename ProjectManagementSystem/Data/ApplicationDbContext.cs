@@ -16,6 +16,8 @@ namespace ProjectManagementSystem.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectUser> ProjectUsers { get; set; }
         public DbSet<MissionExecutor> MissionExecutors { get; set; }
+        public DbSet<Notice> Notices { get; set; }
+        public DbSet<Book> Books { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

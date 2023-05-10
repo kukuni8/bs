@@ -29,6 +29,8 @@ namespace ProjectManagementSystem.ViewModels
 
         public List<ProjectUserNotInProjectModel> UsersNotInThisProject { get; set; }
 
+        public IEnumerable<BookIndexViewModel> BookIndexViewModels { get; set; }
+
     }
     public class ProjectMissionIndexViewModel
     {
@@ -122,6 +124,11 @@ namespace ProjectManagementSystem.ViewModels
 
         [Display(Name = "执行者")]
         public List<string> Executors { get; set; }
+
+        public List<MissionDialogue> Dialogues { get; set; }
+
+        [Display(Name = "记录")]
+        public string Content { get; set; }
     }
 
     public class ProjectUserIndexViewModel

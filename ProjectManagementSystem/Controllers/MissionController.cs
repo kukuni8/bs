@@ -32,6 +32,19 @@ namespace ProjectManagementSystem.Controllers
         }
 
 
+        public async Task<IActionResult> MyIndex()
+        {
+            var missions = await applicationDbContext.Missions
+                .Include(m => m.Project)
+                .OrderByDescending(m => m.Status)
+                .ToListAsync();
+            var model = new MissionIndexViewModel
+            {
+                Missions = missions,
+            };
+            return View(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> DeleteMission(int id)
         {

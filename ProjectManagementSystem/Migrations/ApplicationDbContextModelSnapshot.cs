@@ -266,6 +266,36 @@ namespace ProjectManagementSystem.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.Book", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CoverImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Summary")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Books");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Defect", b =>
                 {
                     b.Property<int>("Id")
@@ -401,6 +431,36 @@ namespace ProjectManagementSystem.Migrations
                     b.HasIndex("MissionId");
 
                     b.ToTable("MissionExecutors");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Notice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ApplicationUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Information")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("NoticeType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Notices");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
@@ -562,6 +622,15 @@ namespace ProjectManagementSystem.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.Book", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.Project", "Project")
+                        .WithMany("Books")
+                        .HasForeignKey("ProjectId");
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Defect", b =>
                 {
                     b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Functionary")
@@ -639,6 +708,15 @@ namespace ProjectManagementSystem.Migrations
                     b.Navigation("Mission");
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Models.Notice", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Notices")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
                 {
                     b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Functionary")
@@ -712,6 +790,8 @@ namespace ProjectManagementSystem.Migrations
 
                     b.Navigation("MissionExecutors");
 
+                    b.Navigation("Notices");
+
                     b.Navigation("ProjectUsers");
 
                     b.Navigation("PutForwardDefects");
@@ -732,6 +812,8 @@ namespace ProjectManagementSystem.Migrations
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
                 {
+                    b.Navigation("Books");
+
                     b.Navigation("Defects");
 
                     b.Navigation("Missions");

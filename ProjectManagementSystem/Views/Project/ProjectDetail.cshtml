@@ -97,6 +97,21 @@
 </style>
 
 
+<style>
+    .list-group-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .list-group-item .time {
+            font-size: 12px;
+        }
+
+        .list-group-item .content {
+            display: flex;
+            font-size: 14px;
+        }
+</style>
 
 <div class="card">
     <div class="card-body">
@@ -108,19 +123,22 @@
                 <button class="nav-link active" id="look-tab" data-bs-toggle="tab" data-bs-target="#bordered-looks" type="button" role="tab" aria-controls="home" aria-selected="true">总览</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="mission-tab" data-bs-toggle="tab" data-bs-target="#bordered-missions" type="button" role="tab" aria-controls="home" aria-selected="true">任务列表</button>
+                <button class="nav-link" id="mission-tab" data-bs-toggle="tab" data-bs-target="#bordered-missions" type="button" role="tab" aria-controls="home" aria-selected="true">任务</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="risk-tab" data-bs-toggle="tab" data-bs-target="#bordered-risks" type="button" role="tab" aria-controls="profile" aria-selected="false">风险列表</button>
+                <button class="nav-link" id="risk-tab" data-bs-toggle="tab" data-bs-target="#bordered-risks" type="button" role="tab" aria-controls="profile" aria-selected="false">风险</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="defect-tab" data-bs-toggle="tab" data-bs-target="#bordered-defects" type="button" role="tab" aria-controls="home" aria-selected="true">缺陷列表</button>
+                <button class="nav-link" id="defect-tab" data-bs-toggle="tab" data-bs-target="#bordered-defects" type="button" role="tab" aria-controls="home" aria-selected="true">缺陷</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#bordered-users" type="button" role="tab" aria-controls="profile" aria-selected="false">项目人员</button>
+                <button class="nav-link" id="book-tab" data-bs-toggle="tab" data-bs-target="#bordered-books" type="button" role="tab" aria-controls="home" aria-selected="true">文档</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="project-tab" data-bs-toggle="tab" data-bs-target="#bordered-editProject" type="button" role="tab" aria-controls="profile" aria-selected="false">项目信息</button>
+                <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#bordered-users" type="button" role="tab" aria-controls="profile" aria-selected="false">人员</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="project-tab" data-bs-toggle="tab" data-bs-target="#bordered-editProject" type="button" role="tab" aria-controls="profile" aria-selected="false">信息</button>
             </li>
         </ul>
         <div class="tab-content pt-2" id="borderedTabContent">
@@ -204,9 +222,9 @@
                                 </div>
 
                                 <!-- EditModal -->
-                                <div class="modal fade bs-example-modal-lg" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal fade bs-example-modal-lg my-modal" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
+                                     aria-hidden="true" data-scrollable-div="@mission.Name">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                         <div class="modal-body">
                                             <div class="container-fluid">
                                                 <div class="modal-content">
@@ -215,128 +233,139 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                                 aria-label="Close"></button>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
-                                                            <div class="form-group row">
-                                                                <input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
-                                                                <label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
-                                                                    <div class="invalid-feedback">请输入任务的名称</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
-                                                                    <div class="invalid-feedback">请输入任务的所属项目</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.CreateDate" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.CreateDate.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.CreateDate" required>
-                                                                    <div class="invalid-feedback">请输入任务的创建日期</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.StartDate" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.StartDate.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.StartDate" required>
-                                                                    <div class="invalid-feedback">请输入任务的更新时间日期</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
-                                                                    <div class="invalid-feedback">请输入任务的截止日期</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.FinishedTime" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.FinishedTime.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.FinishedTime" required>
-                                                                    <div class="invalid-feedback">请输入任务的截止日期</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Status" class="form-control valid">
-                                                                        @foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
-                                                                        {
-                                                                            if (status.Value == ((int)mission.Status).ToString())
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Priority" class="form-control valid">
-                                                                        @foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
-                                                                        {
-                                                                            if (priority.Value == ((int)mission.Priority).ToString())
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
-                                                                        @{
-                                                                            foreach (var item in userManager.Users)
-                                                                            {
-                                                                                <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
+                                                    <form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
+                                                        <div class="modal-body">
+                                                            <div class="container">
+                                                                <div class="row">
+                                                                    <div class="col-6" style="height:550px;">
+                                                                        <div class="form-group row">
+                                                                            <input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
+                                                                            <label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
+                                                                                <div class="invalid-feedback">请输入任务的名称</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
+                                                                                <div class="invalid-feedback">请输入任务的所属项目</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
+                                                                                <span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.CreateDate" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input value="@mission.CreateDate.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.CreateDate" required readonly>
+                                                                                <div class="invalid-feedback">请输入任务的创建日期</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
+                                                                                <div class="invalid-feedback">请输入任务的截止日期</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <select asp-for="@Model.EditMission.Status" class="form-control valid">
+                                                                                    @foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
+                                                                                    {
+                                                                                        if (status.Value == ((int)mission.Status).ToString())
+                                                                                        {
+                                                                                            <option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
+                                                                                <span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <select asp-for="@Model.EditMission.Priority" class="form-control valid">
+                                                                                    @foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
+                                                                                    {
+                                                                                        if (priority.Value == ((int)mission.Priority).ToString())
+                                                                                        {
+                                                                                            <option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
+                                                                                <span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
+                                                                                    @{
+                                                                                        foreach (var item in userManager.Users)
+                                                                                        {
+                                                                                            <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
 
-                                                                    <div class="invalid-feedback">请选择执行人</div>
+                                                                                <div class="invalid-feedback">请选择执行人</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <div class="overflow-auto" style="height:400px;" id="scrollableDiv">
+                                                                            <ul class="list-group">
+                                                                                @foreach (var dialogue in mission.Dialogues)
+                                                                                {
+                                                                                    <li class="list-group-item">
+                                                                                        <div class="time">@dialogue.CreateDate</div>
+                                                                                        <div class="content">
+                                                                                            <div class="part1">@dialogue.Speaker</div>
+                                                                                            <div class="part2">:</div>
+                                                                                            <div class="part3">@dialogue.Content</div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="form-floating">
+                                                                            <textarea asp-for="@Model.EditMission.Content" class="form-control" id="floatingName" placeholder="写点记录" style="height:150px;"></textarea>
+                                                                            <label for="floatingName">任务记录</label>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <br />
-                                                            <div class="modal-footer">
-                                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                                                                <button type="submit" class="btn btn-primary">提交</button>
-                                                                <a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                            <button type="submit" class="btn btn-primary">提交</button>
+                                                            <a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -377,8 +406,6 @@
                                     statusClass = "status-3";
                                 }
 
-
-
                                 <div class="card mb-3 mission-card" data-id="@mission.Id">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
                                         <div class="card-body">
@@ -389,10 +416,11 @@
                                         </div>
                                     </a>
                                 </div>
+
                                 <!-- EditModal -->
-                                <div class="modal fade bs-example-modal-lg" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal fade bs-example-modal-lg my-modal" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
+                                     aria-hidden="true" data-scrollable-div="@mission.Name">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                         <div class="modal-body">
                                             <div class="container-fluid">
                                                 <div class="modal-content">
@@ -401,104 +429,139 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                                 aria-label="Close"></button>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
-                                                            <div class="form-group row">
-                                                                <input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
-                                                                <label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
-                                                                    <div class="invalid-feedback">请输入任务的名称</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
-                                                                    <div class="invalid-feedback">请输入任务的所属项目</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
-                                                                    <div class="invalid-feedback">请输入任务的截止日期</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Status" class="form-control valid">
-                                                                        @foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
-                                                                        {
-                                                                            if (status.Value == ((int)mission.Status).ToString())
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Priority" class="form-control valid">
-                                                                        @foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
-                                                                        {
-                                                                            if (priority.Value == ((int)mission.Priority).ToString())
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
-                                                                        @{
-                                                                            foreach (var item in userManager.Users)
-                                                                            {
-                                                                                <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
+                                                    <form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
+                                                        <div class="modal-body">
+                                                            <div class="container">
+                                                                <div class="row">
+                                                                    <div class="col-6" style="height:550px;">
+                                                                        <div class="form-group row">
+                                                                            <input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
+                                                                            <label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
+                                                                                <div class="invalid-feedback">请输入任务的名称</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
+                                                                                <div class="invalid-feedback">请输入任务的所属项目</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
+                                                                                <span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.CreateDate" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input value="@mission.CreateDate.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.CreateDate" required readonly>
+                                                                                <div class="invalid-feedback">请输入任务的创建日期</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
+                                                                                <div class="invalid-feedback">请输入任务的截止日期</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <select asp-for="@Model.EditMission.Status" class="form-control valid">
+                                                                                    @foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
+                                                                                    {
+                                                                                        if (status.Value == ((int)mission.Status).ToString())
+                                                                                        {
+                                                                                            <option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
+                                                                                <span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <select asp-for="@Model.EditMission.Priority" class="form-control valid">
+                                                                                    @foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
+                                                                                    {
+                                                                                        if (priority.Value == ((int)mission.Priority).ToString())
+                                                                                        {
+                                                                                            <option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
+                                                                                <span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
+                                                                                    @{
+                                                                                        foreach (var item in userManager.Users)
+                                                                                        {
+                                                                                            <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
 
-                                                                    <div class="invalid-feedback">请选择执行人</div>
+                                                                                <div class="invalid-feedback">请选择执行人</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <div class="overflow-auto" style="height:400px;" id="scrollableDiv">
+                                                                            <ul class="list-group">
+                                                                                @foreach (var dialogue in mission.Dialogues)
+                                                                                {
+                                                                                    <li class="list-group-item">
+                                                                                        <div class="time">@dialogue.CreateDate</div>
+                                                                                        <div class="content">
+                                                                                            <div class="part1">@dialogue.Speaker</div>
+                                                                                            <div class="part2">:</div>
+                                                                                            <div class="part3">@dialogue.Content</div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="form-floating">
+                                                                            <textarea asp-for="@Model.EditMission.Content" class="form-control" id="floatingName" placeholder="写点记录" style="height:150px;"></textarea>
+                                                                            <label for="floatingName">任务记录</label>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <br />
-                                                            <div class="modal-footer">
-                                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                                                                <button type="submit" class="btn btn-primary">提交</button>
-                                                                <a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                            <button type="submit" class="btn btn-primary">提交</button>
+                                                            <a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -539,8 +602,6 @@
                                     statusClass = "status-3";
                                 }
 
-
-
                                 <div class="card mb-3 mission-card" data-id="@mission.Id">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#@mission.Name">
                                         <div class="card-body">
@@ -551,10 +612,11 @@
                                         </div>
                                     </a>
                                 </div>
+
                                 <!-- EditModal -->
-                                <div class="modal fade bs-example-modal-lg" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal fade bs-example-modal-lg my-modal" id="@mission.Name" tabindex="-1" aria-labelledby="editModalLabel"
+                                     aria-hidden="true" data-scrollable-div="@mission.Name">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                         <div class="modal-body">
                                             <div class="container-fluid">
                                                 <div class="modal-content">
@@ -563,104 +625,139 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                                 aria-label="Close"></button>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
-                                                            <div class="form-group row">
-                                                                <input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
-                                                                <label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
-                                                                    <div class="invalid-feedback">请输入任务的名称</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
-                                                                    <div class="invalid-feedback">请输入任务的所属项目</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
-                                                                    <div class="invalid-feedback">请输入任务的截止日期</div>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Status" class="form-control valid">
-                                                                        @foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
-                                                                        {
-                                                                            if (status.Value == ((int)mission.Status).ToString())
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select asp-for="@Model.EditMission.Priority" class="form-control valid">
-                                                                        @foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
-                                                                        {
-                                                                            if (priority.Value == ((int)mission.Priority).ToString())
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
-                                                                    <span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group row">
-                                                                <label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
-                                                                <div class="col-sm-10">
-                                                                    <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
-                                                                        @{
-                                                                            foreach (var item in userManager.Users)
-                                                                            {
-                                                                                <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
-                                                                            }
-                                                                        }
-                                                                    </select>
+                                                    <form class="needs-validation" novalidate="" asp-action="EditMission" method="post">
+                                                        <div class="modal-body">
+                                                            <div class="container">
+                                                                <div class="row">
+                                                                    <div class="col-6" style="height:550px;">
+                                                                        <div class="form-group row">
+                                                                            <input asp-for="@Model.EditMission.Id" value="@mission.Id" hidden>
+                                                                            <label asp-for="@Model.EditMission.Name" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input value="@mission.Name" type="text" class="form-control" asp-for="@Model.EditMission.Name" required>
+                                                                                <div class="invalid-feedback">请输入任务的名称</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.ProjectName" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input type="text" value="@Model.CurProject.Name" class="form-control" asp-for="@Model.EditMission.ProjectName" readonly>
+                                                                                <div class="invalid-feedback">请输入任务的所属项目</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Description" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <textarea name="EditMission.Description" class="form-control" aria-label="With textarea">@mission.Description</textarea>
+                                                                                <span class="invalid" asp-validation-for="@Model.EditMission.Description"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.CreateDate" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input value="@mission.CreateDate.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.CreateDate" required readonly>
+                                                                                <div class="invalid-feedback">请输入任务的创建日期</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Deadline" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <input value="@mission.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.EditMission.Deadline" required>
+                                                                                <div class="invalid-feedback">请输入任务的截止日期</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Status" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <select asp-for="@Model.EditMission.Status" class="form-control valid">
+                                                                                    @foreach (var status in @Html.GetEnumSelectList<MissionStatus>())
+                                                                                    {
+                                                                                        if (status.Value == ((int)mission.Status).ToString())
+                                                                                        {
+                                                                                            <option value="@((MissionStatus)int.Parse(status.Value))" selected>@((MissionStatus)int.Parse(status.Value))</option>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <option value="@((MissionStatus)int.Parse(status.Value))">@((MissionStatus)int.Parse(status.Value))</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
+                                                                                <span class="invalid" asp-validation-for="@Model.EditMission.Status"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Priority" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <select asp-for="@Model.EditMission.Priority" class="form-control valid">
+                                                                                    @foreach (var priority in @Html.GetEnumSelectList<MissionPriority>())
+                                                                                    {
+                                                                                        if (priority.Value == ((int)mission.Priority).ToString())
+                                                                                        {
+                                                                                            <option value="@((MissionPriority)int.Parse(priority.Value))" selected>@((MissionPriority)int.Parse(priority.Value))</option>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <option value="@((MissionPriority)int.Parse(priority.Value))">@((MissionPriority)int.Parse(priority.Value))</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
+                                                                                <span class="invalid" asp-validation-for="@Model.EditMission.Priority"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="form-group row">
+                                                                            <label asp-for="@Model.EditMission.Executors" class="col-sm-2"></label>
+                                                                            <div class="col-sm-10">
+                                                                                <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
+                                                                                    @{
+                                                                                        foreach (var item in userManager.Users)
+                                                                                        {
+                                                                                            <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
 
-                                                                    <div class="invalid-feedback">请选择执行人</div>
+                                                                                <div class="invalid-feedback">请选择执行人</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <div class="overflow-auto" style="height:400px;" id="scrollableDiv">
+                                                                            <ul class="list-group">
+                                                                                @foreach (var dialogue in mission.Dialogues)
+                                                                                {
+                                                                                    <li class="list-group-item">
+                                                                                        <div class="time">@dialogue.CreateDate</div>
+                                                                                        <div class="content">
+                                                                                            <div class="part1">@dialogue.Speaker</div>
+                                                                                            <div class="part2">:</div>
+                                                                                            <div class="part3">@dialogue.Content</div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="form-floating">
+                                                                            <textarea asp-for="@Model.EditMission.Content" class="form-control" id="floatingName" placeholder="写点记录" style="height:150px;"></textarea>
+                                                                            <label for="floatingName">任务记录</label>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <br />
-                                                            <div class="modal-footer">
-                                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                                                                <button type="submit" class="btn btn-primary">提交</button>
-                                                                <a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                            <button type="submit" class="btn btn-primary">提交</button>
+                                                            <a asp-action="DeleteMission" class="btn btn-danger" asp-route-id="@mission.Id">删除</a>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -875,6 +972,32 @@
                         </div>
                     </section>
 
+                </div>
+            </div>
+            <div class="tab-pane fade" id="bordered-books" role="tabpanel" aria-labelledby="book-tab">
+                <div class="row">
+                    <div class="text-end">
+                        <a class="btn btn-outline-primary" asp-action="AddBook" asp-controller="Book" asp-route-projectId="@Model.CurProject.Id">添加文档</a>
+                    </div>
+                </div>
+                <br>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    @foreach (var book in Model.BookIndexViewModels)
+                    {
+                        <div class="col">
+                            <div class="card h-100">
+                                <img src="@book.CoverImage" style="width: 100%; height: 200px;" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">@book.Name</h5>
+                                    <p class="card-text">@book.Summary</p>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <a asp-action="EditBook" asp-controller="Book" asp-route-id="@book.Id" class="btn btn-primary">查看</a>
+                                    <a asp-action="DeleteBook" asp-controller="Book" asp-route-id="@book.Id" class="btn btn-danger">删除</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
             <div class="tab-pane fade" id="bordered-users" role="tabpanel" aria-labelledby="user-tab">
@@ -1186,5 +1309,19 @@
                 }
             }).render();
         });
+    </script>
+    <script>
+        function scrollToBottom() {
+            var scrollableDiv = document.getElementById("scrollableDiv");
+            scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
+        }
+        document.querySelectorAll(".my-modal").forEach(function (modal) {
+            modal.addEventListener("shown.bs.modal", function () {
+                var scrollableDivId = this.getAttribute("data-scrollable-div");
+                scrollToBottom(scrollableDivId);
+            });
+        });
+
+
     </script>
     }

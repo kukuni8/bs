@@ -179,6 +179,28 @@ namespace ProjectManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NoticeType = table.Column<int>(type: "int", nullable: false),
+                    Information = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApplicationUserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notices_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
                 {
@@ -209,6 +231,28 @@ namespace ProjectManagementSystem.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProjectId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Books_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -437,6 +481,11 @@ namespace ProjectManagementSystem.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Books_ProjectId",
+                table: "Books",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Defects_FunctionaryId",
                 table: "Defects",
                 column: "FunctionaryId");
@@ -475,6 +524,11 @@ namespace ProjectManagementSystem.Migrations
                 name: "IX_Missions_PutForwardId",
                 table: "Missions",
                 column: "PutForwardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notices_ApplicationUserId",
+                table: "Notices",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_FunctionaryId",
@@ -525,6 +579,9 @@ namespace ProjectManagementSystem.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Books");
+
+            migrationBuilder.DropTable(
                 name: "Defects");
 
             migrationBuilder.DropTable(
@@ -535,6 +592,9 @@ namespace ProjectManagementSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "MissionExecutors");
+
+            migrationBuilder.DropTable(
+                name: "Notices");
 
             migrationBuilder.DropTable(
                 name: "ProjectUsers");

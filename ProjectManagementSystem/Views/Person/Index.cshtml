@@ -1,34 +1,35 @@
 ﻿@using ProjectManagementSystem.ViewModels
 @model PersonIndexViewModel
+
 <div class="container">
     <div class="row">
-        <div class="col-3">
-            <div class="card rounded">
-                <div class="card-body text-white bg-secondary text-center">
-                    <br>
-                    <h2>待处理任务</h2>
-                    <h3>@Model.UndealMissionCount</h3>
-                    <a asp-action="Index" asp-controller="Mission" asp-route-Status="0" class="btn btn-light text-secondary" disabled="@((Model.UndealMissionCount == 0))">查看</a>
+        <div class="col-4">
+            <div class="card shadow-lg rounded">
+                <div class="card-body bg-secondary text-center">
+                    <i class="fas fa-tasks fa-3x text-white mt-3"></i>
+                    <h2 class="text-white mt-3">待处理任务</h2>
+                    <h3 class="text-white">@Model.UndealMissionCount</h3>
+                    <a asp-action="Index" asp-controller="Mission" asp-route-Status="0" class="btn btn-outline-light text-secondary mt-3 mb-3" disabled="@((Model.UndealMissionCount == 0))">查看</a>
                 </div>
             </div>
         </div>
-        <div class="col-3">
-            <div class="card rounded">
-                <div class="card-body text-white bg-info text-center">
-                    <br>
-                    <h2>进行中任务</h2>
-                    <h3>@Model.InprogressMissionCount</h3>
-                    <a asp-action="Index" asp-controller="Mission" asp-route-Status="1" class="btn btn-light text-info" disabled="@((Model.InprogressMissionCount == 0))">查看</a>
+        <div class="col-4">
+            <div class="card shadow-lg rounded">
+                <div class="card-body bg-info text-center">
+                    <i class="fas fa-spinner fa-3x text-white mt-3"></i>
+                    <h2 class="text-white mt-3">进行中任务</h2>
+                    <h3 class="text-white">@Model.InprogressMissionCount</h3>
+                    <a asp-action="Index" asp-controller="Mission" asp-route-Status="1" class="btn btn-outline-light text-info mt-3 mb-3" disabled="@((Model.InprogressMissionCount == 0))">查看</a>
                 </div>
             </div>
         </div>
-        <div class="col-3">
-            <div class="card rounded">
-                <div class="card-body text-white bg-success text-center">
-                    <br>
-                    <h2>已完成任务</h2>
-                    <h3>@Model.FinishedMissionCount</h3>
-                    <a asp-action="Index" asp-controller="Mission" asp-route-Status="2" class="btn btn-light text-sucess" disabled="@((Model.FinishedMissionCount == 0))">查看</a>
+        <div class="col-4">
+            <div class="card shadow-lg rounded">
+                <div class="card-body bg-success text-center">
+                    <i class="fas fa-check-circle fa-3x text-white mt-3"></i>
+                    <h2 class="text-white mt-3">已完成任务</h2>
+                    <h3 class="text-white">@Model.FinishedMissionCount</h3>
+                    <a asp-action="Index" asp-controller="Mission" asp-route-Status="2" class="btn btn-outline-light text-success mt-3 mb-3" disabled="@((Model.FinishedMissionCount == 0))">查看</a>
                 </div>
             </div>
         </div>

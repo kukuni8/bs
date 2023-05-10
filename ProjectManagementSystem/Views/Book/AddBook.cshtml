@@ -1,0 +1,86 @@
+﻿@model ProjectManagementSystem.ViewModels.BookAddViewModel
+
+<div class="container">
+    <h3>添加文档</h3>
+    <br>
+    <form method="post" asp-action="AddBook" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <input asp-for="@Model.ProjectId" hidden>
+                    <label>文档名称:</label>
+                    <input asp-for="@Model.Name" type="text" class="form-control" placeholder="输入标题" required="">
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <label>文档封面:</label>
+                    <input asp-for="@Model.CoverImage" type="file" class="form-control" placeholder="输入封面" required="" onchange="previewImage(this)">
+                    <img id="coverImagePreview" alt="封面预览" class="img-thumbnail mt-2" style="height:200px;width:auto; display:none;">
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="col-md-12">
+            <label>文档概要:</label>
+            <textarea asp-for="@Model.Summary" type="text" class="form-control auto-resize" placeholder="输入概要">
+            </textarea>
+        </div>
+        <br>
+        <div class="col-md-12">
+            <label>文档内容:</label>
+            <textarea asp-for="@Model.Content" type="text" class="form-control auto-resize" placeholder="输入内容">
+            </textarea>
+        </div>
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <a asp-action="" class="btn btn-secondary btn-block">返回</a>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary btn-block">保存</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+@section Scripts{
+    <script>
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
+
+        // 在页面加载时调整textarea的高度，并为所有具有'auto-resize'类的textarea元素添加oninput事件处理器
+        window.addEventListener('DOMContentLoaded', function () {
+            const textareas = document.querySelectorAll('.auto-resize');
+            textareas.forEach((textarea) => {
+                autoResizeTextarea(textarea);
+                textarea.addEventListener('input', () => autoResizeTextarea(textarea));
+            });
+        });
+
+    </script>
+    <script>
+        // 其他代码
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var preview = document.getElementById('coverImagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}
