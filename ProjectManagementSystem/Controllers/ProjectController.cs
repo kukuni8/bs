@@ -143,23 +143,85 @@ namespace ProjectManagementSystem.Controllers
                 },
                 EditMission = new ProjectEditMissionViewModel { },
             };
-            model.RiskEditViewModels = project.Risks.Select(r => new RiskEditViewModel
-            {
-                Id = r.Id,
-                Name = r.Name,
-                Incidence = r.Incidence,
-                Solution = r.Solution,
-                CreateDate = r.CreateDate,
-                Status = r.Status,
-                RiskType = r.RiskType,
-                Level = r.Level,
-                Functionary = r.Functionary,
-                FunctionaryId = r.FunctionaryId,
-                PutForward = r.PutForward,
-                PutForwardId = r.PutForwardId,
-                Project = project,
-                ProjectId = project.Id,
-            });
+            model.UnCheckRiskViewModels = project.Risks
+                .Where(r => r.Status == RiskStatus.审核中)
+                .Select(r => new RiskEditViewModel
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Incidence = r.Incidence,
+                    Solution = r.Solution,
+                    CreateDate = r.CreateDate,
+                    Status = r.Status,
+                    RiskType = r.RiskType,
+                    Level = r.Level,
+                    Functionary = r.Functionary,
+                    FunctionaryId = r.FunctionaryId,
+                    PutForward = r.PutForward,
+                    PutForwardId = r.PutForwardId,
+                    Project = project,
+                    ProjectId = project.Id,
+                });
+
+            model.UnDealRiskViewModels = project.Risks
+               .Where(r => r.Status == RiskStatus.待处理)
+               .Select(r => new RiskEditViewModel
+               {
+                   Id = r.Id,
+                   Name = r.Name,
+                   Incidence = r.Incidence,
+                   Solution = r.Solution,
+                   CreateDate = r.CreateDate,
+                   Status = r.Status,
+                   RiskType = r.RiskType,
+                   Level = r.Level,
+                   Functionary = r.Functionary,
+                   FunctionaryId = r.FunctionaryId,
+                   PutForward = r.PutForward,
+                   PutForwardId = r.PutForwardId,
+                   Project = project,
+                   ProjectId = project.Id,
+               });
+
+            model.SettledRiskViewModels = project.Risks
+               .Where(r => r.Status == RiskStatus.已解决)
+               .Select(r => new RiskEditViewModel
+               {
+                   Id = r.Id,
+                   Name = r.Name,
+                   Incidence = r.Incidence,
+                   Solution = r.Solution,
+                   CreateDate = r.CreateDate,
+                   Status = r.Status,
+                   RiskType = r.RiskType,
+                   Level = r.Level,
+                   Functionary = r.Functionary,
+                   FunctionaryId = r.FunctionaryId,
+                   PutForward = r.PutForward,
+                   PutForwardId = r.PutForwardId,
+                   Project = project,
+                   ProjectId = project.Id,
+               });
+
+            model.DiscardedRiskViewModels = project.Risks
+               .Where(r => r.Status == RiskStatus.已丢弃)
+               .Select(r => new RiskEditViewModel
+               {
+                   Id = r.Id,
+                   Name = r.Name,
+                   Incidence = r.Incidence,
+                   Solution = r.Solution,
+                   CreateDate = r.CreateDate,
+                   Status = r.Status,
+                   RiskType = r.RiskType,
+                   Level = r.Level,
+                   Functionary = r.Functionary,
+                   FunctionaryId = r.FunctionaryId,
+                   PutForward = r.PutForward,
+                   PutForwardId = r.PutForwardId,
+                   Project = project,
+                   ProjectId = project.Id,
+               });
 
             model.DefectEditViewModels = project.Defects.Select(d => new DefectEditViewModel
             {
@@ -227,6 +289,34 @@ namespace ProjectManagementSystem.Controllers
                 Changes = project.Fund.Changes,
                 Paid = paid,
                 Income = incom,
+            };
+            model.CheckIndexViewModel = new CheckIndexViewModel()
+            {
+                MissionChecks = project.Missions
+                .Where(m => m.Status == MissionStatus.已完成)
+                .OrderByDescending(m => m.CheckStatus)
+                .Select(m => new CheckInfoViewModel
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Status = m.CheckStatus,
+                }).ToList(),
+                RiskChecks = project.Risks
+                .Where(r => r.Status == RiskStatus.审核中 || r.CheckStatus == CheckStatus.审核通过 || r.CheckStatus == CheckStatus.审核未通过)
+                .Select(m => new CheckInfoViewModel
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Status = m.CheckStatus,
+                }).ToList(),
+                DefectChecks = project.Defects
+                .Where(d => d.Status == DefectStatus.审核中 || d.CheckStatus == CheckStatus.审核通过 || d.CheckStatus == CheckStatus.审核未通过)
+                .Select(d => new CheckInfoViewModel
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    Status = d.CheckStatus,
+                }).ToList(),
             };
             return View(model);
         }
@@ -467,6 +557,10 @@ namespace ProjectManagementSystem.Controllers
                     Content = $"将任务状态设置为{model.Status.ToString()}",
                 };
                 applicationDbContext.MissionDialogues.Add(dia);
+            }
+            if (model.Status == MissionStatus.已完成 && mission.CheckStatus == CheckStatus.审核未通过)
+            {
+                mission.CheckStatus = CheckStatus.再次审核;
             }
             var excuterNames = await applicationDbContext.MissionExecutors
                 .Where(me => me.MissionId == mission.Id)

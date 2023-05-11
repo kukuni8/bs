@@ -27,6 +27,9 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "状态")]
         public DefectStatus Status { get; set; }
 
+        public CheckStatus CheckStatus { get; set; }
+
+
         public int? FunctionaryId { get; set; }
         [Display(Name = "负责人")]
         public ApplicationUser Functionary { get; set; }

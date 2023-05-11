@@ -21,7 +21,10 @@ namespace ProjectManagementSystem.ViewModels
 
         public ProjectDeleteMissionViewModel DeleteMission { get; set; }
 
-        public IEnumerable<RiskEditViewModel> RiskEditViewModels { get; set; }
+        public IEnumerable<RiskEditViewModel> UnCheckRiskViewModels { get; set; }
+        public IEnumerable<RiskEditViewModel> UnDealRiskViewModels { get; set; }
+        public IEnumerable<RiskEditViewModel> SettledRiskViewModels { get; set; }
+        public IEnumerable<RiskEditViewModel> DiscardedRiskViewModels { get; set; }
 
         public IEnumerable<DefectEditViewModel> DefectEditViewModels { get; set; }
 
@@ -44,6 +47,9 @@ namespace ProjectManagementSystem.ViewModels
         public FundChange AddFundViewModel { get; set; }
 
         public FundChange UseFundViewModel { get; set; }
+
+        public CheckIndexViewModel CheckIndexViewModel { get; set; }
+
     }
     public class ProjectMissionIndexViewModel
     {

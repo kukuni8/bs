@@ -304,6 +304,9 @@ namespace ProjectManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CheckStatus")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -407,6 +410,9 @@ namespace ProjectManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CheckStatus")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -418,6 +424,9 @@ namespace ProjectManagementSystem.Migrations
 
                     b.Property<DateTime>("FinishedTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsCheck")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -656,6 +665,9 @@ namespace ProjectManagementSystem.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CheckStatus")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");

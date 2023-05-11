@@ -31,7 +31,8 @@
 
     public enum RiskStatus
     {
-        待审核,
+        审核中,
+        待处理,
         已丢弃,
         已解决,
     }
@@ -52,8 +53,9 @@
 
     public enum DefectStatus
     {
-        待审核,
-        处理中,
+        审核中,
+        待处理,
+        已丢弃,
         已解决,
     }
 
@@ -69,5 +71,14 @@
     {
         支出,
         收入,
+    }
+
+
+    public enum CheckStatus
+    {
+        未审核,
+        再次审核,
+        审核未通过,
+        审核通过,
     }
 }

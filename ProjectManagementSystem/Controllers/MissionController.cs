@@ -83,6 +83,8 @@ namespace ProjectManagementSystem.Controllers
             return View(model);
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> EditMission(MissionEditViewModel model)
         {
@@ -216,6 +218,8 @@ namespace ProjectManagementSystem.Controllers
             applicationDbContext.SaveChanges();
             return RedirectToAction("EditMission", new { id = mission.Id });
         }
+
+
 
 
     }

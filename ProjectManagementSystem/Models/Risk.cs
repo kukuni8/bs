@@ -31,6 +31,9 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "风险类型")]
         public RiskType RiskType { get; set; }
 
+        public CheckStatus CheckStatus { get; set; }
+
+
         public int? FunctionaryId { get; set; }
         [Display(Name = "负责人")]
         public ApplicationUser Functionary { get; set; }

@@ -26,10 +26,16 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "完成时间")]
         [DataType(DataType.Date)]
         public DateTime FinishedTime { get; set; }
+
+        [Display(Name = "是否审核")]
+        public bool IsCheck { get; set; }
+
         [Display(Name = "优先级")]
         public MissionPriority Priority { get; set; }
         [Display(Name = "状态")]
         public MissionStatus Status { get; set; }
+
+        public CheckStatus CheckStatus { get; set; }
 
         [Display(Name = "所属项目")]
         public Project Project { get; set; }

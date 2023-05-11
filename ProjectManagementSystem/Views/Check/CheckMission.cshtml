@@ -1,0 +1,157 @@
+﻿@using ProjectManagementSystem.Data;
+@using ProjectManagementSystem.ViewModels
+@using ProjectManagementSystem.Models
+@model MissionEditViewModel
+@inject ApplicationDbContext applicationDbContext;
+<style>
+    .custom-select {
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 0.375rem 0.75rem;
+    }
+
+    .vertically-centered-label {
+        display: flex;
+        align-items: center;
+    }
+</style>
+<style>
+    .list-group-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .list-group-item .time {
+            font-size: 12px;
+        }
+
+        .list-group-item .content {
+            display: flex;
+            font-size: 14px;
+        }
+</style>
+
+<div class="container">
+    <form asp-action="EditMission" method="post">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3>任务详情</h3>
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-6" style="height:550px;">
+                        <div class="form-group row vertically-centered-label">
+                            <input asp-for="@Model.Id" value="@Model.Id" hidden>
+                            <label asp-for="@Model.Name" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <input value="@Model.Name" type="text" class="form-control" asp-for="@Model.Name" required>
+                                <div class="invalid-feedback">请输入任务的名称</div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row vertically-centered-label">
+                            <label asp-for="@Model.Project" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <input type="text" value="@Model.Project" class="form-control" asp-for="@Model.Project" readonly>
+                                <div class="invalid-feedback">请输入任务的所属项目</div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row vertically-centered-label">
+                            <label asp-for="@Model.Description" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <textarea name="Description" class="form-control" aria-label="With textarea">@Model.Description</textarea>
+                                <span class="invalid" asp-validation-for="@Model.Description"></span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row vertically-centered-label">
+                            <label asp-for="@Model.PutForward" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <input type="text" value="@Model.PutForward" class="form-control" asp-for="@Model.PutForward" readonly>
+                                <div class="invalid-feedback">请输入任务的所属项目</div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row vertically-centered-label">
+                            <label asp-for="@Model.CreateDate" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <input value="@Model.CreateDate.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.CreateDate" readonly>
+                                <div class="invalid-feedback">请输入任务的创建日期</div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row vertically-centered-label">
+                            <label asp-for="@Model.Deadline" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <input value="@Model.Deadline.ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.Deadline" required>
+                                <div class="invalid-feedback">请输入任务的截止日期</div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row vertically-centered-label">
+                            <label asp-for="@Model.Status" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <select asp-for="@Model.Status" asp-items="@Html.GetEnumSelectList<MissionStatus>()" class="form-control valid">
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row vertically-centered-label">
+                            <label asp-for="@Model.Priority" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <select asp-for="@Model.Priority" asp-items="@Html.GetEnumSelectList<MissionPriority>()" class="form-control valid">
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row vertically-centered-label">
+                            <label asp-for="@Model.Executors" class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <select id="missionExecutor" asp-for="@Model.Executors" class="selectpicker form-control valid custom-select" data-live-search="true" multiple required="">
+                                    @{
+                                        foreach (var item in applicationDbContext.ProjectUsers.Where(pu => pu.ProjectId == Model.Project.Id).Select(pu => pu.ApplicationUser.UserName))
+                                        {
+                                            <option value="@item" selected="@Model.Executors.Contains(item)">@item</option>
+                                        }
+                                    }
+                                </select>
+                                <div class="invalid-feedback">请选择执行人</div>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="col-6">
+                        <div class="overflow-auto" style="height:400px;">
+                            <ul class="list-group">
+                                @foreach (var dialogue in Model.Dialogues)
+                                {
+                                    <li class="list-group-item">
+                                        <div class="time">@dialogue.CreateDate</div>
+                                        <div class="content">
+                                            <div class="part1">@dialogue.Speaker</div>
+                                            <div class="part2">:</div>
+                                            <div class="part3">@dialogue.Content</div>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="form-floating">
+                            <textarea asp-for="@Model.Content" class="form-control" id="floatingName" placeholder="写点记录" style="height:150px;"></textarea>
+                            <label for="floatingName">任务记录</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <a class="btn btn-secondary" asp-action="ReturnCheckMissionView" asp-route-id="@Model.Id">返回</a>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+
