@@ -46,6 +46,10 @@ namespace ProjectManagementSystem.Data
              .Property(f => f.Amount)
              .HasColumnType("decimal(18, 2)");
 
+            modelBuilder.Entity<FundChange>()
+             .Property(f => f.Number)
+             .HasColumnType("decimal(18, 2)");
+
             modelBuilder.Entity<ProjectUser>()
                 .HasKey(pu => new { pu.ProjectId, pu.ApplicationUserId });
 

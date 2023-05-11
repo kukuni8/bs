@@ -112,7 +112,60 @@
             font-size: 14px;
         }
 </style>
+<style>
+    .card-icon-green {
+        color: #2eca6a;
+        background: #e0f8e9;
+        font-size: 32px;
+        line-height: 0;
+        width: 64px;
+        height: 64px;
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
 
+    .card-icon-blue {
+        color: #4d79ff;
+        background: #e6e6ff;
+        font-size: 32px;
+        line-height: 0;
+        width: 64px;
+        height: 64px;
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+
+
+    .card-icon-red {
+        color: #ff4d4d;
+        background: #ffe6e6;
+        font-size: 32px;
+        line-height: 0;
+        width: 64px;
+        height: 64px;
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+
+</style>
+
+<style>
+
+    .activity-item {
+        align-items: center;
+    }
+
+    .time-container {
+        width: 160px;
+        text-align: right;
+    }
+
+    .activity-badge {
+        margin-left: 20px;
+        margin-right: 10px;
+    }
+
+</style>
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">@Model.ProjectEditViewModel.Name</h5>
@@ -1265,6 +1318,176 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="bordered-funds" role="tabpanel" aria-labelledby="fund-tab">
+                <div class="container">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                        <!-- 资金 Card -->
+                        <div class="col">
+                            <div class="card info-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">资金</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon-blue rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-yen"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h4>@Model.FundIndexViewModel.Amount</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End 资金 Card -->
+                        <!-- 收入 Card -->
+                        <div class="col">
+                            <div class="card info-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">收入</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon-green rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-yen"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h4>@Model.FundIndexViewModel.Income</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End 收入 Card -->
+                        <!-- 支出 Card -->
+                        <div class="col">
+                            <div class="card  info-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">支出</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon-red rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-yen"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h4>@Model.FundIndexViewModel.Paid</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End 支出 Card -->
+                        <!-- 新增收入/支出 Card -->
+                        <div class="col">
+                            <div class="card info-card" style="height:83%">
+                                <div class="card-body d-flex flex-column">
+                                    <div class="d-grid gap-2 mt-auto">
+                                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addFund">新增收入</button>
+                                        <div class="modal fade" id="addFund" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form asp-action="AddFund" asp-controller="Fund" method="post">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">新增收入</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="container-fluid">
+                                                                <div class="form-group row">
+                                                                    <input asp-for="@Model.AddFundViewModel.FundId" value="@Model.FundIndexViewModel.Id" hidden>
+                                                                </div>
+                                                                <br>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-2">金额</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="number" class="form-control" asp-for="@Model.AddFundViewModel.Number">
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <br>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-2">说明</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="text" class="form-control" asp-for="@Model.AddFundViewModel.Description">
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                    <br>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                            <button type="submit" class="btn btn-primary">添加</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#useFund">新增支出</button>
+                                        <div class="modal fade" id="useFund" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form asp-action="UseFund" asp-controller="Fund" method="post">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">新增支出</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="container-fluid">
+                                                                <div class="form-group row">
+                                                                    <input asp-for="@Model.UseFundViewModel.FundId" value="@Model.FundIndexViewModel.Id" hidden>
+                                                                </div>
+                                                                <br>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-2">金额</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="number" class="form-control" asp-for="@Model.UseFundViewModel.Number" max="@Model.FundIndexViewModel.Amount">
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <br>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-2">说明</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="text" class="form-control" asp-for="@Model.UseFundViewModel.Description">
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                    <br>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                            <button type="submit" class="btn btn-primary">添加</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End 新增收入/支出 Card -->
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">资金记录</h5>
+                            <div class="activity">
+                                @foreach (var fundChange in Model.FundIndexViewModel.Changes)
+                                {
+                                    <div class="activity-item d-flex">
+                                        <div class="time-container">
+                                            <div class="activite-label">@fundChange.DateTime</div>
+                                        </div>
+                                        @{
+                                            var c = "text-danger";
+                                            if (fundChange.ChangeType == FundChangeType.收入)
+                                                c = "text-success";
+                                        }
+                                        <i class='bi bi-circle-fill activity-badge @c align-self-start'></i>
+                                        <div class="activity-content">
+                                            @fundChange.User.UserName @fundChange.ChangeType.ToString() @fundChange.Number 说明：@fundChange.Description
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div><!-- End Recent Activity -->
+
+                </div>
             </div>
             <div class="tab-pane fade" id="bordered-users" role="tabpanel" aria-labelledby="user-tab">
                 <div class="container">

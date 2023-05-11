@@ -106,5 +106,10 @@ namespace ProjectManagementSystem.Controllers
             }
         }
 
+        public IActionResult ReturnProjetDetail(int id)
+        {
+            return RedirectToAction("ProjectDetail", "Project", new { id = id, tab = "bordered-books" });
+        }
+
     }
 }

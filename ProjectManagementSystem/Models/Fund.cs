@@ -14,10 +14,12 @@ namespace ProjectManagementSystem.Models
     public class FundChange
     {
         public int Id { get; set; }
-        public int Number { get; set; }
+        public decimal Number { get; set; }
+        public DateTime DateTime { get; set; }
         public FundChangeType ChangeType { get; set; }
-
+        public string Description { get; set; }
         public Fund Fund { get; set; }
+        public int FundId { get; set; }
         public ApplicationUser User { get; set; }
     }
 }

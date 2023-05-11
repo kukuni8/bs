@@ -67,7 +67,7 @@
 
     public enum FundChangeType
     {
-        增加,
-        减少,
+        支出,
+        收入,
     }
 }

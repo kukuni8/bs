@@ -71,6 +71,8 @@ namespace ProjectManagementSystem.Controllers
                 .Include(p => p.Books)
                 .Include(p => p.Resources)
                 .ThenInclude(r => r.Changes)
+                .Include(p => p.Fund)
+                .ThenInclude(f => f.Changes)
                 .FirstOrDefaultAsync(a => a.Id == id);
             var missions = project.Missions;
             var model = new ProjectDetailViewModel()
@@ -212,6 +214,20 @@ namespace ProjectManagementSystem.Controllers
                 ImagePath = r.ImagePath,
                 ResourceChanges = r.Changes,
             });
+            var paid = project.Fund.Changes
+                .Where(c => c.ChangeType == FundChangeType.支出)
+                .Sum(c => c.Number);
+            var incom = project.Fund.Changes
+                .Where(c => c.ChangeType == FundChangeType.收入)
+                .Sum(c => c.Number);
+            model.FundIndexViewModel = new FundIndexViewModel()
+            {
+                Id = project.Fund.Id,
+                Amount = project.Fund.Amount,
+                Changes = project.Fund.Changes,
+                Paid = paid,
+                Income = incom,
+            };
             return View(model);
         }
         [HttpPost]
@@ -255,6 +271,7 @@ namespace ProjectManagementSystem.Controllers
                 PutForwardId = put.Id,
                 Status = (ProjectStatus)model.Status,
                 ProjectUsers = new List<ProjectUser>(),
+                Fund = new Fund(),
             };
             var pu = new ProjectUser
             {

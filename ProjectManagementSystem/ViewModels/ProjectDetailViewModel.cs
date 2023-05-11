@@ -38,6 +38,12 @@ namespace ProjectManagementSystem.ViewModels
         public ResourceChangeViewModel UseResourceViewModel { get; set; }
 
         public ResourceChangeViewModel AddResourceViewModel { get; set; }
+
+        public FundIndexViewModel FundIndexViewModel { get; set; }
+
+        public FundChange AddFundViewModel { get; set; }
+
+        public FundChange UseFundViewModel { get; set; }
     }
     public class ProjectMissionIndexViewModel
     {

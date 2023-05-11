@@ -375,11 +375,17 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<int>("ChangeType")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FundId")
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FundId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Number")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
@@ -790,7 +796,9 @@ namespace ProjectManagementSystem.Migrations
                 {
                     b.HasOne("ProjectManagementSystem.Models.Fund", "Fund")
                         .WithMany("Changes")
-                        .HasForeignKey("FundId");
+                        .HasForeignKey("FundId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "User")
                         .WithMany("FundChanges")
