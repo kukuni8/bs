@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementSystem.Data;
+using ProjectManagementSystem.Helper;
 using ProjectManagementSystem.Models;
 using ProjectManagementSystem.ViewModels;
 
@@ -15,9 +16,12 @@ namespace ProjectManagementSystem.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly ApplicationDbContext applicationDbContext;
-        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole<int>> roleManager, ApplicationDbContext applicationDbContext)
+        private readonly IImageService imageHelper;
+
+        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole<int>> roleManager, ApplicationDbContext applicationDbContext, IImageService imageHelper)
         {
             this.applicationDbContext = applicationDbContext;
+            this.imageHelper = imageHelper;
             this.userManager = userManager;
             _roleManager = roleManager;
         }
@@ -27,10 +31,27 @@ namespace ProjectManagementSystem.Controllers
             var users = await userManager.Users
                 .Include(u => u.Department)
                 .Include(u => u.Job)
+                .Include(u => u.PutForwardProjects)
+                .Include(u => u.PutForwardRisks)
+                .Include(u => u.PutForwardDefects)
+                .Include(u => u.PutForwardMissions)
+                .Include(u => u.PutforwardChats)
+                .Include(u => u.FunctionaryDefects)
+                .Include(u => u.FunctionaryProjects)
+                .Include(u => u.FunctionaryRisks)
                 .ToListAsync();
             var model = new List<UserIndexViewModel>();
+
             foreach (var user in users)
             {
+                var canDelete = user.PutForwardProjects.Count > 0
+                    || user.PutForwardRisks.Count > 0
+                    || user.PutForwardDefects.Count > 0
+                    || user.PutForwardMissions.Count > 0
+                    || user.PutforwardChats.Count > 0
+                    || user.FunctionaryProjects.Count > 0
+                    || user.FunctionaryDefects.Count > 0
+                    || user.FunctionaryRisks.Count > 0;
                 var timespan = DateTime.Now - user.JobDate;
                 var year = (timespan.Days / 365).ToString() + "年";
                 var newUser = new UserIndexViewModel();
@@ -43,7 +64,8 @@ namespace ProjectManagementSystem.Controllers
                 newUser.RoleName = user.RoleName;
                 newUser.JobYear = year;
                 newUser.Age = user.BirthDate == default ? " " : (DateTime.Now.Year - user.BirthDate.Year).ToString() + "岁";
-
+                newUser.ImagePath = user.ImagePath;
+                newUser.CanDelete = !canDelete;
                 model.Add(newUser);
             }
 
@@ -67,6 +89,7 @@ namespace ProjectManagementSystem.Controllers
 
             var user = new ApplicationUser
             {
+                RoleName = userAddViewModel.RoleName,
                 UserName = userAddViewModel.UserName,
                 Email = userAddViewModel.Email,
                 BirthDate = userAddViewModel.BirthDate,
@@ -76,6 +99,7 @@ namespace ProjectManagementSystem.Controllers
                 Department = await applicationDbContext.Departments.FirstOrDefaultAsync(d => d.Name == userAddViewModel.Department),
                 Job = await applicationDbContext.Positions.FirstOrDefaultAsync(p => p.Name == userAddViewModel.Job),
                 JobDate = userAddViewModel.JobDate,
+                ImagePath = imageHelper.SaveCoverImage(userAddViewModel.Image),
             };
 
             var result = await userManager.CreateAsync(user, userAddViewModel.Password);
@@ -103,7 +127,7 @@ namespace ProjectManagementSystem.Controllers
             var user = await userManager.FindByIdAsync(id);
             var newUser = new UserEditViewModel
             {
-
+                UserName = user.UserName,
                 Email = user.Email,
                 BirthDate = user.BirthDate,
                 About = user.About,
@@ -113,7 +137,8 @@ namespace ProjectManagementSystem.Controllers
                 Job = user.Job?.ToString(),
                 JobDate = user.JobDate,
                 RoleName = user.RoleName,
-                Id = id
+                Id = id,
+                ImagePath = user.ImagePath,
             };
             return View(newUser);
         }
@@ -126,7 +151,8 @@ namespace ProjectManagementSystem.Controllers
             {
                 return RedirectToAction("Index");
             }
-
+            user.RoleName = model.RoleName;
+            user.UserName = model.UserName;
             user.Email = model.Email;
             user.BirthDate = model.BirthDate;
             user.About = model.About;
@@ -135,6 +161,9 @@ namespace ProjectManagementSystem.Controllers
             user.Department = await applicationDbContext.Departments.FirstOrDefaultAsync(d => d.Name == model.Department);
             user.Job = await applicationDbContext.Positions.FirstOrDefaultAsync(p => p.Name == model.Job);
             user.JobDate = model.JobDate;
+            if (model.Image != null)
+                user.ImagePath = imageHelper.SaveCoverImage(model.Image);
+
 
             var result = await userManager.UpdateAsync(user);
 

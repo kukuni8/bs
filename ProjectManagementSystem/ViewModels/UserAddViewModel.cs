@@ -44,5 +44,7 @@ namespace ProjectManagementSystem.ViewModels
         [Display(Name = "角色")]
         public string RoleName { get; set; }
 
+        public IFormFile Image { get; set; }
+
     }
 }

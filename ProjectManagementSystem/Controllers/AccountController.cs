@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagementSystem.Data;
+using ProjectManagementSystem.Helper;
 using ProjectManagementSystem.Models;
 using ProjectManagementSystem.ViewModels;
 
@@ -9,12 +11,16 @@ namespace ProjectManagementSystem.Controllers
     public class AccountController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IImageService imageService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, ApplicationDbContext applicationDbContext, SignInManager<ApplicationUser> signInManager, IImageService imageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            this.imageService = imageService;
+            _context = applicationDbContext;
         }
         public IActionResult Login()
         {
@@ -76,8 +82,12 @@ namespace ProjectManagementSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var modal = new AccountIndexViewModal { ApplicationUser = user };
+            var user = await _userManager.GetUserAsync(User);
+            var nUser = await _context.ApplicationUsers
+                .Include(u => u.Department)
+                .Include(u => u.Job)
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+            var modal = new AccountIndexViewModal { ApplicationUser = nUser };
             modal.SelectedTab = "profile-overview";
             return View(modal);
         }
@@ -100,6 +110,10 @@ namespace ProjectManagementSystem.Controllers
             user.Job = model.Job;
             user.TrueName = model.TrueName;
             user.PhoneNumber = model.PhoneNumber;
+            if (viewModal.Image != null)
+            {
+                user.ImagePath = imageService.SaveCoverImage(viewModal.Image);
+            }
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {

@@ -50,6 +50,8 @@ namespace ProjectManagementSystem.ViewModels
 
         public CheckIndexViewModel CheckIndexViewModel { get; set; }
 
+        public IEnumerable<ApplicationUser> UsersInTheProject { get; set; }
+
     }
     public class ProjectMissionIndexViewModel
     {

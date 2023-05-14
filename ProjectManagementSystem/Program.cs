@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ProjectManagementSystem.Data;
+using ProjectManagementSystem.Helper;
 using ProjectManagementSystem.Models;
 
 namespace ProjectManagementSystem
@@ -14,6 +15,8 @@ namespace ProjectManagementSystem
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddScoped<IImageService, ImageHelper>();
+
             builder.Services.AddScoped<UserManager<ApplicationUser>>();
             builder.Services.AddControllersWithViews();
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

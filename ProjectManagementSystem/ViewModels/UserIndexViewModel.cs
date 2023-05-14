@@ -26,5 +26,9 @@ namespace ProjectManagementSystem.ViewModels
 
         [Display(Name = "角色")]
         public string RoleName { get; set; }
+
+        public string ImagePath { get; set; }
+
+        public bool CanDelete { get; set; }
     }
 }

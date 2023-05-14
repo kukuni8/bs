@@ -10,6 +10,8 @@ namespace ProjectManagementSystem.ViewModels
     {
         public string Id { get; set; }
 
+        public string UserName { get; set; }
+
         [DataType(DataType.EmailAddress)]
         [Display(Name = "邮箱")]
         public string Email { get; set; }
@@ -38,5 +40,8 @@ namespace ProjectManagementSystem.ViewModels
 
         [Display(Name = "角色")]
         public string RoleName { get; set; }
+
+        public IFormFile Image { get; set; }
+        public string ImagePath { get; set; }
     }
 }

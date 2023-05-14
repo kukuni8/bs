@@ -38,7 +38,7 @@ namespace ProjectManagementSystem.Controllers
             fund.Amount += model.Number;
             applicationDbContext.Funds.Update(fund);
             await applicationDbContext.SaveChangesAsync();
-            return RedirectToAction("ProjectDetail", "Project", new { id = fund.Project.Fund.Id, tab = "bordered-funds" });
+            return RedirectToAction("ProjectDetail", "Project", new { id = fund.Project.Fund.Id, tab = "bordered-resources" });
         }
 
 
@@ -63,7 +63,7 @@ namespace ProjectManagementSystem.Controllers
             fund.Amount -= model.Number;
             applicationDbContext.Funds.Update(fund);
             await applicationDbContext.SaveChangesAsync();
-            return RedirectToAction("ProjectDetail", "Project", new { id = fund.Project.Fund.Id, tab = "bordered-funds" });
+            return RedirectToAction("ProjectDetail", "Project", new { id = fund.Project.Fund.Id, tab = "bordered-resources" });
         }
     }
 }

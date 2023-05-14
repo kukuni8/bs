@@ -14,14 +14,17 @@ namespace ProjectManagementSystem.Controllers
         private readonly ApplicationDbContext applicationDbContext;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole<int>> roleManager;
         public ProjectController(ApplicationDbContext applicationDbContext,
             SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole<int>> roleManager
           )
         {
             this.applicationDbContext = applicationDbContext;
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index()
@@ -68,6 +71,11 @@ namespace ProjectManagementSystem.Controllers
                 .Include(p => p.Missions)
                 .ThenInclude(m => m.Dialogues)
                 .Include(p => p.ProjectUsers)
+                .ThenInclude(pu => pu.ApplicationUser)
+                .ThenInclude(u => u.Department)
+                .Include(p => p.ProjectUsers)
+                .ThenInclude(pu => pu.ApplicationUser)
+                .ThenInclude(u => u.Job)
                 .Include(p => p.Books)
                 .Include(p => p.Resources)
                 .ThenInclude(r => r.Changes)
@@ -318,6 +326,7 @@ namespace ProjectManagementSystem.Controllers
                     Status = d.CheckStatus,
                 }).ToList(),
             };
+            model.UsersInTheProject = project.ProjectUsers.Select(a => a.ApplicationUser);
             return View(model);
         }
         [HttpPost]

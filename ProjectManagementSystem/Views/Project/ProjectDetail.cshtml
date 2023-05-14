@@ -206,9 +206,6 @@
                 <button class="nav-link" id="resource-tab" data-bs-toggle="tab" data-bs-target="#bordered-resources" type="button" role="tab" aria-controls="home" aria-selected="true">资源</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="fund-tab" data-bs-toggle="tab" data-bs-target="#bordered-funds" type="button" role="tab" aria-controls="home" aria-selected="true">资金</button>
-            </li>
-            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#bordered-users" type="button" role="tab" aria-controls="profile" aria-selected="false">人员</button>
             </li>
             <li class="nav-item" role="presentation">
@@ -668,7 +665,7 @@
                                                                             <div class="col-sm-10">
                                                                                 <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
                                                                                     @{
-                                                                                        foreach (var item in userManager.Users)
+                                                                                        foreach (var item in Model.UsersInTheProject)
                                                                                         {
                                                                                             <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
                                                                                         }
@@ -864,7 +861,7 @@
                                                                             <div class="col-sm-10">
                                                                                 <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
                                                                                     @{
-                                                                                        foreach (var item in userManager.Users)
+                                                                                        foreach (var item in Model.UsersInTheProject)
                                                                                         {
                                                                                             <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
                                                                                         }
@@ -1060,7 +1057,7 @@
                                                                             <div class="col-sm-10">
                                                                                 <select id="missionExecutor" asp-for="@Model.EditMission.Executors" class="selectpicker form-control valid" data-live-search="true" multiple required="">
                                                                                     @{
-                                                                                        foreach (var item in userManager.Users)
+                                                                                        foreach (var item in Model.UsersInTheProject)
                                                                                         {
                                                                                             <option value="@item.UserName" selected="@mission.Executors.Contains(item.UserName)">@item.UserName</option>
                                                                                         }
@@ -1180,7 +1177,7 @@
                                                 <label asp-for="@Model.AddMission.Executors" class="col-sm-2"></label>
                                                 <div class="col-sm-10">
                                                     <select asp-for=@Model.AddMission.Executors class="selectpicker form-control valid" data-live-search="true" multiple required="">
-                                                        @foreach (var item in userManager.Users.Select(a => a.UserName))
+                                                        @foreach (var item in Model.UsersInTheProject.Select(a => a.UserName))
                                                         {
                                                             <option value="@item">@item</option>
                                                         }
@@ -1570,6 +1567,150 @@
             </div>
             <div class="tab-pane fade" id="bordered-resources" role="tabpanel" aria-labelledby="resource-tab">
                 <div class="container">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                        <!-- 资金 Card -->
+                        <div class="col">
+                            <div class="card info-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">资金</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon-blue rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-yen"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h4>@Model.FundIndexViewModel.Amount</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End 资金 Card -->
+                        <!-- 收入 Card -->
+                        <div class="col">
+                            <div class="card info-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">收入</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon-green rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-yen"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h4>@Model.FundIndexViewModel.Income</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End 收入 Card -->
+                        <!-- 支出 Card -->
+                        <div class="col">
+                            <div class="card  info-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">支出</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon-red rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-yen"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h4>@Model.FundIndexViewModel.Paid</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End 支出 Card -->
+                        <!-- 新增收入/支出 Card -->
+                        <div class="col">
+                            <div class="card info-card" style="height:83%">
+                                <div class="card-body d-flex flex-column">
+                                    <div class="d-grid gap-2 mt-auto">
+                                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addFund">新增收入</button>
+                                        <div class="modal fade" id="addFund" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form asp-action="AddFund" asp-controller="Fund" method="post">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">新增收入</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="container-fluid">
+                                                                <div class="form-group row">
+                                                                    <input asp-for="@Model.AddFundViewModel.FundId" value="@Model.FundIndexViewModel.Id" hidden>
+                                                                </div>
+                                                                <br>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-2">金额</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="number" class="form-control" asp-for="@Model.AddFundViewModel.Number">
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <br>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-2">说明</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="text" class="form-control" asp-for="@Model.AddFundViewModel.Description">
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                    <br>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                            <button type="submit" class="btn btn-primary">添加</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#useFund">新增支出</button>
+                                        <div class="modal fade" id="useFund" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form asp-action="UseFund" asp-controller="Fund" method="post">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">新增支出</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="container-fluid">
+                                                                <div class="form-group row">
+                                                                    <input asp-for="@Model.UseFundViewModel.FundId" value="@Model.FundIndexViewModel.Id" hidden>
+                                                                </div>
+                                                                <br>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-2">金额</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="number" class="form-control" asp-for="@Model.UseFundViewModel.Number" max="@Model.FundIndexViewModel.Amount">
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <br>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-2">说明</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="text" class="form-control" asp-for="@Model.UseFundViewModel.Description">
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                    <br>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                            <button type="submit" class="btn btn-primary">添加</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End 新增收入/支出 Card -->
+                    </div>
+
+
+
                     <section class="section">
                         <div class="row">
                             <div class="col-lg-12">
@@ -1795,151 +1936,6 @@
                             </div>
                         </div>
                     </section>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="bordered-funds" role="tabpanel" aria-labelledby="fund-tab">
-                <div class="container">
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-                        <!-- 资金 Card -->
-                        <div class="col">
-                            <div class="card info-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">资金</h5>
-                                    <div class="d-flex align-items-center">
-                                        <div class="card-icon-blue rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-currency-yen"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h4>@Model.FundIndexViewModel.Amount</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- End 资金 Card -->
-                        <!-- 收入 Card -->
-                        <div class="col">
-                            <div class="card info-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">收入</h5>
-                                    <div class="d-flex align-items-center">
-                                        <div class="card-icon-green rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-currency-yen"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h4>@Model.FundIndexViewModel.Income</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- End 收入 Card -->
-                        <!-- 支出 Card -->
-                        <div class="col">
-                            <div class="card  info-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">支出</h5>
-                                    <div class="d-flex align-items-center">
-                                        <div class="card-icon-red rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-currency-yen"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h4>@Model.FundIndexViewModel.Paid</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- End 支出 Card -->
-                        <!-- 新增收入/支出 Card -->
-                        <div class="col">
-                            <div class="card info-card" style="height:83%">
-                                <div class="card-body d-flex flex-column">
-                                    <div class="d-grid gap-2 mt-auto">
-                                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addFund">新增收入</button>
-                                        <div class="modal fade" id="addFund" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <form asp-action="AddFund" asp-controller="Fund" method="post">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">新增收入</h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="container-fluid">
-                                                                <div class="form-group row">
-                                                                    <input asp-for="@Model.AddFundViewModel.FundId" value="@Model.FundIndexViewModel.Id" hidden>
-                                                                </div>
-                                                                <br>
-                                                                <div class="form-group row">
-                                                                    <label class="col-sm-2">金额</label>
-                                                                    <div class="col-sm-10">
-                                                                        <input type="number" class="form-control" asp-for="@Model.AddFundViewModel.Number">
-                                                                        <div class="invalid-feedback"></div>
-                                                                    </div>
-                                                                </div>
-                                                                <br>
-                                                                <div class="form-group row">
-                                                                    <label class="col-sm-2">说明</label>
-                                                                    <div class="col-sm-10">
-                                                                        <input type="text" class="form-control" asp-for="@Model.AddFundViewModel.Description">
-                                                                        <div class="invalid-feedback"></div>
-                                                                    </div>
-                                                                    <br>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                                                            <button type="submit" class="btn btn-primary">添加</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#useFund">新增支出</button>
-                                        <div class="modal fade" id="useFund" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <form asp-action="UseFund" asp-controller="Fund" method="post">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">新增支出</h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="container-fluid">
-                                                                <div class="form-group row">
-                                                                    <input asp-for="@Model.UseFundViewModel.FundId" value="@Model.FundIndexViewModel.Id" hidden>
-                                                                </div>
-                                                                <br>
-                                                                <div class="form-group row">
-                                                                    <label class="col-sm-2">金额</label>
-                                                                    <div class="col-sm-10">
-                                                                        <input type="number" class="form-control" asp-for="@Model.UseFundViewModel.Number" max="@Model.FundIndexViewModel.Amount">
-                                                                        <div class="invalid-feedback"></div>
-                                                                    </div>
-                                                                </div>
-                                                                <br>
-                                                                <div class="form-group row">
-                                                                    <label class="col-sm-2">说明</label>
-                                                                    <div class="col-sm-10">
-                                                                        <input type="text" class="form-control" asp-for="@Model.UseFundViewModel.Description">
-                                                                        <div class="invalid-feedback"></div>
-                                                                    </div>
-                                                                    <br>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
-                                                            <button type="submit" class="btn btn-primary">添加</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- End 新增收入/支出 Card -->
-                    </div>
 
                     <!-- Recent Activity -->
                     <div class="card">
@@ -1966,7 +1962,6 @@
                             </div>
                         </div>
                     </div><!-- End Recent Activity -->
-
                 </div>
             </div>
             <div class="tab-pane fade" id="bordered-users" role="tabpanel" aria-labelledby="user-tab">
