@@ -166,57 +166,76 @@
 
     </header><!-- End Header -->
     <!-- ======= Sidebar ======= -->
-    <aside id="sidebar" class="sidebar">
+    @{
+    var activeController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var activeAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
 
-        <ul class="sidebar-nav" id="sidebar-nav">
+@{ 
+    string[] userRoutes = { "User", "Role" };
+    string[] projectRoutes = { "Project" };
+    string[] otherRoutes = { "Department", "Position" };
+}
 
-            <li class="nav-item">
-                <a class="nav-link" asp-action="Index" asp-controller="Home">
-                    <i class="bi bi-grid"></i>
-                    <span>看板</span>
-                </a>
-            </li><!-- End Dashboard Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-card-list"></i><span>用户</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="users-nav" class="nav-content collapse ">
-                    <li>
-                        <a asp-action="Index" asp-controller="User">用户管理</a>
-                    </li>
-                    <li>
-                        <a asp-action="Index" asp-controller="Role">角色管理</a>
-                    </li>
-                </ul>
-            </li><!-- End Components Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>项目</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="components-nav" class="nav-content collapse ">
-                    <li>
-                        <a asp-action="Index" asp-controller="Project">项目管理</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#others-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>其他</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="others-nav" class="nav-content collapse ">
-                    <li>
-                        <a asp-action="Index" asp-controller="Department">部门管理</a>
-                    </li>
-                    <li>
-                        <a asp-action="Index" asp-controller="Position">职位管理</a>
+<aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+        <li class="nav-item @(userRoutes.Contains(activeController) ? "active" : "")">
+            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-card-list"></i><span>用户</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="components-nav" class="nav-content collapse @(userRoutes.Contains(activeController) ? "show" : "")" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="nav-link @(activeController == "User" ? "active" : "")"
+                       asp-action="Index" asp-controller="User">
+                        用户管理
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link @(activeController == "Role" ? "active" : "")"
+                       asp-action="Index" asp-controller="Role">
+                        角色管理
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item @(projectRoutes.Contains(activeController) ? "active" : "")">
+            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-menu-button-wide"></i><span>项目</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="forms-nav" class="nav-content collapse @(projectRoutes.Contains(activeController) ? "show" : "")" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="nav-link @(activeController == "Project" ? "active" : "")"
+                       asp-action="Index" asp-controller="Project">
+                        项目管理
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item @(otherRoutes.Contains(activeController) ? "active" : "")">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-menu-button-wide"></i><span>其他</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tables-nav" class="nav-content collapse @(otherRoutes.Contains(activeController) ? "show" : "")" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="nav-link @(activeController == "Department" ? "active" : "")"
+                       asp-action="Index" asp-controller="Department">
+                        部门管理
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link @(activeController == "Position" ? "active" : "")"
+                           asp-action="Index" asp-controller="Position">
+                            职位管理
+                        </a>
                     </li>
                 </ul>
             </li>
         </ul>
 
-    </aside><!-- End Sidebar-->
+    </aside>
+
+
+
 
     <main id="main" class="main">
 
