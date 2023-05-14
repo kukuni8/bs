@@ -9,7 +9,8 @@ namespace ProjectManagementSystem.Models
         public DateTime CreateTime { get; set; }
         public NoticeType NoticeType { get; set; }
         public string Information { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser Putforward { get; set; }
+        public List<NoticeReceiver> Receivers { get; set; }
         public Project Project { get; set; }
     }
 }

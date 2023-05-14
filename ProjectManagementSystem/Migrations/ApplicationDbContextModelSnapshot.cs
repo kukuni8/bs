@@ -174,6 +174,35 @@ namespace ProjectManagementSystem.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Controllers.ChatRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PutforwardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PutforwardId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.ToTable("ChatRecord");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
@@ -198,8 +227,8 @@ namespace ProjectManagementSystem.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Department")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -208,11 +237,14 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Job")
+                    b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("JobDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("JobId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -254,6 +286,10 @@ namespace ProjectManagementSystem.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("JobId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -343,6 +379,22 @@ namespace ProjectManagementSystem.Migrations
                     b.HasIndex("PutForwardId");
 
                     b.ToTable("Defects");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Fund", b =>
@@ -507,9 +559,6 @@ namespace ProjectManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("ApplicationUserId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
@@ -525,13 +574,47 @@ namespace ProjectManagementSystem.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("PutforwardId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
 
+                    b.HasIndex("PutforwardId");
+
                     b.ToTable("Notices");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.NoticeReceiver", b =>
+                {
+                    b.Property<int>("NoticeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NoticeId", "ReceiverId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.ToTable("NoticeReceivers");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Position", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Positions");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
@@ -761,6 +844,40 @@ namespace ProjectManagementSystem.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProjectManagementSystem.Controllers.ChatRecord", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Putforward")
+                        .WithMany("PutforwardChats")
+                        .HasForeignKey("PutforwardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Receiver")
+                        .WithMany("ReceiveChats")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Putforward");
+
+                    b.Navigation("Receiver");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.Department", "Department")
+                        .WithMany("Users")
+                        .HasForeignKey("DepartmentId");
+
+                    b.HasOne("ProjectManagementSystem.Models.Position", "Job")
+                        .WithMany("Users")
+                        .HasForeignKey("JobId");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Job");
+                });
+
             modelBuilder.Entity("ProjectManagementSystem.Models.Book", b =>
                 {
                     b.HasOne("ProjectManagementSystem.Models.Project", "Project")
@@ -877,17 +994,36 @@ namespace ProjectManagementSystem.Migrations
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Notice", b =>
                 {
-                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Notices")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("ProjectManagementSystem.Models.Project", "Project")
                         .WithMany("Notices")
                         .HasForeignKey("ProjectId");
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Putforward")
+                        .WithMany("Notices")
+                        .HasForeignKey("PutforwardId");
 
                     b.Navigation("Project");
+
+                    b.Navigation("Putforward");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.NoticeReceiver", b =>
+                {
+                    b.HasOne("ProjectManagementSystem.Models.Notice", "Notice")
+                        .WithMany("Receivers")
+                        .HasForeignKey("NoticeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagementSystem.Models.ApplicationUser", "Receiver")
+                        .WithMany("NoticeReceived")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notice");
+
+                    b.Navigation("Receiver");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>
@@ -989,6 +1125,8 @@ namespace ProjectManagementSystem.Migrations
 
                     b.Navigation("MissionExecutors");
 
+                    b.Navigation("NoticeReceived");
+
                     b.Navigation("Notices");
 
                     b.Navigation("ProjectUsers");
@@ -1001,7 +1139,16 @@ namespace ProjectManagementSystem.Migrations
 
                     b.Navigation("PutForwardRisks");
 
+                    b.Navigation("PutforwardChats");
+
+                    b.Navigation("ReceiveChats");
+
                     b.Navigation("ResourceChanges");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Department", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Fund", b =>
@@ -1014,6 +1161,16 @@ namespace ProjectManagementSystem.Migrations
                     b.Navigation("Dialogues");
 
                     b.Navigation("MissionExecutors");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Notice", b =>
+                {
+                    b.Navigation("Receivers");
+                });
+
+            modelBuilder.Entity("ProjectManagementSystem.Models.Position", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("ProjectManagementSystem.Models.Project", b =>

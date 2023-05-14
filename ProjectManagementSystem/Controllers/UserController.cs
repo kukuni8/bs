@@ -24,23 +24,26 @@ namespace ProjectManagementSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var users = await userManager.Users.ToListAsync();
+            var users = await userManager.Users
+                .Include(u => u.Department)
+                .Include(u => u.Job)
+                .ToListAsync();
             var model = new List<UserIndexViewModel>();
             foreach (var user in users)
             {
                 var timespan = DateTime.Now - user.JobDate;
                 var year = (timespan.Days / 365).ToString() + "年";
-                var newUser = new UserIndexViewModel()
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Department = user?.Department,
-                    Job = user.Job,
-                    TrueName = user.TrueName,
-                    RoleName = user.RoleName,
-                    JobYear = year,
-                    Age = user.BirthDate == default ? " " : (DateTime.Now.Year - user.BirthDate.Year).ToString() + "岁",
-                };
+                var newUser = new UserIndexViewModel();
+
+                newUser.Id = user.Id;
+                newUser.UserName = user.UserName;
+                newUser.Department = user.Department?.ToString();
+                newUser.Job = user.Job?.ToString();
+                newUser.TrueName = user.TrueName;
+                newUser.RoleName = user.RoleName;
+                newUser.JobYear = year;
+                newUser.Age = user.BirthDate == default ? " " : (DateTime.Now.Year - user.BirthDate.Year).ToString() + "岁";
+
                 model.Add(newUser);
             }
 
@@ -70,8 +73,8 @@ namespace ProjectManagementSystem.Controllers
                 About = userAddViewModel.About,
                 Address = userAddViewModel.Address,
                 TrueName = userAddViewModel.TrueName,
-                Department = userAddViewModel.Department,
-                Job = userAddViewModel.Job,
+                Department = await applicationDbContext.Departments.FirstOrDefaultAsync(d => d.Name == userAddViewModel.Department),
+                Job = await applicationDbContext.Positions.FirstOrDefaultAsync(p => p.Name == userAddViewModel.Job),
                 JobDate = userAddViewModel.JobDate,
             };
 
@@ -106,8 +109,8 @@ namespace ProjectManagementSystem.Controllers
                 About = user.About,
                 Address = user.Address,
                 TrueName = user.TrueName,
-                Department = user.Department,
-                Job = user.Job,
+                Department = user.Department?.ToString(),
+                Job = user.Job?.ToString(),
                 JobDate = user.JobDate,
                 RoleName = user.RoleName,
                 Id = id
@@ -129,8 +132,8 @@ namespace ProjectManagementSystem.Controllers
             user.About = model.About;
             user.Address = model.Address;
             user.TrueName = model.TrueName;
-            user.Department = model.Department;
-            user.Job = model.Job;
+            user.Department = await applicationDbContext.Departments.FirstOrDefaultAsync(d => d.Name == model.Department);
+            user.Job = await applicationDbContext.Positions.FirstOrDefaultAsync(p => p.Name == model.Job);
             user.JobDate = model.JobDate;
 
             var result = await userManager.UpdateAsync(user);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagementSystem.Controllers;
 using ProjectManagementSystem.Models;
 
 
@@ -22,6 +23,10 @@ namespace ProjectManagementSystem.Data
         public DbSet<ResourceChange> ResourceChanges { get; set; }
         public DbSet<Fund> Funds { get; set; }
         public DbSet<FundChange> FundChanges { get; set; }
+
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Position> Positions { get; set; }
+        public DbSet<NoticeReceiver> NoticeReceivers { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -53,6 +58,19 @@ namespace ProjectManagementSystem.Data
             modelBuilder.Entity<ProjectUser>()
                 .HasKey(pu => new { pu.ProjectId, pu.ApplicationUserId });
 
+            modelBuilder.Entity<NoticeReceiver>()
+                .HasKey(nr => new { nr.NoticeId, nr.ReceiverId });
+
+            modelBuilder.Entity<Notice>()
+                .HasMany(n => n.Receivers)
+                .WithOne(nr => nr.Notice)
+                .HasForeignKey(nr => nr.NoticeId);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.NoticeReceived)
+                .WithOne(nr => nr.Receiver)
+                 .HasForeignKey(nr => nr.ReceiverId);
+
             modelBuilder.Entity<Project>()
             .HasMany(p => p.ProjectUsers)
             .WithOne(pu => pu.Project)
@@ -62,6 +80,8 @@ namespace ProjectManagementSystem.Data
                 .HasMany(u => u.ProjectUsers)
                 .WithOne(pu => pu.ApplicationUser)
                 .HasForeignKey(pu => pu.ApplicationUserId);
+
+
 
             modelBuilder.Entity<MissionExecutor>()
                 .HasKey(me => new { me.ApplicationUserId, me.MissionId });
@@ -140,6 +160,18 @@ namespace ProjectManagementSystem.Data
                 .WithMany(u => u.FunctionaryProjects)
                 .HasForeignKey(p => p.FunctionaryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ChatRecord>()
+           .HasOne(cr => cr.Putforward)
+           .WithMany(u => u.PutforwardChats)
+           .HasForeignKey(cr => cr.PutforwardId)
+            .OnDelete(DeleteBehavior.Restrict); // 禁用级联删除
+
+            modelBuilder.Entity<ChatRecord>()
+                .HasOne(cr => cr.Receiver)
+                .WithMany(u => u.ReceiveChats)
+                .HasForeignKey(cr => cr.ReceiverId)
+                 .OnDelete(DeleteBehavior.Restrict); // 禁用级联删除
         }
     }
 }

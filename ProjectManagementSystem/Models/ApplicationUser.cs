@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
+using ProjectManagementSystem.Controllers;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectManagementSystem.Models
@@ -16,12 +18,14 @@ namespace ProjectManagementSystem.Models
         [Display(Name = "地址")]
         public string Address { get; set; }
         [Display(Name = "职位")]
-        public string Job { get; set; }
+        public Position Job { get; set; }
         [Display(Name = "姓名")]
         public string TrueName { get; set; }
 
+        public string ImagePath { get; set; }
+
         [Display(Name = "部门")]
-        public string Department { get; set; }
+        public Department Department { get; set; }
 
         [Display(Name = "入职时间")]
         [DataType(DataType.Date)]
@@ -55,9 +59,17 @@ namespace ProjectManagementSystem.Models
 
         public List<Notice> Notices { get; set; }
 
+
+
+
         public List<ResourceChange> ResourceChanges { get; set; }
 
         public List<FundChange> FundChanges { get; set; }
+
+        public List<NoticeReceiver> NoticeReceived { get; set; }
+
+        public List<ChatRecord> PutforwardChats { get; set; }
+        public List<ChatRecord> ReceiveChats { get; set; }
 
         public override string ToString()
         {

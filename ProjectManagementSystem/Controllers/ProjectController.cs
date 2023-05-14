@@ -243,16 +243,16 @@ namespace ProjectManagementSystem.Controllers
             {
                 Id = u.ApplicationUser.Id,
                 Name = u.ApplicationUser.UserName,
-                Department = u.ApplicationUser.Department,
-                Job = u.ApplicationUser.Job,
+                Department = u.ApplicationUser.Department.ToString(),
+                Job = u.ApplicationUser.Job.ToString(),
                 RoleName = u.ApplicationUser.RoleName,
             });
             model.UsersNotInThisProject = await applicationDbContext.Users.Where(u => !project.ProjectUsers.Select(a => a.ApplicationUserId).Contains(u.Id)).Select(u => new ProjectUserNotInProjectModel
             {
                 Id = u.Id,
                 Name = u.UserName,
-                Department = u.Department,
-                Job = u.Job,
+                Department = u.Department.ToString(),
+                Job = u.Job.ToString(),
                 RoleName = u.RoleName,
                 IsSelected = false,
             }).ToListAsync();
@@ -471,13 +471,6 @@ namespace ProjectManagementSystem.Controllers
                     Mission = mission,
                 };
                 mission.MissionExecutors.Add(me);
-                var notice = new Notice
-                {
-                    ApplicationUser = curUser,
-                    NoticeType = NoticeType.任务通知,
-                    Information = $"{await userManager.FindByNameAsync(User.Identity.Name)}给你分配了一个任务",
-                    IsRead = false,
-                };
                 var dia = new MissionDialogue
                 {
                     MissionId = mission.Id,
@@ -487,7 +480,6 @@ namespace ProjectManagementSystem.Controllers
                 };
                 applicationDbContext.MissionDialogues.Add(dia);
                 applicationDbContext.Missions.Update(mission);
-                await applicationDbContext.Notices.AddAsync(notice);
 
             }
             applicationDbContext.SaveChanges();
@@ -664,6 +656,18 @@ namespace ProjectManagementSystem.Controllers
             }
             await applicationDbContext.SaveChangesAsync();
             return RedirectToAction("ProjectDetail", "Project", new { id = model.CurProjectId, tab = "bordered-users" });
+        }
+        [HttpGet]
+        public JsonResult GetData()
+        {
+            var data = new[]
+            {
+            new { name = "待处理", data = new[] {31, 40, 28, 51, 42, 82, 56} },
+            new { name = "进行中", data = new[] {11, 32, 45, 32, 34, 52, 41} },
+            new { name = "已完成", data = new[] {15, 11, 32, 18, 9, 24, 11} }
+        };
+
+            return Json(data);
         }
     }
 }
