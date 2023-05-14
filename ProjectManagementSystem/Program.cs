@@ -1,10 +1,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ProjectManagementSystem.Data;
 using ProjectManagementSystem.Helper;
+using ProjectManagementSystem.Hubs;
 using ProjectManagementSystem.Models;
+using System.Security.Principal;
+using System;
 
 namespace ProjectManagementSystem
 {
@@ -19,6 +23,7 @@ namespace ProjectManagementSystem
 
             builder.Services.AddScoped<UserManager<ApplicationUser>>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSignalR();
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString, b => b.MigrationsAssembly("ProjectManagementSystem")));
@@ -84,9 +89,14 @@ namespace ProjectManagementSystem
             app.UseAuthorization();
 
 
-            app.MapControllerRoute(
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Account}/{action=Login}/{id?}");
+                endpoints.MapHub<ChatHub>("/chathub");
+                endpoints.MapHub<NotificationHub>("/noticeHub");
+            });
 
             app.Run();
         }

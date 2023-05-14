@@ -1,11 +1,23 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using ProjectManagementSystem.Models;
 using System.Threading.Tasks;
 
-public class NotificationHub : Hub
+namespace ProjectManagementSystem.Hubs
 {
-    public async Task SendNotification()
+    public class NotificationHub : Hub
     {
-        await Clients.All.SendAsync("ReceiveNotification");
+        public async Task SendNoticeToUser(string userId, Notice notice)
+        {
+            try
+            {
+                await Clients.User(userId.ToString()).SendAsync("ReceiveNotice", notice);
+            }
+            catch (Exception ex)
+            {
+                // Log error here
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
     }
 }
-

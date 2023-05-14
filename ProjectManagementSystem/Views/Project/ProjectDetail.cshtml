@@ -172,6 +172,14 @@
         text-align: center; /* 设置文本居中对齐 */
     }
 </style>
+
+<style>
+    .notification {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+</style>
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">@Model.ProjectEditViewModel.Name</h5>
@@ -262,258 +270,137 @@
             <div class="tab-pane fade" id="bordered-notices" role="tabpanel" aria-labelledby="notice-tab">
                 <div class="card">
                     <div class="card-body">
-                        <div class="divide-y">
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar">JL</span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Jeffie Lewzey</strong> commented on your <strong>"I'm not a witch."</strong> post.
+                        <h5 class="card-title">通知列表</h5>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newNotice">
+                            发通知
+                        </button>
+                        <div class="modal fade" id="newNotice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form asp-action="AddNotice" asp-controller="Notice" method="post">
+                                        <input asp-for="@Model.NoticeAddViewModel.ProjectId" value="@Model.CurProject.Id" hidden>
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">新通知</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <div class="text-muted">yesterday</div>
-                                    </div>
-                                    <div class="col-auto align-self-center">
-                                        <div class="badge bg-primary"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/002m.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            It's <strong>Mallory Hulme</strong>'s birthday. Wish him well!
+                                        <div class="modal-body">
+                                            <textarea asp-for="@Model.NoticeAddViewModel.Information"></textarea>
+                                            <div class="form-check">
+                                                <input asp-for="@Model.NoticeAddViewModel.IsInfo" class="form-check-input" name="flexRadioDefault" id="flexRadioDefault1">
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    普通
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="@Model.NoticeAddViewModel.IsWarning" class="form-check-input" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                                <label class="form-check-label" for="flexRadioDefault2">
+                                                    警告
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="@Model.NoticeAddViewModel.IsDanger" class="form-check-input" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                                <label class="form-check-label" for="flexRadioDefault2">
+                                                    危险
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="@Model.NoticeAddViewModel.IsSuccess" class="form-check-input" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                                <label class="form-check-label" for="flexRadioDefault2">
+                                                    提醒
+                                                </label>
+                                            </div>
                                         </div>
-                                        <div class="text-muted">2 days ago</div>
-                                    </div>
-                                    <div class="col-auto align-self-center">
-                                        <div class="badge bg-primary"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/003m.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Dunn Slane</strong> posted <strong>"Well, what do you want?"</strong>.
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                                            <button type="submit" class="btn btn-primary">发送</button>
                                         </div>
-                                        <div class="text-muted">today</div>
-                                    </div>
-                                    <div class="col-auto align-self-center">
-                                        <div class="badge bg-primary"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/000f.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Emmy Levet</strong> created a new project <strong>Morning alarm clock</strong>.
-                                        </div>
-                                        <div class="text-muted">4 days ago</div>
-                                    </div>
-                                    <div class="col-auto align-self-center">
-                                        <div class="badge bg-primary"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/001f.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Maryjo Lebarree</strong> liked your photo.
-                                        </div>
-                                        <div class="text-muted">2 days ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar">EP</span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Egan Poetz</strong> registered new client as <strong>Trilia</strong>.
-                                        </div>
-                                        <div class="text-muted">yesterday</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/002f.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Kellie Skingley</strong> closed a new deal on project <strong>Pen Pineapple Apple Pen</strong>.
-                                        </div>
-                                        <div class="text-muted">2 days ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/003f.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Christabel Charlwood</strong> created a new project for <strong>Wikibox</strong>.
-                                        </div>
-                                        <div class="text-muted">4 days ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar">HS</span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Haskel Shelper</strong> change status of <strong>Tabler Icons</strong> from <strong>open</strong> to <strong>closed</strong>.
-                                        </div>
-                                        <div class="text-muted">today</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/006m.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Lorry Mion</strong> liked <strong>Tabler UI Kit</strong>.
-                                        </div>
-                                        <div class="text-muted">yesterday</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/004f.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Leesa Beaty</strong> posted new video.
-                                        </div>
-                                        <div class="text-muted">2 days ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/007m.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Perren Keemar</strong> and 3 others followed you.
-                                        </div>
-                                        <div class="text-muted">2 days ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar">SA</span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Sunny Airey</strong> upload 3 new photos to category <strong>Inspirations</strong>.
-                                        </div>
-                                        <div class="text-muted">2 days ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/009m.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Geoffry Flaunders</strong> made a <strong>$10</strong> donation.
-                                        </div>
-                                        <div class="text-muted">2 days ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/010m.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Thatcher Keel</strong> created a profile.
-                                        </div>
-                                        <div class="text-muted">3 days ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/005f.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Dyann Escala</strong> hosted the event <strong>Tabler UI Birthday</strong>.
-                                        </div>
-                                        <div class="text-muted">4 days ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/006f.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Avivah Mugleston</strong> mentioned you on <strong>Best of 2020</strong>.
-                                        </div>
-                                        <div class="text-muted">2 days ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar">AA</span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                            <strong>Arlie Armstead</strong> sent a Review Request to <strong>Amanda Blake</strong>.
-                                        </div>
-                                        <div class="text-muted">2 days ago</div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                        <div id="notificationList">
+                        </div>
+                        @foreach (var notice in Model.Notices)
+                        {
+                            var coor = "alert-success";
+                            var ic = "bi bi-check-circle me-1";
+                            var bt = "btn-success";
+                            if (notice.NoticeType == NoticeType.Info)
+                            {
+                                coor = "alert-info";
+                                ic = "bi bi-info-circle me-1";
+                                bt = "btn-info";
+                            }
+                            if (notice.NoticeType == NoticeType.Warning)
+                            {
+                                coor = "alert-warning";
+                                ic = "bi bi-exclamation-triangle me-1";
+                                bt = "btn-warning";
+                            }
+
+                            if (notice.NoticeType == NoticeType.Danger)
+                            {
+                                coor = "alert-danger";
+                                ic = "bi bi-exclamation-octagon me-1";
+                                bt = "btn-danger";
+                            }
+                            <div class="alert @coor alert-dismissible fade show notification" role="alert">
+                                <div class="notification-info">
+                                    <i class="@ic"></i>
+                                    A simple success alert with icon—check it out!
+                                </div>
+                                <button type="button" class="btn @bt btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#@("looktz" + notice.Id)">详情</button>
+                                <div class="modal fade" id="@("looktz" + notice.Id)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">通知详情</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <textarea>@notice.Information</textarea>
+                                                <label>@notice.Putforward</label>
+                                                <label>@notice.CreateTime.ToString("yyyy-MM-dd")</label>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="bordered-chats" role="tabpanel" aria-labelledby="chat-tab">
+                <div class="container">
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-2">User:</div>
+                        <div class="col-4"><input type="text" id="userInput" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">Message:</div>
+                        <div class="col-4"><input type="text" id="messageInput" /></div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-6"><input type="button" id="sendButton" value="Send Message" /></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <hr />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <ul id="messagesList"></ul>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane fade" id="bordered-missions" role="tabpanel" aria-labelledby="mission-tab">
                 <div class="container">
@@ -2344,7 +2231,115 @@
         });
     </script>
 
+    <script>
+        //通知已读颜色变浅
+        $(document).ready(function () {
+            $('.mark-as-read').click(function () {
+                $(this).parent().css('opacity', '0.5');
+            });
+        });
+    </script>
 
+    <script>
+        //const connection = new signalR.HubConnectionBuilder()
+        //    .withUrl("/chathub")
+        //    .build();
+
+        //connection.start().then(function () {
+        //    document.getElementById("sendButton").addEventListener("click", function (event) {
+        //        const user = document.getElementById("userInput").value;
+        //        const message = document.getElementById("messageInput").value;
+        //        connection.invoke("SendMessageToUser", user, message).catch(function (err) {
+        //            return console.error(err.toString());
+        //        });
+        //        event.preventDefault();
+        //    });
+        //}).catch(function (err) {
+        //    return console.error(err.toString());
+        //});
+
+        //// 接收消息
+        //connection.on("ReceiveMessage", function (message) {
+        //    const li = document.createElement("li");
+        //    li.textContent = message;
+        //    document.getElementById("messagesList").appendChild(li);
+        //});
+
+
+    </script>
+
+    <script>
+    $(document).ready(function () {
+        // 创建 SignalR 连接
+        var connection = new signalR.HubConnectionBuilder().withUrl("/noticeHub").build();
+
+        // 接收通知
+        connection.on("ReceiveNotice", function (notice) {
+                console.log('received');
+            var coor = "alert-success";
+            var ic = "bi bi-check-circle me-1";
+            var bt = "btn-success";
+
+            if (notice.NoticeType === "Info") {
+                coor = "alert-info";
+                ic = "bi bi-info-circle me-1";
+                bt = "btn-info";
+            } else if (notice.NoticeType === "Warning") {
+                coor = "alert-warning";
+                ic = "bi bi-exclamation-triangle me-1";
+                bt = "btn-warning";
+            } else if (notice.NoticeType === "Danger") {
+                coor = "alert-danger";
+                ic = "bi bi-exclamation-octagon me-1";
+                bt = "btn-danger";
+            }
+
+            var noticeElement = '<div class="alert ' + coor + ' alert-dismissible fade show notification" role="alert">' +
+                '<div class="notification-info">' +
+                '<i class="' + ic + '"></i>' +
+                notice.Information +
+                '</div>' +
+                '<button type="button" class="btn ' + bt + ' btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#looktz' + notice.Id + '">详情</button>' +
+                // 添加通知详情的模态框代码
+                '</div>';
+
+            // 将通知元素添加到页面中的通知列表
+            $('#notificationList').append(noticeElement);
+
+            // 生成通知详情的模态框代码
+            var modalElement = '<div class="modal fade" id="looktz' + notice.Id + '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+                '<div class="modal-dialog">' +
+                '<div class="modal-content">' +
+                '<div class="modal-header">' +
+                '<h1 class="modal-title fs-5" id="exampleModalLabel">通知详情</h1>' +
+                '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+                '</div>' +
+                '<div class="modal-body">' +
+                '<textarea>' + notice.Information + '</textarea>' +
+                '<label>' + notice.Putforward + '</label>' +
+                '<label>' + notice.CreateTime + '</label>' +
+                '</div>' +
+                '<div class="modal-footer">' +
+                '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+            // 将模态框代码添加到页面
+            $('body').append(modalElement);
+        });
+
+        // 启动 SignalR 连接
+        connection.start().catch(function (err) {
+            console.error(err.toString());
+        });
+            connection.onclose(function (error) {
+                console.log('Connection closed. Error: ', error);
+            });
+
+        });
+    </script>
 
 
 

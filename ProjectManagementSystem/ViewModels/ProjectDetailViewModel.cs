@@ -52,6 +52,10 @@ namespace ProjectManagementSystem.ViewModels
 
         public IEnumerable<ApplicationUser> UsersInTheProject { get; set; }
 
+        public IEnumerable<Notice> Notices { get; set; }
+
+        public NoticeAddViewModel NoticeAddViewModel { get; set; }
+
     }
     public class ProjectMissionIndexViewModel
     {

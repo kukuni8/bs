@@ -59,14 +59,6 @@
         已解决,
     }
 
-    public enum NoticeType
-    {
-        任务通知,
-        风险通知,
-        缺陷通知,
-        其他通知,
-    }
-
     public enum FundChangeType
     {
         支出,
@@ -81,4 +73,13 @@
         审核未通过,
         审核通过,
     }
+
+    public enum NoticeType
+    {
+        Info,
+        Success,
+        Warning,
+        Danger,
+    }
+
 }

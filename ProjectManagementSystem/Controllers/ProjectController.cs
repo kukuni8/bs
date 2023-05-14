@@ -81,6 +81,10 @@ namespace ProjectManagementSystem.Controllers
                 .ThenInclude(r => r.Changes)
                 .Include(p => p.Fund)
                 .ThenInclude(f => f.Changes)
+                .Include(p => p.Notices)
+                .ThenInclude(n => n.Putforward)
+                .Include(p => p.Notices)
+                .ThenInclude(n => n.Receivers)
                 .FirstOrDefaultAsync(a => a.Id == id);
             var missions = project.Missions;
             var model = new ProjectDetailViewModel()
@@ -255,15 +259,17 @@ namespace ProjectManagementSystem.Controllers
                 Job = u.ApplicationUser.Job?.ToString(),
                 RoleName = u.ApplicationUser.RoleName,
             });
-            model.UsersNotInThisProject = await applicationDbContext.Users.Where(u => !project.ProjectUsers.Select(a => a.ApplicationUserId).Contains(u.Id)).Select(u => new ProjectUserNotInProjectModel
+            var notin = await applicationDbContext.Users.Where(u => !project.ProjectUsers.Select(a => a.ApplicationUserId).Contains(u.Id)).ToListAsync();
+
+            model.UsersNotInThisProject = notin.Select(u => new ProjectUserNotInProjectModel
             {
                 Id = u.Id,
                 Name = u.UserName,
-                Department = u.Department.ToString(),
-                Job = u.Job.ToString(),
+                Department = u.Department?.ToString(),
+                Job = u.Job?.ToString(),
                 RoleName = u.RoleName,
                 IsSelected = false,
-            }).ToListAsync();
+            }).ToList();
 
             model.BookIndexViewModels = project.Books.Select(b => new BookIndexViewModel
             {
@@ -327,6 +333,16 @@ namespace ProjectManagementSystem.Controllers
                 }).ToList(),
             };
             model.UsersInTheProject = project.ProjectUsers.Select(a => a.ApplicationUser);
+            model.Notices = project.Notices;
+            model.NoticeAddViewModel = new NoticeAddViewModel()
+            {
+                IsDanger = false,
+                IsInfo = true,
+                IsSuccess = false,
+                IsWarning = false,
+                Information = "",
+                ProjectId = project.Id,
+            };
             return View(model);
         }
         [HttpPost]
