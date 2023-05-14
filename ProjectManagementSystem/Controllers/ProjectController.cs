@@ -243,8 +243,8 @@ namespace ProjectManagementSystem.Controllers
             {
                 Id = u.ApplicationUser.Id,
                 Name = u.ApplicationUser.UserName,
-                Department = u.ApplicationUser.Department.ToString(),
-                Job = u.ApplicationUser.Job.ToString(),
+                Department = u.ApplicationUser.Department?.ToString(),
+                Job = u.ApplicationUser.Job?.ToString(),
                 RoleName = u.ApplicationUser.RoleName,
             });
             model.UsersNotInThisProject = await applicationDbContext.Users.Where(u => !project.ProjectUsers.Select(a => a.ApplicationUserId).Contains(u.Id)).Select(u => new ProjectUserNotInProjectModel
