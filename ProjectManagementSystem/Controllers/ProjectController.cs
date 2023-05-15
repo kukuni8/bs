@@ -29,7 +29,12 @@ namespace ProjectManagementSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var projects = await applicationDbContext.Projects.Include(a => a.Missions).ToListAsync();
+            var projects = await applicationDbContext.Projects
+                .Include(a => a.Missions)
+                .Include(p => p.PutForward)
+                .Include(p => p.Functionary)
+                .Include(p => p.ProjectUsers)
+                .ToListAsync();
             var models = new List<ProjectIndexViewModel>();
             var missions = await applicationDbContext.Missions.ToListAsync();
             foreach (var project in projects)
@@ -41,17 +46,10 @@ namespace ProjectManagementSystem.Controllers
                     Description = project.Description,
                     Deadline = project.Deadline,
                     CreatedDate = project.CreateDate,
+                    PutForward = project.PutForward,
+                    Functionary = project.Functionary,
+                    UserCount = project.ProjectUsers.Count(),
                 };
-                var curMissions = project.Missions.ToList();
-                var curMissionsCount = curMissions.Count() == 0 ? 1 : curMissions.Count();
-                var unDealMissionCount = curMissions.Where(a => a.Status == MissionStatus.待处理 && a.Deadline >= DateTime.Now).Count();
-                var compeleteMissionCount = curMissions.Where(a => a.Status == MissionStatus.进行中 && a.Deadline >= DateTime.Now).Count();
-                var inprogressMissionCount = curMissions.Where(a => a.Status == MissionStatus.已完成 && a.Deadline >= DateTime.Now).Count();
-                var timeoutMissionCount = curMissions.Where(a => a.Deadline < DateTime.Now).Count();
-                model.UnDealPercent = unDealMissionCount / curMissionsCount;
-                model.FinishedPercent = compeleteMissionCount / curMissionsCount;
-                model.InProgressPercent = inprogressMissionCount / curMissionsCount;
-                model.TimeOutPercent = timeoutMissionCount / curMissionsCount;
                 models.Add(model);
             }
 
@@ -342,6 +340,9 @@ namespace ProjectManagementSystem.Controllers
             };
             return View(model);
         }
+
+
+
         [HttpPost]
         public async Task<IActionResult> EditProject([Bind("ProjectEditViewModel")] ProjectDetailViewModel model)
         {
@@ -684,12 +685,33 @@ namespace ProjectManagementSystem.Controllers
         {
             var data = new[]
             {
-            new { name = "待处理", data = new[] {31, 40, 28, 51, 42, 82, 56} },
-            new { name = "进行中", data = new[] {11, 32, 45, 32, 34, 52, 41} },
-            new { name = "已完成", data = new[] {15, 11, 32, 18, 9, 24, 11} }
-        };
+        new {
+            name = "待处理",
+            color = "#00B050", // 颜色字段
+            data = new[] {
+                new { x = "2018-09-19T00:00:00.000Z", y = 31 },
+                new { x = "2018-09-19T01:30:00.000Z", y = 40 },
+                new { x = "2018-09-19T02:30:00.000Z", y = 28 },
+                // 更多数据...
+            }
+        },
+        new {
+            name = "进行中",
+            color = "#FF0000", // 颜色字段
+            data = new[] {
+                new { x = "2018-09-19T00:00:00.000Z", y = 11 },
+                new { x = "2018-09-19T01:30:00.000Z", y = 32 },
+                new { x = "2018-09-19T02:30:00.000Z", y = 45 },
+                // 更多数据...
+            }
+        },
+        // 更多数据...
+    };
 
             return Json(data);
         }
+
+
+
     }
 }

@@ -9,6 +9,8 @@ using ProjectManagementSystem.Hubs;
 using ProjectManagementSystem.Models;
 using System.Security.Principal;
 using System;
+using Microsoft.AspNetCore.Authorization;
+using ProjectManagementSystem.Filter;
 
 namespace ProjectManagementSystem
 {
@@ -35,6 +37,7 @@ namespace ProjectManagementSystem
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 1;
                 options.User.AllowedUserNameCharacters = null;
+
             })
             .AddRoleManager<RoleManager<IdentityRole<int>>>()
             .AddSignInManager<SignInManager<ApplicationUser>>()
@@ -68,6 +71,18 @@ namespace ProjectManagementSystem
                 options.AddPolicy("È±ÏÝ±à¼­", policy => policy.RequireClaim("È±ÏÝ±à¼­"));
                 options.AddPolicy("È±ÏÝÉ¾³ý", policy => policy.RequireClaim("È±ÏÝÉ¾³ý"));
             });
+
+            //builder.Services.AddScoped<CustomAuthorizationFilter>(provider =>
+            //       new CustomAuthorizationFilter(
+            //       provider.GetRequiredService<IAuthorizationService>(),
+            //       new List<string> { "ÓÃ»§Ìí¼Ó" } // ÕâÀïÊÇÄãµÄ²ßÂÔÁÐ±í
+            //      )
+            //     );
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Home/AccessDenied";
+            });
+
 
             builder.Services.AddHttpContextAccessor();
             var app = builder.Build();

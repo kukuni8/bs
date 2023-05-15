@@ -35,61 +35,44 @@
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading-@project.Id">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@project.Id" aria-expanded="false" aria-controls="collapse-@project.Id">
-
-                                        <span class="label" style="width: 10%;">@project.Name</span>
-                                        <div class="project-progress">
-                                            @if (project.FinishedPercent != 0)
-                                            {
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="@project.FinishedPercent" aria-valuemin="0" aria-valuemax="100" style="width: @project.FinishedPercent%">
-                                                        已完成
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (project.InProgressPercent != 0)
-                                            {
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="@project.InProgressPercent" aria-valuemin="0" aria-valuemax="100" style="width: @project.InProgressPercent%">
-                                                        进行中
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (project.TimeOutPercent != 0)
-                                            {
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="@project.TimeOutPercent" aria-valuemin="0" aria-valuemax="100" style="width: @project.TimeOutPercent%">
-                                                        已超时
-                                                    </div>
-                                                </div>
-                                            }
-                                            @if (project.UnDealPercent != 0)
-                                            {
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-secondary" role="progressbar" aria-valuenow="@project.UnDealPercent" aria-valuemin="0" aria-valuemax="100" style="width: @project.UnDealPercent%">
-                                                        待处理
-                                                    </div>
-                                                </div>
-                                            }
-
-                                        </div>
-
-
                                     </button>
                                 </h2>
                                 <div id="collapse-@project.Id" class="accordion-collapse collapse" aria-labelledby="heading-@project.Id" data-bs-parent=".accordion">
                                     <div class="accordion-body">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label class="form-control">创建日期: @project.CreatedDate.ToString("d")</label>
-                                            </div>
-                                            <div class="col-md-3 offset-6">
-                                                <label class="form-control">截止日期: @project.Deadline.ToString("d")</label>
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label">项目名称</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" value="@project.Name" disabled>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <label class="form-control">项目描述:</label>
-                                                <textarea class="form-control" rows="5" readonly>@project.Description</textarea>
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label">项目状态</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" value="@project.Status" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label">项目创建时间</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" value="@project.CreatedDate.ToString("yyyy-MM-dd")" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label">项目提出人</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" value="@project.PutForward.ToString()" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label">项目负责人</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" value="@project.Functionary.ToString()" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label">项目人数</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" value="@project.UserCount.ToString()" disabled>
                                             </div>
                                         </div>
                                         <div class="row mt-3">

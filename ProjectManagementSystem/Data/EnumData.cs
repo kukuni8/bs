@@ -16,7 +16,6 @@
 
     public enum ProjectStatus
     {
-        待处理,
         进行中,
         已完成,
         已逾期,

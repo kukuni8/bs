@@ -72,6 +72,7 @@ namespace ProjectManagementSystem.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "用户添加")]
         public IActionResult AddUser()
         {
             UserAddViewModel userAddViewModel = new UserAddViewModel();

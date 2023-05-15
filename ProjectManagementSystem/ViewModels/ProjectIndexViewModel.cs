@@ -1,4 +1,5 @@
 ﻿using ProjectManagementSystem.Data;
+using ProjectManagementSystem.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
@@ -23,19 +24,16 @@ namespace ProjectManagementSystem.ViewModels
         [DataType(DataType.Date)]
         public DateTime Deadline { get; set; }
 
+        public ProjectStatus Status { get; set; }
+
+        public int UserCount { get; set; }
 
         [Required]
         [Display(Name = "负责人")]
         public string FunctionaryId { get; set; }
+        public ApplicationUser Functionary { get; set; }
         [Display(Name = "提出人")]
         public string PutForwardId { get; set; }
-
-        public int FinishedPercent { get; set; }
-
-        public int InProgressPercent { get; set; }
-
-        public int TimeOutPercent { get; set; }
-
-        public int UnDealPercent { get; set; }
+        public ApplicationUser PutForward { get; set; }
     }
 }

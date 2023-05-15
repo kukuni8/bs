@@ -234,9 +234,10 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                                    <li><a class="dropdown-item" id="filter-today" href="#">Today</a></li>
+                                    <li><a class="dropdown-item" id="filter-this-month" href="#">This Month</a></li>
+                                    <li><a class="dropdown-item" id="filter-this-year" href="#">This Year</a></li>
+
                                 </ul>
                             </div>
 
@@ -2218,36 +2219,80 @@
     </script>
 
     <script>
-        $(function () {
-            $.get('/Project/GetData', function (data) {
-                var options = {
-                    series: data,
-                    chart: {
-                        height: 350,
-                        type: 'area'
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    stroke: {
-                        curve: 'smooth'
-                    },
-                    xaxis: {
-                        type: 'datetime',
-                        categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                    },
-                    tooltip: {
-                        x: {
-                            format: 'dd/MM/yy HH:mm'
-                        },
-                    },
-                };
+        var chart;  // 创建一个全局变量来保存当前的图表
 
-                var chart = new ApexCharts(document.querySelector("#chart"), options);
-                chart.render();
+        $('#filter-today').click(function (e) {
+            e.preventDefault();
+            $.get('/Project/GetData?filter=Today', function (data) {
+                renderChart(data);
             });
         });
+
+        $('#filter-this-month').click(function (e) {
+            e.preventDefault();
+            $.get('/Project/GetData?filter=ThisMonth', function (data) {
+                renderChart(data);
+            });
+        });
+
+        $('#filter-this-year').click(function (e) {
+            e.preventDefault();
+            $.get('/Project/GetData?filter=ThisYear', function (data) {
+                renderChart(data);
+            });
+        });
+
+        function renderChart(data) {
+            if (chart) {
+                chart.destroy();  // 如果已经存在一个图表，先销毁它
+            }
+
+            // 处理数据，使其满足 ApexCharts 的要求
+            var series = data.map(function (item) {
+                return {
+                    name: item.name,
+                    data: item.data.map(function (d) {
+                        return { x: d.x, y: d.y }
+                    }),
+                    color: item.color, // 颜色字段
+                };
+            });
+
+            var options = {
+                series: series,
+                chart: {
+                    height: 350,
+                    type: 'area'
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                xaxis: {
+                    type: 'datetime'
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd/MM/yy HH:mm'
+                    },
+                },
+            };
+
+            chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        }
+
+
+        // 页面加载完成后，自动触发“这个月”的点击事件
+        $(document).ready(function () {
+            $('#filter-this-month').trigger('click');
+        });
     </script>
+
+
+
 
     <script>
         $(document).ready(function () {
@@ -2334,14 +2379,14 @@
                 }
 
                 var noticeElement = `
-                                <div class="alert ${coor} alert-dismissible fade show notification" role="alert">
-                                    <div class="notification-info">
-                                        <i class="${ic}"></i>
-                                        ${notice.information}
-                                    </div>
-                                    <button type="button" class="btn ${bt} btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#looktz${notice.id}">详情</button>
-                                </div>
-                            `;
+                                        <div class="alert ${coor} alert-dismissible fade show notification" role="alert">
+                                            <div class="notification-info">
+                                                <i class="${ic}"></i>
+                                                ${notice.information}
+                                            </div>
+                                            <button type="button" class="btn ${bt} btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#looktz${notice.id}">详情</button>
+                                        </div>
+                                    `;
 
                 // 将通知元素添加到页面中的通知列表的最上方
                 $('#notificationList').prepend(noticeElement);
@@ -2356,27 +2401,27 @@
                 var formattedTime = createDate.getHours() + ':' + createDate.getMinutes() + ':' + createDate.getSeconds();
 
                 var modalElement = `
-            <div class="modal fade" id="looktz${notice.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">通知详情</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <textarea class="form-control" readonly>${notice.information}</textarea>
-                            <div class="d-flex justify-content-between">
-                                <label>通知人： ${notice.putforward}</label>
-                                <label>时间： ${formattedDate} ${formattedTime}</label>
+                    <div class="modal fade" id="looktz${notice.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">通知详情</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <textarea class="form-control" readonly>${notice.information}</textarea>
+                                    <div class="d-flex justify-content-between">
+                                        <label>通知人： ${notice.putforward}</label>
+                                        <label>时间： ${formattedDate} ${formattedTime}</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
-                        </div>
                     </div>
-                </div>
-            </div>
-        `;
+                `;
 
 
                 // 将模态框代码添加到页面
