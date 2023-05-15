@@ -7,6 +7,14 @@ namespace ProjectManagementSystem.ViewModels
 {
     public class MissionIndexViewModel
     {
-        public IEnumerable<Mission> Missions { get; set; }
+        public int CurProjectId { get; set; }
+        public string CurProjectName { get; set; }
+        public ProjectAddMissionViewModel AddMission { get; set; }
+
+        public ProjectEditMissionViewModel EditMission { get; set; }
+
+        // public ProjectDeleteMissionViewModel DeleteMission { get; set; }
+        public ProjectMissionIndexViewModel ProjectMissionIndexViewModel { get; set; }
+        public IEnumerable<ApplicationUser> UsersInTheProject { get; set; }
     }
 }

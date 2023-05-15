@@ -23,7 +23,7 @@ namespace ProjectManagementSystem.Controllers
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> AddNotice([Bind("NoticeAddViewModel")] ProjectDetailViewModel vm)
+        public async Task<IActionResult> AddNotice([Bind("NoticeAddViewModel")] NoticeIndexViewModel vm)
         {
             var model = vm.NoticeAddViewModel;
             var project = await applicationDbContext.Projects

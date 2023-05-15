@@ -1,0 +1,163 @@
+﻿@using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Models
+@using ProjectManagementSystem.ViewModels
+@model CheckIndexViewModel
+<div class="container">
+    <!-- Default Accordion -->
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item" id="missionaccordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    任务审核
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">id</th>
+                                <th scope="col">名称</th>
+                                <th scope="col">状态</th>
+                                <th scope="col">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var missionCheck in Model.MissionChecks)
+                            {
+                                var co = "btn btn-success";
+                                if (missionCheck.Status == CheckStatus.未审核)
+                                    co = "btn btn-info";
+                                if (missionCheck.Status == CheckStatus.再次审核)
+                                    co = "btn btn-secondary";
+                                <tr>
+                                    <th>@missionCheck.Id</th>
+                                    <td>@missionCheck.Name</td>
+                                    <td>
+                                        <label class="@co">@missionCheck.Status</label>
+                                    </td>
+                                    <td>
+                                        <a asp-action="CheckMission" asp-controller="Check" asp-route-id="@missionCheck.Id" class="btn btn-outline-primary">详情</a>
+                                        @if (missionCheck.Status != CheckStatus.审核通过)
+                                        {
+                                            <a asp-action="PassMission" asp-controller="Check" asp-route-id="@missionCheck.Id" class="btn btn-outline-success">通过</a>
+                                        }
+                                        @if (missionCheck.Status != CheckStatus.审核未通过)
+                                        {
+                                            <a asp-action="UnPassMission" asp-controller="Check" asp-route-id="@missionCheck.Id" class="btn btn-outline-danger">未通过</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" id="defectaccordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    缺陷审核
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">id</th>
+                                <th scope="col">名称</th>
+                                <th scope="col">状态</th>
+                                <th scope="col">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var defectCheck in Model.DefectChecks)
+                            {
+                                var co = "btn btn-success";
+                                if (defectCheck.Status == CheckStatus.未审核)
+                                    co = "btn btn-info";
+                                if (defectCheck.Status == CheckStatus.再次审核)
+                                    co = "btn btn-secondary";
+                                if (defectCheck.Status == CheckStatus.审核未通过)
+                                    co = "btn btn-danger";
+                                <tr>
+                                    <th>@defectCheck.Id</th>
+                                    <td>@defectCheck.Name</td>
+                                    <td>
+                                        <label class="@co">@defectCheck.Status</label>
+                                    </td>
+                                    <td>
+                                        <a asp-action="CheckDefect" asp-controller="Check" asp-route-id="@defectCheck.Id" class="btn btn-outline-primary">详情</a>
+                                        @if (defectCheck.Status != CheckStatus.审核通过)
+                                        {
+                                            <a asp-action="PassDefect" asp-controller="Check" asp-route-id="@defectCheck.Id" class="btn btn-outline-success">通过</a>
+                                        }
+                                        @if (defectCheck.Status != CheckStatus.审核未通过)
+                                        {
+                                            <a asp-action="UnPassDefect" asp-controller="Check" asp-route-id="@defectCheck.Id" class="btn btn-outline-danger">未通过</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" id="riskaccordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    风险审核
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">id</th>
+                                <th scope="col">名称</th>
+                                <th scope="col">状态</th>
+                                <th scope="col">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var riskCheck in Model.RiskChecks)
+                            {
+                                var co = "btn btn-success";
+                                if (riskCheck.Status == CheckStatus.未审核)
+                                    co = "btn btn-info";
+                                if (riskCheck.Status == CheckStatus.再次审核)
+                                    co = "btn btn-secondary";
+                                if (riskCheck.Status == CheckStatus.审核未通过)
+                                    co = "btn btn-danger";
+                                <tr>
+                                    <th>@riskCheck.Id</th>
+                                    <td>@riskCheck.Name</td>
+                                    <td>
+                                        <label class="@co">@riskCheck.Status</label>
+                                    </td>
+                                    <td>
+                                        <a asp-action="CheckRisk" asp-controller="Check" asp-route-id="@riskCheck.Id" class="btn btn-outline-primary">详情</a>
+                                        @if (riskCheck.Status != CheckStatus.审核通过)
+                                        {
+                                            <a asp-action="PassRisk" asp-controller="Check" asp-route-id="@riskCheck.Id" class="btn btn-outline-success">通过</a>
+                                        }
+                                        @if (riskCheck.Status != CheckStatus.审核未通过)
+                                        {
+                                            <a asp-action="UnPassRisk" asp-controller="Check" asp-route-id="@riskCheck.Id" class="btn btn-outline-danger">未通过</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div><!-- End Default Accordion Example -->
+</div>

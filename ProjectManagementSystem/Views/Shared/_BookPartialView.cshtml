@@ -1,0 +1,28 @@
+﻿@using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Models
+@using ProjectManagementSystem.ViewModels
+@model BookViewModel
+<div class="row">
+    <div class="text-end">
+        <a class="btn btn-outline-primary" asp-action="AddBook" asp-controller="Book" asp-route-projectId="@Model.CurProjectId">添加文档</a>
+    </div>
+</div>
+<br>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var book in Model.BookIndexViewModels)
+    {
+        <div class="col">
+            <div class="card h-100">
+                <img src="@book.CoverImage" style="width: 100%; height: 200px;" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title text-center">@book.Name</h5>
+                    <p class="card-text">@book.Summary</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a asp-action="EditBook" asp-controller="Book" asp-route-id="@book.Id" class="btn btn-primary">查看</a>
+                    <a asp-action="DeleteBook" asp-controller="Book" asp-route-id="@book.Id" class="btn btn-danger">删除</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

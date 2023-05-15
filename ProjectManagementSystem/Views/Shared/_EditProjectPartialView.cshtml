@@ -1,0 +1,92 @@
+﻿@using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Models
+@using ProjectManagementSystem.ViewModels
+@model ProjectViewModel
+@inject ApplicationDbContext applicationDbContext
+<div class="container">
+    <form asp-action="EditProject" method="post">
+        <div class="form-group row">
+            <input asp-for="ProjectEditViewModel.Id" value="@Model.CurProjectId" hidden>
+            <label asp-for="ProjectEditViewModel.Name" class="col-sm-2"></label>
+            <div class="col-sm-10">
+                <input asp-for="ProjectEditViewModel.Name" value="@Model.ProjectEditViewModel.Name" class="form-control exchange-element" required disabled>
+                <div class="invalid-feedback">请输入项目名称</div>
+            </div>
+        </div>
+        <br />
+        <div class="form-group row">
+            <label asp-for="ProjectEditViewModel.Description" class="col-sm-2"></label>
+            <div class="col-sm-10">
+                <textarea asp-for="ProjectEditViewModel.Description" class="form-control exchange-element" disabled></textarea>
+            </div>
+        </div>
+        <br />
+        <div class="form-group row">
+            <label asp-for="ProjectEditViewModel.CreatedDate" class="col-sm-2"></label>
+            <div class="col-sm-10">
+                <input asp-for="ProjectEditViewModel.CreatedDate" type="date" value="@Model.ProjectEditViewModel.CreatedDate.ToString("yyyy-MM-dd")" class="form-control exchange-element" disabled>
+            </div>
+        </div>
+        <br />
+        <div class="form-group row">
+            <label asp-for="ProjectEditViewModel.Deadline" class="col-sm-2"></label>
+            <div class="col-sm-10">
+                <input asp-for="ProjectEditViewModel.Deadline" value="@Model.ProjectEditViewModel.Deadline.ToString("yyyy-MM-dd")" class="form-control exchange-element" disabled>
+            </div>
+        </div>
+        <br />
+        <div class="form-group row">
+            <label asp-for="ProjectEditViewModel.Status" class="col-sm-2"></label>
+            <div class="col-sm-10">
+                <select asp-for="ProjectEditViewModel.Status" asp-items="@Html.GetEnumSelectList<ProjectStatus>()" class="form-control exchange-element" disabled></select>
+            </div>
+        </div>
+        <br />
+        <div class="form-group row">
+            <label asp-for="ProjectEditViewModel.PutForward" class="col-sm-2"></label>
+            <div class="col-sm-10">
+                <select asp-for="ProjectEditViewModel.PutForward" asp-items="new SelectList(applicationDbContext.Users.Select(a=>a.UserName))" class="form-control exchange-element" disabled></select>
+            </div>
+        </div>
+        <br />
+        <div class="form-group row">
+            <label asp-for="ProjectEditViewModel.Functionary" class="col-sm-2"></label>
+            <div class="col-sm-10">
+                <select asp-for="ProjectEditViewModel.Functionary" asp-items="new SelectList(applicationDbContext.Users.Select(a=>a.UserName))" class="form-control exchange-element" disabled></select>
+            </div>
+        </div>
+        <br />
+        <div class="col-6 offset-3">
+            <div class="form-group row">
+                <button class="btn btn-primary text-center" id="exchangeBtn">编辑</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#exchangeBtn").click(function (event) {
+            event.preventDefault(); // 阻止表单默认提交事件
+            var btnText = $(this).text();
+            var form = $(this).closest('form');
+
+            if (btnText === "编辑") {
+                $(this).text("保存");
+                $(".exchange-element").prop("disabled", false);
+            } else {
+                $(this).text("编辑");
+                $(".exchange-element").prop("disabled", true);
+
+                // 在提交表单之前启用所有字段，以确保所有数据都包含在请求中
+                $(".exchange-element").prop("disabled", false);
+
+                // 提交表单
+                form.submit();
+            }
+        });
+    });
+
+</script>
+@section Scripts{
+
+            }

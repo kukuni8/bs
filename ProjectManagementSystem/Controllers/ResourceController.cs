@@ -21,7 +21,7 @@ namespace ProjectManagementSystem.Controllers
             this.userManager = userManager;
         }
         [HttpPost]
-        public async Task<IActionResult> InitResource([Bind("ResourceAddViewModel")] ProjectDetailViewModel vm)
+        public async Task<IActionResult> InitResource([Bind("ResourceAddViewModel")] ResourceViewModel vm)
         {
             var model = vm.ResourceAddViewModel;
             var res = new Resource()
@@ -49,7 +49,7 @@ namespace ProjectManagementSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UseResource([Bind("UseResourceViewModel")] ProjectDetailViewModel vm)
+        public async Task<IActionResult> UseResource([Bind("UseResourceViewModel")] ResourceViewModel vm)
         {
             var model = vm.UseResourceViewModel;
             var resource = await applicationDbContext.Resources
@@ -73,7 +73,7 @@ namespace ProjectManagementSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddResource([Bind("AddResourceViewModel")] ProjectDetailViewModel vm)
+        public async Task<IActionResult> AddResource([Bind("AddResourceViewModel")] ResourceViewModel vm)
         {
             var model = vm.AddResourceViewModel;
             var resource = await applicationDbContext.Resources

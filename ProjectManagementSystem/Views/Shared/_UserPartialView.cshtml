@@ -1,0 +1,125 @@
+﻿@using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Models
+@using ProjectManagementSystem.ViewModels
+@model UserViewModel
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <h5 class="card-title">项目人员</h5>
+                    </div>
+                    <div class="row">
+                        <div class="card">
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                添加人员
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <input class="form-control mt-2 float-right" id="searchInput" type="text" placeholder="搜索...">
+                        </div>
+                        <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">添加人员</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="post" asp-action="AddUserToProject">
+                                        <div class="modal-body">
+                                            <div class="modal-body">
+                                                <input type="text" class="form-control" placeholder="输入用户名进行搜索" id="searchuser">
+                                                <hr>
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>用户名</th>
+                                                            <th>角色</th>
+                                                            <th>部门</th>
+                                                            <th>职位</th>
+                                                            <th>添加</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @for (int i = 0; i < Model.UsersNotInThisProject.Count; i++)
+                                                        {
+                                                            var user = Model.UsersNotInThisProject[i];
+                                                            <tr>
+                                                                <input asp-for="@Model.UsersNotInThisProject[i].Id" value="@Model.UsersNotInThisProject[i].Id" hidden>
+                                                                <input asp-for="@Model.CurProjectId" value="@Model.CurProjectId" hidden>
+                                                                <td>@user.Name</td>
+                                                                <td>@user.RoleName</td>
+                                                                <td>@user.Department</td>
+                                                                <td>@user.Job</td>
+                                                                <td>
+                                                                    <div class="form-check">
+                                                                        <input type="checkbox" class="form-check-input" asp-for="@Model.UsersNotInThisProject[i].IsSelected" )>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                            <button type="submit" class="btn btn-primary">添加</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 下面是之前的卡片表格代码 -->
+                    <div class="row">
+                        <div class="col">
+                            <!-- Card 1 -->
+                            <div class="card mt-3" style="height:60px;">
+                                <div class="custom-card-body">
+                                    <table class="table table-borderless mb-0">
+                                        <tbody>
+                                            <tr>
+                                                <td class="custom-td">用户</td>
+                                                <td class="custom-td">角色</td>
+                                                <td class="custom-td">部门</td>
+                                                <td class="custom-td">岗位</td>
+                                                <td class="custom-td">操作</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            @foreach (var user in Model.ProjectUserIndexViewModels)
+                            {
+                                <div class="card mt-3" data-searchable>
+                                    <div class="custom-card-body">
+                                        <table class="table table-borderless mb-0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="custom-td">@user.Name</td>
+                                                    <td class="custom-td">@user.RoleName</td>
+                                                    <td class="custom-td">@user.Department</td>
+                                                    <td class="custom-td">@user.Job</td>
+                                                    <td class="custom-td"><a asp-action="DeleteUserFromProject" asp-controller="User" asp-route-userId="@user.Id" asp-route-PROJECTId="@Model.CurProjectId" class="btn btn-outline-danger" onclick="return confirm('确定要删除风险：@user.Name 吗？');">删除</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

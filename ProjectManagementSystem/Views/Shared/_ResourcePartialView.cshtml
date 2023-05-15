@@ -1,0 +1,401 @@
+﻿@using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Models
+@using ProjectManagementSystem.ViewModels
+@model ResourceViewModel
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        <!-- 资金 Card -->
+        <div class="col">
+            <div class="card info-card">
+                <div class="card-body">
+                    <h5 class="card-title">资金</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon-blue rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-currency-yen"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h4>@Model.FundIndexViewModel.Amount</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End 资金 Card -->
+        <!-- 收入 Card -->
+        <div class="col">
+            <div class="card info-card">
+                <div class="card-body">
+                    <h5 class="card-title">收入</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon-green rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-currency-yen"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h4>@Model.FundIndexViewModel.Income</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End 收入 Card -->
+        <!-- 支出 Card -->
+        <div class="col">
+            <div class="card  info-card">
+                <div class="card-body">
+                    <h5 class="card-title">支出</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon-red rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-currency-yen"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h4>@Model.FundIndexViewModel.Paid</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End 支出 Card -->
+        <!-- 新增收入/支出 Card -->
+        <div class="col">
+            <div class="card info-card" style="height:83%">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-grid gap-2 mt-auto">
+                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addFund">新增收入</button>
+                        <div class="modal fade" id="addFund" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form asp-action="AddFund" asp-controller="Fund" method="post">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">新增收入</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container-fluid">
+                                                <div class="form-group row">
+                                                    <input asp-for="@Model.AddFundViewModel.FundId" value="@Model.FundIndexViewModel.Id" hidden>
+                                                </div>
+                                                <br>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2">金额</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="number" class="form-control" asp-for="@Model.AddFundViewModel.Number">
+                                                        <div class="invalid-feedback"></div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2">说明</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" asp-for="@Model.AddFundViewModel.Description">
+                                                        <div class="invalid-feedback"></div>
+                                                    </div>
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                            <button type="submit" class="btn btn-primary">添加</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#useFund">新增支出</button>
+                        <div class="modal fade" id="useFund" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form asp-action="UseFund" asp-controller="Fund" method="post">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">新增支出</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container-fluid">
+                                                <div class="form-group row">
+                                                    <input asp-for="@Model.UseFundViewModel.FundId" value="@Model.FundIndexViewModel.Id" hidden>
+                                                </div>
+                                                <br>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2">金额</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="number" class="form-control" asp-for="@Model.UseFundViewModel.Number" max="@Model.FundIndexViewModel.Amount">
+                                                        <div class="invalid-feedback"></div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2">说明</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" asp-for="@Model.UseFundViewModel.Description">
+                                                        <div class="invalid-feedback"></div>
+                                                    </div>
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                            <button type="submit" class="btn btn-primary">添加</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End 新增收入/支出 Card -->
+    </div>
+
+
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <h5 class="card-title">资源列表</h5>
+                            <div class="form-group row">
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addResourceModal">添加资源</button>
+                                    <div class="modal fade" id="addResourceModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form asp-controller="Resource" asp-action="InitResource" enctype="multipart/form-data" method="post">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">添加资源</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="container-fluid">
+                                                            <div class="form-group row">
+                                                                <input asp-for="@Model.ResourceAddViewModel.ProjectId" value="@Model.CurProjectId" hidden>
+                                                                <label asp-for="@Model.ResourceAddViewModel.Name" class="col-sm-2"></label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control" asp-for="@Model.ResourceAddViewModel.Name" required>
+                                                                    <div class="invalid-feedback"></div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="form-group row">
+                                                                <label asp-for="@Model.ResourceAddViewModel.Image" class="col-sm-2"></label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="file" class="form-control" asp-for="@Model.ResourceAddViewModel.Image" onchange="previewImage(this)">
+                                                                    <img id="coverImagePreview" alt="封面预览" class="img-thumbnail mt-2" style="height:100px;width:auto; display:none;">
+                                                                    <div class="invalid-feedback"></div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="form-group row">
+                                                                <label asp-for="@Model.ResourceAddViewModel.Description" class="col-sm-2"></label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control" asp-for="@Model.ResourceAddViewModel.Description" required>
+                                                                    <div class="invalid-feedback"></div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="form-group row">
+                                                                <label asp-for="@Model.ResourceAddViewModel.Number" class="col-sm-2"></label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="number" class="form-control" asp-for="@Model.ResourceAddViewModel.Number" required>
+                                                                    <div class="invalid-feedback"></div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                        <button type="submit" class="btn btn-primary">保存</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">名称</th>
+                                    <th scope="col">图片</th>
+                                    <th scope="col">描述</th>
+                                    <th scope="col">数量</th>
+                                    <th scope="col">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var resource in Model.ResourceIndexViewModels)
+                                {
+                                    <tr>
+                                        <th scope="row">@resource.Id</th>
+                                        <td>@resource.Name</td>
+                                        <td>
+                                            <img src="@resource.ImagePath" alt="没有图片" style="width:100px; height:100px">
+                                        </td>
+                                        <td>@resource.Description</td>
+                                        <td>@resource.Number</td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#useResource@(resource.Id)">使用</button>
+                                            <div class="modal fade" id="useResource@(resource.Id)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form asp-action="UseResource" asp-controller="Resource" method="post">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">使用资源</h1>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="container-fluid">
+                                                                    <div class="form-group row">
+                                                                        <input asp-for="@Model.UseResourceViewModel.ProjectId" value="@Model.CurProjectId" hidden>
+                                                                        <input asp-for="@Model.UseResourceViewModel.ResourceId" value="@resource.Id" hidden>
+                                                                        <label class="col-sm-2">名称</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" value="@resource.Name" readonly>
+                                                                            <div class="invalid-feedback"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-sm-2">数量</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="number" class="form-control" asp-for="@Model.UseResourceViewModel.Number" max="@resource.Number">
+                                                                            <div class="invalid-feedback"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-sm-2">说明</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" asp-for="@Model.UseResourceViewModel.Description">
+                                                                            <div class="invalid-feedback"></div>
+                                                                        </div>
+                                                                        <br>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                                <button type="submit" class="btn btn-primary">使用</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addResource@(resource.Id)">添加</button>
+                                            <div class="modal fade" id="addResource@(resource.Id)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form asp-action="AddResource" asp-controller="Resource" method="post">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">添加资源</h1>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="container-fluid">
+                                                                    <div class="form-group row">
+                                                                        <input asp-for="@Model.AddResourceViewModel.ProjectId" value="@Model.CurProjectId" hidden>
+                                                                        <input asp-for="@Model.AddResourceViewModel.ResourceId" value="@resource.Id" hidden>
+                                                                        <label class="col-sm-2">名称</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" value="@resource.Name" readonly>
+                                                                            <div class="invalid-feedback"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-sm-2">数量</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="number" class="form-control" asp-for="@Model.AddResourceViewModel.Number">
+                                                                            <div class="invalid-feedback"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-sm-2">说明</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" asp-for="@Model.AddResourceViewModel.Description">
+                                                                            <div class="invalid-feedback"></div>
+                                                                        </div>
+                                                                        <br>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                                <button type="submit" class="btn btn-primary">添加</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#lookResource@(resource.Id)">查看记录</button>
+                                            <div class="modal fade" id="lookResource@(resource.Id)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form asp-action="AddResource" asp-controller="Resource" method="post">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">资源记录</h1>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="container-fluid">
+                                                                    <ul class="list-group list-group-flush">
+                                                                        @foreach (var change in resource.ResourceChanges)
+                                                                        {
+                                                                            <li class="list-group-item">
+                                                                                <p6>@change.Time</p6>
+                                                                                <label>@change.User.UserName @change.Description @change.Number 个 @change.Resource.Name 描述：@change.Reason</label>
+                                                                            </li>
+                                                                        }
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a asp-action="DeleteResource" asp-controller="Resource" asp-route-id="@resource.Id" class="btn btn-outline-danger">删除</a>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Activity -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">资金记录</h5>
+            <div class="activity">
+                @foreach (var fundChange in Model.FundIndexViewModel.Changes)
+                {
+                    <div class="activity-item d-flex">
+                        <div class="time-container">
+                            <div class="activite-label">@fundChange.DateTime</div>
+                        </div>
+                        @{
+                            var c = "text-danger";
+                            if (fundChange.ChangeType == FundChangeType.收入)
+                                c = "text-success";
+                        }
+                        <i class='bi bi-circle-fill activity-badge @c align-self-start'></i>
+                        <div class="activity-content">
+                            @fundChange.User.UserName @fundChange.ChangeType.ToString() @fundChange.Number 说明：@fundChange.Description
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div><!-- End Recent Activity -->
+</div>

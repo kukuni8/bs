@@ -21,29 +21,29 @@ namespace ProjectManagementSystem.Controllers
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(int Status)
-        {
-            var missions = await applicationDbContext.Missions.Include(m => m.Project).Where(m => m.Status == (MissionStatus)Status).ToListAsync();
-            var model = new MissionIndexViewModel
-            {
-                Missions = missions,
-            };
-            return View(model);
-        }
+        //public async Task<IActionResult> Index(int Status)
+        //{
+        //    var missions = await applicationDbContext.Missions.Include(m => m.Project).Where(m => m.Status == (MissionStatus)Status).ToListAsync();
+        //    var model = new MissionIndexViewModel
+        //    {
+        //        Missions = missions,
+        //    };
+        //    return View(model);
+        //}
 
 
-        public async Task<IActionResult> MyIndex()
-        {
-            var missions = await applicationDbContext.Missions
-                .Include(m => m.Project)
-                .OrderByDescending(m => m.Status)
-                .ToListAsync();
-            var model = new MissionIndexViewModel
-            {
-                Missions = missions,
-            };
-            return View(model);
-        }
+        //public async Task<IActionResult> MyIndex()
+        //{
+        //    var missions = await applicationDbContext.Missions
+        //        .Include(m => m.Project)
+        //        .OrderByDescending(m => m.Status)
+        //        .ToListAsync();
+        //    var model = new MissionIndexViewModel
+        //    {
+        //        Missions = missions,
+        //    };
+        //    return View(model);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> DeleteMission(int id)

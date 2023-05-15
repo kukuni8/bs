@@ -1,0 +1,127 @@
+﻿@using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Models
+@using ProjectManagementSystem.ViewModels
+@model NoticeIndexViewModel
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">通知列表</h5>
+        <div class="d-flex justify-content-end mb-3">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newNotice">
+                发通知
+            </button>
+        </div>
+        <br />
+        <div class="modal fade" id="newNotice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form asp-action="AddNotice" asp-controller="Notice" method="post">
+                        <input asp-for="@Model.NoticeAddViewModel.ProjectId" value="@Model.NoticeAddViewModel.ProjectId" hidden>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">新通知</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <br>
+                        <div class="modal-body">
+                            <textarea class="form-control" asp-for="@Model.NoticeAddViewModel.Information"></textarea>
+                            <br />
+                            <div class="d-flex justify-content-between">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="NoticeAddViewModel.NoticeType" id="infoRadio" value="Info" asp-for="NoticeAddViewModel.NoticeType">
+                                    <label class="form-check-label" for="infoRadio">
+                                        普通
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="NoticeAddViewModel.NoticeType" id="successRadio" value="Success" asp-for="NoticeAddViewModel.NoticeType">
+                                    <label class="form-check-label" for="successRadio">
+                                        提醒
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="NoticeAddViewModel.NoticeType" id="warningRadio" value="Warning" asp-for="NoticeAddViewModel.NoticeType">
+                                    <label class="form-check-label" for="warningRadio">
+                                        警告
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="NoticeAddViewModel.NoticeType" id="dangerRadio" value="Danger" asp-for="NoticeAddViewModel.NoticeType">
+                                    <label class="form-check-label" for="dangerRadio">
+                                        危险
+                                    </label>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">发送</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="notificationList">
+            @foreach (var notice in Model.Notices)
+            {
+                var coor = "alert-success";
+                var ic = "bi bi-check-circle me-1";
+                var bt = "btn-success";
+                if (notice.NoticeType == NoticeType.Info)
+                {
+                    coor = "alert-info";
+                    ic = "bi bi-info-circle me-1";
+                    bt = "btn-info";
+                }
+                if (notice.NoticeType == NoticeType.Warning)
+                {
+                    coor = "alert-warning";
+                    ic = "bi bi-exclamation-triangle me-1";
+                    bt = "btn-warning";
+                }
+
+                if (notice.NoticeType == NoticeType.Danger)
+                {
+                    coor = "alert-danger";
+                    ic = "bi bi-exclamation-octagon me-1";
+                    bt = "btn-danger";
+                }
+                var op = notice.IsRead ? "opacity:0.5;" : "";
+                <div class="alert @coor alert-dismissible fade show notification" style="@op" role="alert">
+                    <div class="notification-info">
+                        <i class="@ic"></i>
+                        @notice.Information
+                    </div>
+                    <button type="button" class="btn @bt btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#@("looktz" + notice.Id)" data-notice-id="@notice.Id">详情</button>
+                </div>
+                <div class="modal fade" id="@("looktz"+notice.Id)" tabindex="-1" aria-labelledby="@("looktzlb" + notice.Id)" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="@("looktzlb" + notice.Id)">通知详情</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <textarea class="form-control" asp-for="@notice.Information"></textarea>
+                                <br />
+                                <div class="d-flex justify-content-between">
+                                    <label>通知人： @notice.Putforward</label>
+                                    <label>时间: @notice.CreateTime.ToString("G")</label>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>

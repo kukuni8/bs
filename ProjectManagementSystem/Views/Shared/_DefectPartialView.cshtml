@@ -1,0 +1,60 @@
+﻿@using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Models
+@using ProjectManagementSystem.ViewModels
+@model DefectIndexViewModel
+<div class="container">
+    <h5 class="card-title">缺陷列表</h5>
+    <div class="form-group row">
+        <div class="text-end">
+            <a asp-action="AddDefect" asp-controller="Defect" asp-route-projectId="@Model.CurProjectId" class="btn btn-primary text-end">新缺陷</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <!-- Card 1 -->
+            <div class="card mt-3" style="height:50px;">
+                <div class="custom-card-body">
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="custom-td">#</td>
+                                <td class="custom-td">名称</td>
+                                <td class="custom-td">类型</td>
+                                <td class="custom-td">状态</td>
+                                <td class="custom-td">操作</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @foreach (var defect in Model.DefectEditViewModels)
+            {
+                var st = "btn btn-info";
+                if (defect.Status == DefectStatus.待处理)
+                    st = "btn btn-secondary";
+                if (defect.Status == DefectStatus.已解决)
+                    st = "btn btn-success";
+                if (defect.Status == DefectStatus.已丢弃)
+                    st = "btn btn-danger";
+                <div class="card mt-3" data-searchable>
+                    <div class="custom-card-body">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                                <tr>
+                                    <td class="custom-td">@defect.Id</td>
+                                    <td class="custom-td">@defect.Name</td>
+                                    <td class="custom-td">
+                                        <label class="btn btn-secondary">@defect.Type</label>
+                                    </td>
+                                    <td class="custom-td">
+                                        <label class="@st">@defect.Status</label>
+                                    <td class="custom-td"><a asp-action="EditDefect" asp-controller="Defect" asp-route-Id="@defect.Id">编辑</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

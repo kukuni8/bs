@@ -8,53 +8,13 @@ namespace ProjectManagementSystem.ViewModels
 {
     public class ProjectDetailViewModel
     {
-        public ProjectEditViewModel ProjectEditViewModel { get; set; }
-        public ProjectMissionIndexViewModel ProjectMissionIndexViewModel { get; set; }
+
 
         public Project CurProject { get; set; }
 
         public int CurProjectId { get; set; }
 
-        public ProjectAddMissionViewModel AddMission { get; set; }
-
-        public ProjectEditMissionViewModel EditMission { get; set; }
-
-        public ProjectDeleteMissionViewModel DeleteMission { get; set; }
-
-        public IEnumerable<RiskEditViewModel> UnCheckRiskViewModels { get; set; }
-        public IEnumerable<RiskEditViewModel> UnDealRiskViewModels { get; set; }
-        public IEnumerable<RiskEditViewModel> SettledRiskViewModels { get; set; }
-        public IEnumerable<RiskEditViewModel> DiscardedRiskViewModels { get; set; }
-
-        public IEnumerable<DefectEditViewModel> DefectEditViewModels { get; set; }
-
-        public IEnumerable<ProjectUserIndexViewModel> ProjectUserIndexViewModels { get; set; }
-
-        public List<ProjectUserNotInProjectModel> UsersNotInThisProject { get; set; }
-
-        public IEnumerable<BookIndexViewModel> BookIndexViewModels { get; set; }
-
-        public IEnumerable<ResourceIndexViewModel> ResourceIndexViewModels { get; set; }
-
-        public ResourceAddViewModel ResourceAddViewModel { get; set; }
-
-        public ResourceChangeViewModel UseResourceViewModel { get; set; }
-
-        public ResourceChangeViewModel AddResourceViewModel { get; set; }
-
-        public FundIndexViewModel FundIndexViewModel { get; set; }
-
-        public FundChange AddFundViewModel { get; set; }
-
-        public FundChange UseFundViewModel { get; set; }
-
-        public CheckIndexViewModel CheckIndexViewModel { get; set; }
-
         public IEnumerable<ApplicationUser> UsersInTheProject { get; set; }
-
-        public IEnumerable<Notice> Notices { get; set; }
-
-        public NoticeAddViewModel NoticeAddViewModel { get; set; }
 
     }
     public class ProjectMissionIndexViewModel

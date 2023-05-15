@@ -18,7 +18,7 @@ namespace ProjectManagementSystem.Controllers
             this.applicationDbContext = applicationDbContext;
         }
         [HttpPost]
-        public async Task<IActionResult> AddFund([Bind("AddFundViewModel")] ProjectDetailViewModel vm)
+        public async Task<IActionResult> AddFund([Bind("AddFundViewModel")] ResourceViewModel vm)
         {
             var model = vm.AddFundViewModel;
             var fundChange = new FundChange
@@ -43,7 +43,7 @@ namespace ProjectManagementSystem.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UseFund([Bind("UseFundViewModel")] ProjectDetailViewModel vm)
+        public async Task<IActionResult> UseFund([Bind("UseFundViewModel")] ResourceViewModel vm)
         {
             var model = vm.UseFundViewModel;
             var fundChange = new FundChange

@@ -1,0 +1,122 @@
+﻿@using ProjectManagementSystem.Data
+@using ProjectManagementSystem.Models
+@using ProjectManagementSystem.ViewModels
+@model RiskIndexViewModel
+<div class="container">
+    <div class="form-group row">
+        <div class="text-end">
+            <a asp-action="AddRisk" asp-controller="Risk" asp-route-projectId="@Model.CurProjectId" class="btn btn-primary text-end">新风险</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg">
+            <h4 class="mb-3">审核中(@Model.UnCheckRiskViewModels.Count())</h4>
+            @foreach (var risk in Model.UnCheckRiskViewModels)
+            {
+                var st = "border-danger";
+                var ss = "text-danger";
+                if (risk.Level == RiskLevel.低风险)
+                {
+                    st = "border-info";
+                    ss = "text-info";
+                }
+
+                if (risk.Level == RiskLevel.中风险)
+                {
+                    st = "border-warning";
+                    ss = "text-warning";
+                }
+
+                <div class="card @st mb-3">
+                    <div class="card-body @ss">
+                        <h5 class="card-title @ss">@risk.Name</h5>
+                        <p class="card-text">@risk.Incidence</p>
+                        <a asp-action="EditRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-outline-primary">详情</a>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-12 col-md-6 col-lg">
+            <h4 class="mb-3">待处理(@Model.UnDealRiskViewModels.Count())</h4>
+            @foreach (var risk in Model.UnDealRiskViewModels)
+            {
+                var st = "border-danger";
+                var ss = "text-danger";
+                if (risk.Level == RiskLevel.低风险)
+                {
+                    st = "border-info";
+                    ss = "text-info";
+                }
+
+                if (risk.Level == RiskLevel.中风险)
+                {
+                    st = "border-warning";
+                    ss = "text-warning";
+                }
+
+                <div class="card @st mb-3">
+                    <div class="card-body @ss">
+                        <h5 class="card-title @ss">@risk.Name</h5>
+                        <p class="card-text">@risk.Incidence</p>
+                        <a asp-action="EditRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-outline-primary">详情</a>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-12 col-md-6 col-lg">
+            <h4 class="mb-3">已解决(@Model.SettledRiskViewModels.Count())</h4>
+            @foreach (var risk in Model.SettledRiskViewModels)
+            {
+                var st = "border-danger";
+                var ss = "text-danger";
+                if (risk.Level == RiskLevel.低风险)
+                {
+                    st = "border-info";
+                    ss = "text-info";
+                }
+
+                if (risk.Level == RiskLevel.中风险)
+                {
+                    st = "border-warning";
+                    ss = "text-warning";
+                }
+
+                <div class="card @st mb-3">
+                    <div class="card-body @ss">
+                        <h5 class="card-title @ss">@risk.Name</h5>
+                        <p class="card-text">@risk.Incidence</p>
+                        <a asp-action="EditRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-outline-primary">详情</a>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-12 col-md-6 col-lg">
+            <h4 class="mb-3">已丢弃(@Model.DiscardedRiskViewModels.Count())</h4>
+            @foreach (var risk in Model.DiscardedRiskViewModels)
+            {
+                var st = "border-danger";
+                var ss = "text-danger";
+                if (risk.Level == RiskLevel.低风险)
+                {
+                    st = "border-info";
+                    ss = "text-info";
+                }
+
+                if (risk.Level == RiskLevel.中风险)
+                {
+                    st = "border-warning";
+                    ss = "text-warning";
+                }
+
+                <div class="card @st mb-3">
+                    <div class="card-body @ss">
+                        <h5 class="card-title @ss">@risk.Name</h5>
+                        <p class="card-text">@risk.Incidence</p>
+                        <a asp-action="EditRisk" asp-controller="Risk" asp-route-riskId="@risk.Id" class="btn btn-outline-primary">详情</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
