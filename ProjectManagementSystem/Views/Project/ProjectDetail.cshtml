@@ -271,9 +271,12 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">通知列表</h5>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newNotice">
-                            发通知
-                        </button>
+                        <div class="d-flex justify-content-end mb-3">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newNotice">
+                                发通知
+                            </button>
+                        </div>
+                        <br />
                         <div class="modal fade" id="newNotice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -283,32 +286,41 @@
                                             <h1 class="modal-title fs-5" id="exampleModalLabel">新通知</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
+                                        <br>
                                         <div class="modal-body">
-                                            <textarea asp-for="@Model.NoticeAddViewModel.Information"></textarea>
-                                            <div class="form-check">
-                                                <input asp-for="@Model.NoticeAddViewModel.IsInfo" class="form-check-input" name="flexRadioDefault" id="flexRadioDefault1">
-                                                <label class="form-check-label" for="flexRadioDefault1">
-                                                    普通
-                                                </label>
+                                            <textarea class="form-control" asp-for="@Model.NoticeAddViewModel.Information"></textarea>
+                                            <br />
+                                            <div class="d-flex justify-content-between">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="NoticeAddViewModel.NoticeType" id="infoRadio" value="Info" asp-for="NoticeAddViewModel.NoticeType">
+                                                    <label class="form-check-label" for="infoRadio">
+                                                        普通
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="NoticeAddViewModel.NoticeType" id="successRadio" value="Success" asp-for="NoticeAddViewModel.NoticeType">
+                                                    <label class="form-check-label" for="successRadio">
+                                                        提醒
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="NoticeAddViewModel.NoticeType" id="warningRadio" value="Warning" asp-for="NoticeAddViewModel.NoticeType">
+                                                    <label class="form-check-label" for="warningRadio">
+                                                        警告
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="NoticeAddViewModel.NoticeType" id="dangerRadio" value="Danger" asp-for="NoticeAddViewModel.NoticeType">
+                                                    <label class="form-check-label" for="dangerRadio">
+                                                        危险
+                                                    </label>
+                                                </div>
                                             </div>
-                                            <div class="form-check">
-                                                <input asp-for="@Model.NoticeAddViewModel.IsWarning" class="form-check-input" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                                                <label class="form-check-label" for="flexRadioDefault2">
-                                                    警告
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input asp-for="@Model.NoticeAddViewModel.IsDanger" class="form-check-input" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                                                <label class="form-check-label" for="flexRadioDefault2">
-                                                    危险
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input asp-for="@Model.NoticeAddViewModel.IsSuccess" class="form-check-input" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                                                <label class="form-check-label" for="flexRadioDefault2">
-                                                    提醒
-                                                </label>
-                                            </div>
+
+
+
+
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
@@ -319,57 +331,63 @@
                             </div>
                         </div>
                         <div id="notificationList">
-                        </div>
-                        @foreach (var notice in Model.Notices)
-                        {
-                            var coor = "alert-success";
-                            var ic = "bi bi-check-circle me-1";
-                            var bt = "btn-success";
-                            if (notice.NoticeType == NoticeType.Info)
+                            @foreach (var notice in Model.Notices)
                             {
-                                coor = "alert-info";
-                                ic = "bi bi-info-circle me-1";
-                                bt = "btn-info";
-                            }
-                            if (notice.NoticeType == NoticeType.Warning)
-                            {
-                                coor = "alert-warning";
-                                ic = "bi bi-exclamation-triangle me-1";
-                                bt = "btn-warning";
-                            }
+                                var coor = "alert-success";
+                                var ic = "bi bi-check-circle me-1";
+                                var bt = "btn-success";
+                                if (notice.NoticeType == NoticeType.Info)
+                                {
+                                    coor = "alert-info";
+                                    ic = "bi bi-info-circle me-1";
+                                    bt = "btn-info";
+                                }
+                                if (notice.NoticeType == NoticeType.Warning)
+                                {
+                                    coor = "alert-warning";
+                                    ic = "bi bi-exclamation-triangle me-1";
+                                    bt = "btn-warning";
+                                }
 
-                            if (notice.NoticeType == NoticeType.Danger)
-                            {
-                                coor = "alert-danger";
-                                ic = "bi bi-exclamation-octagon me-1";
-                                bt = "btn-danger";
-                            }
-                            <div class="alert @coor alert-dismissible fade show notification" role="alert">
-                                <div class="notification-info">
-                                    <i class="@ic"></i>
-                                    A simple success alert with icon—check it out!
+                                if (notice.NoticeType == NoticeType.Danger)
+                                {
+                                    coor = "alert-danger";
+                                    ic = "bi bi-exclamation-octagon me-1";
+                                    bt = "btn-danger";
+                                }
+                                var op = notice.IsRead ? "opacity:0.5;" : "";
+                                <div class="alert @coor alert-dismissible fade show notification" style="@op" role="alert">
+                                    <div class="notification-info">
+                                        <i class="@ic"></i>
+                                        @notice.Information
+                                    </div>
+                                    <button type="button" class="btn @bt btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#@("looktz" + notice.Id)" data-notice-id="@notice.Id">详情</button>
                                 </div>
-                                <button type="button" class="btn @bt btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#@("looktz" + notice.Id)">详情</button>
-                                <div class="modal fade" id="@("looktz" + notice.Id)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="@("looktz"+notice.Id)" tabindex="-1" aria-labelledby="@("looktzlb" + notice.Id)" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">通知详情</h1>
+                                                <h1 class="modal-title fs-5" id="@("looktzlb" + notice.Id)">通知详情</h1>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <textarea>@notice.Information</textarea>
-                                                <label>@notice.Putforward</label>
-                                                <label>@notice.CreateTime.ToString("yyyy-MM-dd")</label>
+                                                <textarea class="form-control" asp-for="@notice.Information"></textarea>
+                                                <br />
+                                                <div class="d-flex justify-content-between">
+                                                    <label>通知人： @notice.Putforward</label>
+                                                    <label>时间: @notice.CreateTime.ToString("G")</label>
+                                                </div>
                                             </div>
+
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                            }
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -2232,12 +2250,29 @@
     </script>
 
     <script>
-        //通知已读颜色变浅
         $(document).ready(function () {
             $('.mark-as-read').click(function () {
-                $(this).parent().css('opacity', '0.5');
+                $(this).closest('.notification').css('opacity', '0.5');
+                var noticeId = $(this).data('notice-id');
+                // 发送 AJAX 请求
+                $.ajax({
+                    url: '/Notice/MarkNoticeRead', // 后端处理标记为已读的路由地址
+                    type: 'POST',
+                    data: { id: noticeId }, // 传递通知 ID
+                    success: function (response) {
+                        // 成功回调
+                        console.log('Notice marked as read.');
+                        // 在此处执行其他操作，如更新页面等
+                    },
+                    error: function (error) {
+                        // 错误回调
+                        console.error('Error marking notice as read:', error);
+                    }
+                });
             });
         });
+
+
     </script>
 
     <script>
@@ -2269,78 +2304,97 @@
     </script>
 
     <script>
-    $(document).ready(function () {
-        // 创建 SignalR 连接
-        var connection = new signalR.HubConnectionBuilder().withUrl("/noticeHub").build();
+        $(document).ready(function () {
+            // 创建 SignalR 连接
+            var connection = new signalR.HubConnectionBuilder().withUrl("/noticeHub").build();
 
-        // 接收通知
-        connection.on("ReceiveNotice", function (notice) {
-                console.log('received');
-            var coor = "alert-success";
-            var ic = "bi bi-check-circle me-1";
-            var bt = "btn-success";
+            // 接收通知
+            connection.on("ReceiveNotice", function (notice) {
+                console.log(notice);
+                var coor = "alert-success";
+                var ic = "bi bi-check-circle me-1";
+                var bt = "btn-success";
 
-            if (notice.NoticeType === "Info") {
-                coor = "alert-info";
-                ic = "bi bi-info-circle me-1";
-                bt = "btn-info";
-            } else if (notice.NoticeType === "Warning") {
-                coor = "alert-warning";
-                ic = "bi bi-exclamation-triangle me-1";
-                bt = "btn-warning";
-            } else if (notice.NoticeType === "Danger") {
-                coor = "alert-danger";
-                ic = "bi bi-exclamation-octagon me-1";
-                bt = "btn-danger";
-            }
+                if (notice.noticeType === "Info") {
+                    coor = "alert-info";
+                    ic = "bi bi-info-circle me-1";
+                    bt = "btn-info";
+                } else if (notice.noticeType === "Warning") {
+                    coor = "alert-warning";
+                    ic = "bi bi-exclamation-triangle me-1";
+                    bt = "btn-warning";
+                } else if (notice.noticeType === "Danger") {
+                    coor = "alert-danger";
+                    ic = "bi bi-exclamation-octagon me-1";
+                    bt = "btn-danger";
+                } else if (notice.noticeType === "Success") {
+                    coor = "alert-success";
+                    ic = "bi bi-check-circle me-1";
+                    bt = "btn-success";
+                }
 
-            var noticeElement = '<div class="alert ' + coor + ' alert-dismissible fade show notification" role="alert">' +
-                '<div class="notification-info">' +
-                '<i class="' + ic + '"></i>' +
-                notice.Information +
-                '</div>' +
-                '<button type="button" class="btn ' + bt + ' btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#looktz' + notice.Id + '">详情</button>' +
-                // 添加通知详情的模态框代码
-                '</div>';
+                var noticeElement = `
+                                <div class="alert ${coor} alert-dismissible fade show notification" role="alert">
+                                    <div class="notification-info">
+                                        <i class="${ic}"></i>
+                                        ${notice.information}
+                                    </div>
+                                    <button type="button" class="btn ${bt} btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#looktz${notice.id}">详情</button>
+                                </div>
+                            `;
 
-            // 将通知元素添加到页面中的通知列表
-            $('#notificationList').append(noticeElement);
+                // 将通知元素添加到页面中的通知列表的最上方
+                $('#notificationList').prepend(noticeElement);
 
-            // 生成通知详情的模态框代码
-            var modalElement = '<div class="modal fade" id="looktz' + notice.Id + '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
-                '<div class="modal-dialog">' +
-                '<div class="modal-content">' +
-                '<div class="modal-header">' +
-                '<h1 class="modal-title fs-5" id="exampleModalLabel">通知详情</h1>' +
-                '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
-                '</div>' +
-                '<div class="modal-body">' +
-                '<textarea>' + notice.Information + '</textarea>' +
-                '<label>' + notice.Putforward + '</label>' +
-                '<label>' + notice.CreateTime + '</label>' +
-                '</div>' +
-                '<div class="modal-footer">' +
-                '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>';
+                // 创建日期对象
+                var createDate = new Date(notice.createTime);
 
-            // 将模态框代码添加到页面
-            $('body').append(modalElement);
-        });
+                // 格式化日期部分
+                var formattedDate = createDate.getFullYear() + '/' + (createDate.getMonth() + 1) + '/' + createDate.getDate();
 
-        // 启动 SignalR 连接
-        connection.start().catch(function (err) {
-            console.error(err.toString());
-        });
+                // 格式化时间部分
+                var formattedTime = createDate.getHours() + ':' + createDate.getMinutes() + ':' + createDate.getSeconds();
+
+                var modalElement = `
+            <div class="modal fade" id="looktz${notice.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">通知详情</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea class="form-control" readonly>${notice.information}</textarea>
+                            <div class="d-flex justify-content-between">
+                                <label>通知人： ${notice.putforward}</label>
+                                <label>时间： ${formattedDate} ${formattedTime}</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+
+                // 将模态框代码添加到页面
+                $('body').append(modalElement);
+            });
+
+            // 启动 SignalR 连接
+            connection.start().catch(function (err) {
+                console.error(err.toString());
+            });
+
             connection.onclose(function (error) {
                 console.log('Connection closed. Error: ', error);
             });
-
         });
     </script>
 
 
 
-    }
+
+        }

@@ -333,13 +333,10 @@ namespace ProjectManagementSystem.Controllers
                 }).ToList(),
             };
             model.UsersInTheProject = project.ProjectUsers.Select(a => a.ApplicationUser);
-            model.Notices = project.Notices;
+            model.Notices = project.Notices.OrderByDescending(n => n.CreateTime);
             model.NoticeAddViewModel = new NoticeAddViewModel()
             {
-                IsDanger = false,
-                IsInfo = true,
-                IsSuccess = false,
-                IsWarning = false,
+                NoticeType = NoticeType.Info,
                 Information = "",
                 ProjectId = project.Id,
             };

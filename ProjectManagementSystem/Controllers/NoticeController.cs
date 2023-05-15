@@ -37,25 +37,19 @@ namespace ProjectManagementSystem.Controllers
                 CreateTime = DateTime.Now,
                 Information = model.Information,
                 Putforward = await userManager.GetUserAsync(User),
+                NoticeType = model.NoticeType
             };
-            var t = NoticeType.Info;
-            if (model.IsDanger)
-                t = NoticeType.Danger;
-            if (model.IsSuccess)
-                t = NoticeType.Success;
-            if (model.IsWarning)
-                t = NoticeType.Warning;
-            notice.NoticeType = t;
+            await applicationDbContext.Notices.AddAsync(notice);
+            await applicationDbContext.SaveChangesAsync();
             var noticeDto = new NoticeDTO
             {
+                Id = notice.Id,
                 IsRead = false,
                 CreateTime = DateTime.Now,
                 Information = model.Information,
                 Putforward = User.Identity.Name,
-                NoticeType = t,
+                NoticeType = model.NoticeType.ToString() // 将 NoticeType 转换为字符串
             };
-            //await applicationDbContext.Notices.AddAsync(notice);
-            // await applicationDbContext.SaveChangesAsync();
             foreach (var user in project.ProjectUsers)
             {
                 var nr = new NoticeReceiver
@@ -65,11 +59,23 @@ namespace ProjectManagementSystem.Controllers
                 };
 
                 await notifacationhubContext.Clients.User(user.ApplicationUser.Id.ToString()).SendAsync("ReceiveNotice", noticeDto);
-                // await applicationDbContext.NoticeReceivers.AddAsync(nr);
+                await applicationDbContext.NoticeReceivers.AddAsync(nr);
             }
 
             await applicationDbContext.SaveChangesAsync();
             return RedirectToAction("ProjectDetail", "Project", new { id = model.ProjectId, tab = "bordered-notices" });
         }
+
+        [HttpPost]
+        public void MarkNoticeRead(int id)
+        {
+            var notice = applicationDbContext.Notices.FirstOrDefault(n => n.Id == id);
+            if (notice != null)
+            {
+                notice.IsRead = true;
+                applicationDbContext.SaveChanges();
+            }
+        }
+
     }
 }
