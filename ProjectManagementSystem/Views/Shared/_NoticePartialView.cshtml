@@ -125,3 +125,29 @@
 
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('.mark-as-read').click(function () {
+            $(this).closest('.notification').css('opacity', '0.5');
+            var noticeId = $(this).data('notice-id');
+            // 发送 AJAX 请求
+            $.ajax({
+                url: '/Notice/MarkNoticeRead', // 后端处理标记为已读的路由地址
+                type: 'POST',
+                data: { id: noticeId }, // 传递通知 ID
+                success: function (response) {
+                    // 成功回调
+                    console.log('Notice marked as read.');
+                    // 在此处执行其他操作，如更新页面等
+                },
+                error: function (error) {
+                    // 错误回调
+                    console.error('Error marking notice as read:', error);
+                }
+            });
+        });
+    });
+
+
+</script>

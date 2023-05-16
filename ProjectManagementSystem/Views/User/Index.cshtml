@@ -33,9 +33,6 @@
                         <tbody>
                             @foreach (var user in Model)
                             {
-                                var u = await userManager.FindByNameAsync(user.UserName);
-                                var roleNames = await userManager.GetRolesAsync(u);
-                                var roleName = roleNames == null || roleNames.Count() == 0 ? "" : roleNames.First();
                                 <tr>
                                     <td>@user.UserName</td>
                                     <td>
@@ -44,7 +41,7 @@
                                     <td>@user.TrueName</td>
                                     <td>@user.Department</td>
                                     <td>@user.Job</td>
-                                    <td>@roleName</td>
+                                    <td>@user.RoleName</td>
                                     <td>
                                         <row>
                                             <a asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-outline-primary">编辑</a>

@@ -84,7 +84,7 @@ namespace ProjectManagementSystem.Controllers
         /// </summary>
         private readonly int fundChangeCount = 100;
 
-        private readonly int ProjectMissionCount = 100;
+        private readonly int ProjectMissionCount = 300;
 
         private ApplicationDbContext applicationDbContext;
         public DbInit(ApplicationDbContext applicationDbContext)
@@ -330,6 +330,8 @@ namespace ProjectManagementSystem.Controllers
 
             DateTime randomDateTime = new DateTime(year, month, day, hour, minute, second);
 
+            if (randomDateTime > DateTime.Now)
+                return GetRandomTime();
             return randomDateTime;
         }
 
