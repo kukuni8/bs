@@ -68,23 +68,61 @@ namespace ProjectManagementSystem.Controllers
         }
 
 
+        public async Task<IActionResult> GetBarData()
+        {
+            var projects = await applicationDbContext.Projects
+                .Include(p => p.Missions)
+                .ToListAsync();
+            var categories = projects.Select(p => p.Name).ToList();
+            var undealData = projects
+                .Select(project => project.Missions.Count(mission => mission.CreateDate > DateTime.Now)).ToList();
+            var inprogressData = projects
+                .Select(project => project.Missions.Count(mission => mission.StartDate < DateTime.Now && mission.FinishedTime > DateTime.Now)).ToList();
+            var finishedData = projects
+                .Select(project => project.Missions.Count(mission => mission.FinishedTime < DateTime.Now)).ToList();
+
+            var data = new
+            {
+                categories = categories,
+                series = new[]
+                {
+                    new
+                    {
+                        name="已完成",
+                        color = "#ff771d",
+                        data= finishedData,
+                    },
+                    new
+                    {
+                        name="进行中",
+                        color = "#2eca6a",
+                        data= inprogressData,
+                    },
+                    new
+                    {
+                        name="待处理",
+                        color = "#4154f1",
+                        data= undealData,
+                    },
+                },
+            };
+            return Json(data);
+        }
 
     }
 
     public class DbInit
     {
+        private readonly int projectCount = 5;
+
         private readonly int userCount = 10;
         /// <summary>
         /// 项目中的人员数
         /// </summary>
         private readonly int projectUserCount = 8;
 
-        /// <summary>
-        /// 资金更改的次数
-        /// </summary>
-        private readonly int fundChangeCount = 100;
 
-        private readonly int ProjectMissionCount = 300;
+
 
         private ApplicationDbContext applicationDbContext;
         public DbInit(ApplicationDbContext applicationDbContext)
@@ -101,9 +139,12 @@ namespace ProjectManagementSystem.Controllers
             await AddDepartment();
             await AddPosition();
             await AddUser();
-            await AddProject();
-            await AddFundAndChanges();
-            await AddMissionAndExcutor();
+            for (int i = 0; i < projectCount; i++)
+            {
+                await AddProject($"项目{i + 1}");
+                await AddFundAndChanges($"项目{i + 1}");
+                await AddMissionAndExcutor($"项目{i + 1}");
+            }
         }
 
         private async Task AddDepartment()
@@ -179,7 +220,7 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync();
         }
 
-        private async Task AddProject()
+        private async Task AddProject(string projectName)
         {
             var users = await applicationDbContext.ApplicationUsers
                 .ToListAsync();
@@ -189,7 +230,7 @@ namespace ProjectManagementSystem.Controllers
             var funUserIndex = random.Next(usersInProject.Count - 1);
             var project = new Project
             {
-                Name = "项目1",
+                Name = projectName,
                 Description = "项目的描述",
                 CreateDate = new DateTime(2023, 5, 21, 10, 25, 55),
                 Deadline = new DateTime(2023, 11, 28, 10, 25, 55),
@@ -206,12 +247,12 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync();
         }
 
-        private async Task AddFundAndChanges()
+        private async Task AddFundAndChanges(string projectName)
         {
             var project = await applicationDbContext.Projects
                 .Include(p => p.ProjectUsers)
                 .ThenInclude(pu => pu.ApplicationUser)
-               .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(p => p.Name == projectName);
             var usersInThisProject = project.ProjectUsers
                 .Select(pu => pu.ApplicationUser)
                 .ToList();
@@ -224,6 +265,7 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync();
             var random = new Random();
             var fundChanges = new List<FundChange>();
+            var fundChangeCount = random.Next(100, 300);
             for (int i = 0; i < fundChangeCount; i++)
             {
                 bool randomBool = random.Next(2) == 0;
@@ -244,23 +286,24 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync();
         }
 
-        private async Task AddMissionAndExcutor()
+        private async Task AddMissionAndExcutor(string projectName)
         {
             var project = await applicationDbContext.Projects
                 .Include(p => p.ProjectUsers)
                 .ThenInclude(pu => pu.ApplicationUser)
-               .FirstOrDefaultAsync();
+               .FirstOrDefaultAsync(p => p.Name == projectName);
             var usersInThiProject = project.ProjectUsers
                 .Select(pu => pu.ApplicationUser)
                 .ToList();
             var random = new Random();
             var missions = new List<Mission>();
+            var ProjectMissionCount = random.Next(100, 500);
             for (int i = 0; i < ProjectMissionCount; i++)
             {
                 var time = GetRandomTime();
-                var timeToStart = random.Next(1, 10);
+                var timeToStart = random.Next(1, 40);
                 var startTime = time.AddDays(timeToStart);
-                var timeToFinsh = random.Next(1, 10);
+                var timeToFinsh = random.Next(1, 40);
                 var finishTime = startTime.AddDays(timeToFinsh);
                 var priorityInt = random.Next(0, 3);
                 var missionStatus = MissionStatus.进行中;
@@ -306,6 +349,8 @@ namespace ProjectManagementSystem.Controllers
 
 
 
+
+
         public DateTime GetRandomTime()
         {
             Random random = new Random();
@@ -314,7 +359,7 @@ namespace ProjectManagementSystem.Controllers
             int year = 2023;
 
             // 生成随机的月份
-            int month = random.Next(1, 6);
+            int month = random.Next(1, 12);
 
             // 生成随机的日期
             int day = random.Next(1, DateTime.DaysInMonth(year, month) + 1);
@@ -330,7 +375,7 @@ namespace ProjectManagementSystem.Controllers
 
             DateTime randomDateTime = new DateTime(year, month, day, hour, minute, second);
 
-            if (randomDateTime > DateTime.Now)
+            if (randomDateTime > DateTime.Now.AddDays(100))
                 return GetRandomTime();
             return randomDateTime;
         }

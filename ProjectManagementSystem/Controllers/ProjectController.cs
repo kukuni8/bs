@@ -699,7 +699,7 @@ namespace ProjectManagementSystem.Controllers
                 .Include(p => p.Missions)
                 .ThenInclude(m => m.Dialogues)
                 .ThenInclude(d => d.Speaker)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(p => p.Id == projectId);
             var missions = project.Missions;
             var model = new MissionIndexViewModel
             {
@@ -970,16 +970,16 @@ namespace ProjectManagementSystem.Controllers
         }
         public async Task<IActionResult> GetUserData(int projectId)
         {
-            var project = await applicationDbContext.Projects
-                .Include(p => p.ProjectUsers)
-                .ThenInclude(pu => pu.ApplicationUser)
+            var projectUsers = await applicationDbContext.ProjectUsers
+                .Include(pu => pu.Project)
+                .Include(pu => pu.ApplicationUser)
                 .ThenInclude(u => u.Department)
-                .Include(p => p.ProjectUsers)
-                .ThenInclude(pu => pu.ApplicationUser)
+                .Include(pu => pu.ApplicationUser)
                 .ThenInclude(u => u.Job)
-                .FirstOrDefaultAsync(p => p.Id == projectId);
+                .Where(pu => pu.Project.Id == projectId)
+                .ToListAsync();
             var model = new UserViewModel();
-            model.ProjectUserIndexViewModels = project.ProjectUsers.Select(u => new ProjectUserIndexViewModel
+            model.ProjectUserIndexViewModels = projectUsers.Select(u => new ProjectUserIndexViewModel
             {
                 Id = u.ApplicationUser.Id,
                 Name = u.ApplicationUser.UserName,
@@ -987,7 +987,10 @@ namespace ProjectManagementSystem.Controllers
                 Job = u.ApplicationUser.Job?.ToString(),
                 RoleName = u.ApplicationUser.RoleName,
             });
-            var notin = await applicationDbContext.Users.Where(u => !project.ProjectUsers.Select(a => a.ApplicationUserId).Contains(u.Id)).ToListAsync();
+            var notin = await applicationDbContext.Users
+                .Include(u => u.Department)
+                .Include(u => u.Job)
+                .Where(u => !projectUsers.Select(a => a.ApplicationUserId).Contains(u.Id)).ToListAsync();
 
             model.UsersNotInThisProject = notin.Select(u => new ProjectUserNotInProjectModel
             {
@@ -998,7 +1001,7 @@ namespace ProjectManagementSystem.Controllers
                 RoleName = u.RoleName,
                 IsSelected = false,
             }).ToList();
-            model.CurProjectId = project.Id;
+            model.CurProjectId = projectId;
             return PartialView("_UserPartialView", model);
         }
         public async Task<IActionResult> GetBookData(int projectId)

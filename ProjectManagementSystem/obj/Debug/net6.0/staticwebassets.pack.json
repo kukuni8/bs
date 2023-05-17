@@ -5529,6 +5529,78 @@
       "PackagePath": "staticwebassets\\document\\屏幕截图 2023-05-10 202417.png"
     },
     {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.common.js",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.common.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.common.js.map",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.common.js.map"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.common.min.js",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.common.min.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.esm.js",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.esm.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.esm.js.map",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.esm.js.map"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.esm.min.js",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.esm.min.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.js",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.js.map",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.js.map"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.min.js",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.min.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.simple.js",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.simple.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.simple.js.map",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.simple.js.map"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\echarts.simple.min.js",
+      "PackagePath": "staticwebassets\\echartdist\\echarts.simple.min.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\extension\\bmap.js",
+      "PackagePath": "staticwebassets\\echartdist\\extension\\bmap.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\extension\\bmap.js.map",
+      "PackagePath": "staticwebassets\\echartdist\\extension\\bmap.js.map"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\extension\\bmap.min.js",
+      "PackagePath": "staticwebassets\\echartdist\\extension\\bmap.min.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\extension\\dataTool.js",
+      "PackagePath": "staticwebassets\\echartdist\\extension\\dataTool.js"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\extension\\dataTool.js.map",
+      "PackagePath": "staticwebassets\\echartdist\\extension\\dataTool.js.map"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\echartdist\\extension\\dataTool.min.js",
+      "PackagePath": "staticwebassets\\echartdist\\extension\\dataTool.min.js"
+    },
+    {
       "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\lib\\microsoft\\signalr\\dist\\browser\\signalr.js",
       "PackagePath": "staticwebassets\\lib\\microsoft\\signalr\\dist\\browser\\signalr.js"
     },
