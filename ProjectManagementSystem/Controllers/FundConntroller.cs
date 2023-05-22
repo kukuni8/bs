@@ -38,7 +38,6 @@ namespace ProjectManagementSystem.Controllers
             var fund = await applicationDbContext.Funds
                 .Include(f => f.Project)
                 .FirstOrDefaultAsync(f => f.Id == model.FundId);
-            fund.Amount += model.Number;
             applicationDbContext.Funds.Update(fund);
             await applicationDbContext.SaveChangesAsync();
             return RedirectToAction("ProjectDetail", "Project", new { id = fund.Project.Fund.Id, tab = "bordered-resources" });
@@ -63,7 +62,6 @@ namespace ProjectManagementSystem.Controllers
             var fund = await applicationDbContext.Funds
                 .Include(f => f.Project)
                 .FirstOrDefaultAsync(f => f.Id == model.FundId);
-            fund.Amount -= model.Number;
             applicationDbContext.Funds.Update(fund);
             await applicationDbContext.SaveChangesAsync();
             return RedirectToAction("ProjectDetail", "Project", new { id = fund.Project.Fund.Id, tab = "bordered-resources" });

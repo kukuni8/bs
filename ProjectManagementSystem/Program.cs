@@ -32,6 +32,7 @@ namespace ProjectManagementSystem
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
             {
+                options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;

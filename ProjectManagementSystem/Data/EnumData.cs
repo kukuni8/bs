@@ -81,4 +81,11 @@
         Danger,
     }
 
+    public enum CheckType
+    {
+        任务审核,
+        风险审核,
+        缺陷审核,
+    }
+
 }

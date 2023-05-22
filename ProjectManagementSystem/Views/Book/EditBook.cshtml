@@ -1,52 +1,58 @@
 ﻿@model ProjectManagementSystem.ViewModels.BookEditViewModel
 
 <div class="container">
-    <h3>编辑文档</h3>
-    <br>
-    <form method="post" asp-action="EditBook" enctype="multipart/form-data">
-        <div class="row">
-            <div class="col-md-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                <h3>编辑文档</h3>
+            </div>
+            <form method="post" asp-action="EditBook" enctype="multipart/form-data">
                 <div class="row">
-                    <input asp-for="@Model.ProjectId" hidden>
-                    <input asp-for="@Model.Id" hidden>
-                    <label>文档名称:</label>
-                    <input asp-for="@Model.Name" type="text" class="form-control" placeholder="输入标题" required="">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <input asp-for="@Model.ProjectId" hidden>
+                            <input asp-for="@Model.Id" hidden>
+                            <label>文档名称:</label>
+                            <input asp-for="@Model.Name" type="text" class="form-control" placeholder="输入标题" required="">
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <br>
-        <div class="col-md-5">
-            <div class="row">
-                <label>文档封面:</label>
-                <input asp-for="@Model.CoverImage" type="file" class="form-control" placeholder="输入封面">
-                @if (!string.IsNullOrEmpty(Model.CoverImagePath))
-                {
-                    <img src="@Model.CoverImagePath" alt="没有封面" class="img-thumbnail mt-2" style="height:200px; width:auto">
-                }
-            </div>
-        </div>
-        <br>
-        <div class="col-md-12">
-            <label>文档概要:</label>
-            <textarea asp-for="@Model.Summary" type="text" class="form-control auto-resize" placeholder="输入概要">
+                <br>
+                <div class="col-md-12">
+                    <div class="row">
+                        <label>文档概要:</label>
+                        <textarea asp-for="@Model.Summary" type="text" class="form-control auto-resize" placeholder="输入概要">
             </textarea>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+                        <label>当前文件:</label>
+                        <div>
+                            <a class="btn btn-primary" asp-controller="Book" asp-action="DownloadBook" asp-route-fileName="@Model.FilePath">
+                                下载
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+                        <label>更新文件</label>
+                        <input asp-for="@Model.BookFile" type="file" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <a asp-action="ReturnProjetDetail" asp-controller="Book" asp-route-id="@Model.ProjectId" class="btn btn-secondary btn-block">返回</a>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary btn-block">保存</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <br>
-        <div class="col-md-12">
-            <label>文档内容:</label>
-            <textarea asp-for="@Model.Content" type="text" class="form-control auto-resize" placeholder="输入内容">
-            </textarea>
-        </div>
-        <br>
-        <div class="row justify-content-center">
-            <div class="col-auto">
-                <a asp-action="ReturnProjetDetail" asp-controller="Book" asp-route-id="@Model.ProjectId" class="btn btn-secondary btn-block">返回</a>
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary btn-block">保存</button>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
 
 

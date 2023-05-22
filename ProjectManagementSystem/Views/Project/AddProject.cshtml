@@ -29,7 +29,7 @@
                 <div class="row mb-3">
                     <label asp-for=Deadline class="col-sm-2 col-form-label"></label>
                     <div class="col-sm-10">
-                        <input asp-for=Deadline type="text" value="@Model.Deadline.ToString("yy-MM-dd")" class="form-control">
+                        <input asp-for=Deadline value="@Model.Deadline.ToString("yyyy-MM-dd")" class="form-control">
                         <span class="invalid" asp-validation-for="@Model.Deadline"></span>
                     </div>
                 </div>
@@ -43,8 +43,8 @@
                 <div class="row mb-3">
                     <label asp-for=Functionary class="col-sm-2 col-form-label"></label>
                     <div class="col-sm-10">
-                        <select asp-for="@Model.Functionary" class="selectpicker form-control valid" data-live-search="true" asp-items="@new SelectList(applicationDbContext.ApplicationUsers.Select(a=>a.UserName))"></select>
-                        <span class="invalid" asp-validation-for="@Model.Deadline"></span>
+                        <select asp-for="@Model.Functionary" class="form-control valid" asp-items="@new SelectList(applicationDbContext.ApplicationUsers.Select(a=>a.UserName))"></select>
+                        <span class="invalid" asp-validation-for="@Model.Functionary"></span>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -64,3 +64,4 @@
         </div>
     </div>
 </div>
+

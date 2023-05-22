@@ -310,10 +310,7 @@ namespace ProjectManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CoverImage")
+                    b.Property<string>("BookFile")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -404,9 +401,6 @@ namespace ProjectManagementSystem.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");

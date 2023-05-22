@@ -5,6 +5,7 @@ using ProjectManagementSystem.Data;
 using ProjectManagementSystem.Helper;
 using ProjectManagementSystem.Models;
 using ProjectManagementSystem.ViewModels;
+using System.Security.Claims;
 
 namespace ProjectManagementSystem.Controllers
 {
@@ -12,18 +13,26 @@ namespace ProjectManagementSystem.Controllers
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IImageService imageService;
+        private readonly RoleManager<IdentityRole<int>> roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, ApplicationDbContext applicationDbContext, SignInManager<ApplicationUser> signInManager, IImageService imageService)
+        public AccountController(UserManager<ApplicationUser> userManager,
+            ApplicationDbContext applicationDbContext,
+            SignInManager<ApplicationUser> signInManager,
+            IImageService imageService,
+            RoleManager<IdentityRole<int>> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             this.imageService = imageService;
+            this.roleManager = roleManager;
             _context = applicationDbContext;
         }
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
+            var adminInit = new AdminInit(_context, _userManager, roleManager);
+            await adminInit.Init();
             return View();
         }
         [HttpPost]
@@ -152,6 +161,62 @@ namespace ProjectManagementSystem.Controllers
                     ModelState.AddModelError("", error.Description);
                 }
                 return View("Index", viewModal);
+            }
+        }
+    }
+
+
+    public class AdminInit
+    {
+        private readonly ApplicationDbContext applicationDbContext;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole<int>> roleManager;
+
+        public AdminInit(ApplicationDbContext applicationDbContext,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole<int>> roleManager)
+        {
+            this.applicationDbContext = applicationDbContext;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
+        }
+
+        public async Task Init()
+        {
+            if (applicationDbContext.ApplicationUsers.Count() > 0)
+                return;
+            var user = new ApplicationUser();
+            user.UserName = "admin";
+            user.TrueName = "admin";
+            user.Email = "2813550278@qq.com";
+            //user.ImagePath=""
+            var result = await userManager.CreateAsync(user, "admin");
+            if (result.Succeeded)
+            {
+                await RoleInit();
+                var role = await roleManager.FindByNameAsync("管理员");
+                user.RoleName = role.Name;
+                await userManager.UpdateAsync(user);
+                await userManager.AddToRoleAsync(user, role.Name);
+                await applicationDbContext.SaveChangesAsync();
+            }
+        }
+        public async Task RoleInit()
+        {
+            var role = new IdentityRole<int>
+            {
+                Name = "管理员",
+            };
+
+            var result = await roleManager.CreateAsync(role);
+            var roleAddViewModel = new RoleAddViewModel();
+
+            foreach (var item in roleAddViewModel.Infos)
+            {
+                foreach (var v in item.priorityInfos)
+                {
+                    await roleManager.AddClaimAsync(role, new Claim(v.Name, v.Name));
+                }
             }
         }
     }

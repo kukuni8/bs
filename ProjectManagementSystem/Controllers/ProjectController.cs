@@ -365,7 +365,8 @@ namespace ProjectManagementSystem.Controllers
             }
             foreach (var ex in model.Executors)
             {
-                var au = await userManager.FindByNameAsync(ex);
+                var au = await applicationDbContext.ApplicationUsers
+                    .FirstOrDefaultAsync(u => u.UserName == ex);
                 var me = new MissionExecutor
                 {
                     MissionId = mission.Id,
@@ -921,7 +922,7 @@ namespace ProjectManagementSystem.Controllers
             var model = new CheckIndexViewModel()
             {
                 MissionChecks = project.Missions
-                .Where(m => m.Status == MissionStatus.已完成)
+                .Where(m => m.Status == MissionStatus.已完成 && m.CheckStatus != CheckStatus.审核通过)
                 .OrderByDescending(m => m.CheckStatus)
                 .Select(m => new CheckInfoViewModel
                 {
@@ -930,7 +931,7 @@ namespace ProjectManagementSystem.Controllers
                     Status = m.CheckStatus,
                 }).ToList(),
                 RiskChecks = project.Risks
-                .Where(r => r.Status == RiskStatus.审核中 || r.CheckStatus == CheckStatus.审核通过 || r.CheckStatus == CheckStatus.审核未通过)
+                .Where(r => r.Status == RiskStatus.审核中)
                 .Select(m => new CheckInfoViewModel
                 {
                     Id = m.Id,
@@ -938,7 +939,32 @@ namespace ProjectManagementSystem.Controllers
                     Status = m.CheckStatus,
                 }).ToList(),
                 DefectChecks = project.Defects
-                .Where(d => d.Status == DefectStatus.审核中 || d.CheckStatus == CheckStatus.审核通过 || d.CheckStatus == CheckStatus.审核未通过)
+                .Where(d => d.Status == DefectStatus.审核中)
+                .Select(d => new CheckInfoViewModel
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    Status = d.CheckStatus,
+                }).ToList(),
+                UnMissionChecks = project.Missions
+                .Where(m => m.Status == MissionStatus.已完成 && m.CheckStatus == CheckStatus.审核通过)
+                .OrderByDescending(m => m.CheckStatus)
+                .Select(m => new CheckInfoViewModel
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Status = m.CheckStatus,
+                }).ToList(),
+                UnRiskChecks = project.Risks
+                .Where(r => r.CheckStatus == CheckStatus.审核通过 || r.CheckStatus == CheckStatus.审核未通过)
+                .Select(m => new CheckInfoViewModel
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Status = m.CheckStatus,
+                }).ToList(),
+                UnDefectChecks = project.Defects
+                .Where(d => d.CheckStatus == CheckStatus.审核通过 || d.CheckStatus == CheckStatus.审核未通过)
                 .Select(d => new CheckInfoViewModel
                 {
                     Id = d.Id,
@@ -978,7 +1004,7 @@ namespace ProjectManagementSystem.Controllers
             model.FundIndexViewModel = new FundIndexViewModel()
             {
                 Id = project.Fund.Id,
-                Amount = project.Fund.Amount,
+                Amount = incom - paid,
                 Changes = project.Fund.Changes,
                 Paid = paid,
                 Income = incom,
@@ -1032,8 +1058,7 @@ namespace ProjectManagementSystem.Controllers
             {
                 Id = b.Id,
                 Name = b.Name,
-                Content = b.Content,
-                CoverImage = b.CoverImage,
+                FileName = b.BookFile,
                 ProjectId = project.Id,
                 Summary = b.Summary,
             });

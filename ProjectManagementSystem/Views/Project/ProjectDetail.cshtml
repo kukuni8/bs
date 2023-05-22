@@ -257,7 +257,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             const urlParams = new URLSearchParams(window.location.search);
             const tabFromUrl = urlParams.get('tab');
-            const accordionId = urlParams.get("accordionId");
             const tab = tabFromUrl || 'bordered-looks';
 
             const tabElement = document.querySelector(`button[data-bs-target="#${tab}"]`);
@@ -308,32 +307,6 @@
 
 
     </script>
-
-
-
-
-
-
-
-
-    <script>
-        // 其他代码
-
-        function previewImage(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    var preview = document.getElementById('coverImagePreview');
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
-
-
-
     <script>
         $(document).ready(function () {
             $("#searchInput").on("keyup", function () {
@@ -344,17 +317,6 @@
                 });
             });
         });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $('#searchuser').on('keyup', function () {
-                var value = $(this).val().toLowerCase();
-                $('table tbody tr').filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
-
     </script>
     <script>
         function scrollToBottom() {
@@ -437,14 +399,14 @@
                 }
 
                 var noticeElement = `
-                                                                                                                                                                                                                                                                                                                                                                                                <div class="alert ${coor} alert-dismissible fade show notification" role="alert">
-                                                                                                                                                                                                                                                                                                                                                                                                    <div class="notification-info">
-                                                                                                                                                                                                                                                                                                                                                                                                        <i class="${ic}"></i>
-                                                                                                                                                                                                                                                                                                                                                                                                        ${notice.information}
-                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn ${bt} btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#looktz${notice.id}">详情</button>
-                                                                                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                                                                                            `;
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="alert ${coor} alert-dismissible fade show notification" role="alert">
+                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="notification-info">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="${ic}"></i>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                ${notice.information}
+                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                            <button type="button" class="btn ${bt} btn-sm mark-as-read" data-bs-toggle="modal" data-bs-target="#looktz${notice.id}">详情</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    `;
 
                 // 将通知元素添加到页面中的通知列表的最上方
                 $('#notificationList').prepend(noticeElement);
@@ -459,29 +421,27 @@
                 var formattedTime = createDate.getHours() + ':' + createDate.getMinutes() + ':' + createDate.getSeconds();
 
                 var modalElement = `
-                                                                                                                                                                                                                                                                                                                                                                            <div class="modal fade" id="looktz${notice.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                                                                                                                                                                                                                                                                                                                <div class="modal-dialog">
-                                                                                                                                                                                                                                                                                                                                                                                    <div class="modal-content">
-                                                                                                                                                                                                                                                                                                                                                                                        <div class="modal-header">
-                                                                                                                                                                                                                                                                                                                                                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">通知详情</h1>
-                                                                                                                                                                                                                                                                                                                                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                        <div class="modal-body">
-                                                                                                                                                                                                                                                                                                                                                                                            <textarea class="form-control" readonly>${notice.information}</textarea>
-                                                                                                                                                                                                                                                                                                                                                                                            <div class="d-flex justify-content-between">
-                                                                                                                                                                                                                                                                                                                                                                                                <label>通知人： ${notice.putforward}</label>
-                                                                                                                                                                                                                                                                                                                                                                                                <label>时间： ${formattedDate} ${formattedTime}</label>
-                                                                                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                        <div class="modal-footer">
-                                                                                                                                                                                                                                                                                                                                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
-                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                                                                        `;
-
-
+                                         <div class="modal fade" id="looktz${notice.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                           <div class="modal-content">
+                                            <div class="modal-header">
+                                          <h1 class="modal-title fs-5" id="exampleModalLabel">通知详情</h1>
+                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                           <div class="modal-body">
+                                           <textarea class="form-control" readonly>${notice.information}</textarea>
+                                            <div class="d-flex justify-content-between">
+                                            <label>通知人： ${notice.putforward}</label>
+                                           <label>时间： ${formattedDate} ${formattedTime}</label>
+                                            </div>
+                                           </div>
+                                         <div class="modal-footer">
+                                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                                         </div>
+                                          </div>
+                                           </div>
+                                          </div>
+                                           `
                 // 将模态框代码添加到页面
                 $('body').append(modalElement);
             });
@@ -496,8 +456,4 @@
             });
         });
     </script>
-
-
-
-
         }

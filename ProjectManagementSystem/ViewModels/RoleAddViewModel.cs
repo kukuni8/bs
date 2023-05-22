@@ -66,9 +66,8 @@ namespace ProjectManagementSystem.ViewModels
             {AboutName="资源管理",priorityInfos=new List<PriorityInfo>
             {
                 new PriorityInfo {Name="资源添加",IsOn=false },
-                new PriorityInfo {Name="资源编辑",IsOn=false },
+                new PriorityInfo {Name="资源使用",IsOn=false },
                 new PriorityInfo {Name="资源删除",IsOn=false },
-                new PriorityInfo {Name="资源记录",IsOn=false }
             }},
             new PriorityInfos()
             {AboutName="资金管理",priorityInfos=new List<PriorityInfo>

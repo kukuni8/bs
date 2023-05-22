@@ -111,6 +111,7 @@ namespace ProjectManagementSystem.Controllers
                 user.RoleName = role.Name;
                 await userManager.UpdateAsync(user);
                 await userManager.AddToRoleAsync(user, role.Name);
+                await applicationDbContext.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             foreach (IdentityError error in result.Errors)

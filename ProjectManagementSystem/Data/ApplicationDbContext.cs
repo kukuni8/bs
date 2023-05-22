@@ -47,9 +47,6 @@ namespace ProjectManagementSystem.Data
              .WithOne(f => f.Project)
              .HasForeignKey<Fund>(f => f.ProjectId);
 
-            modelBuilder.Entity<Fund>()
-             .Property(f => f.Amount)
-             .HasColumnType("decimal(18, 2)");
 
             modelBuilder.Entity<FundChange>()
              .Property(f => f.Number)

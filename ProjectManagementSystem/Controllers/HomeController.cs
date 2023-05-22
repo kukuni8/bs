@@ -7,6 +7,7 @@ using ProjectManagementSystem.ViewModels;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 
 namespace ProjectManagementSystem.Controllers
 {
@@ -14,11 +15,16 @@ namespace ProjectManagementSystem.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext applicationDbContext;
+        private readonly RoleManager<IdentityRole<int>> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
-        public HomeController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext applicationDbContext)
+        public HomeController(ILogger<HomeController> logger,
+            UserManager<ApplicationUser> userManager,
+            ApplicationDbContext applicationDbContext,
+             RoleManager<IdentityRole<int>> roleManager)
         {
             _logger = logger;
             this.applicationDbContext = applicationDbContext;
+            this.roleManager = roleManager;
             this.userManager = userManager;
         }
 
@@ -31,7 +37,6 @@ namespace ProjectManagementSystem.Controllers
             }
 
             var model = new HomeIndexViewModel();
-
 
 
             return View(model);
@@ -259,7 +264,6 @@ namespace ProjectManagementSystem.Controllers
             var fund = new Fund
             {
                 Project = project,
-                Amount = 1000000,
             };
             await applicationDbContext.Funds.AddAsync(fund);
             await applicationDbContext.SaveChangesAsync();

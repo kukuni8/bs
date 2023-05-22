@@ -11,10 +11,10 @@ namespace ProjectManagementSystem.ViewModels
         public string Name { get; set; }
         [Display(Name = "文档概要")]
         public string Summary { get; set; }
-        [Display(Name = "文档内容")]
-        public string Content { get; set; }
-        [Display(Name = "文档封面")]
-        public string CoverImage { get; set; }
+        [Display(Name = "文档文件")]
+        public string FileName { get; set; }
+
+        public IFormFile File { get; set; }
 
         public int ProjectId { get; set; }
     }

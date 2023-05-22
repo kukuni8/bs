@@ -33,9 +33,8 @@ namespace ProjectManagementSystem.Controllers
             var book = new Book
             {
                 Name = model.Name,
-                Content = model.Content,
                 Summary = model.Summary,
-                CoverImage = SaveCoverImage(model.CoverImage),
+                BookFile = SaveFile(model.BookFile),
                 Project = await applicationDbContext.Projects.FindAsync(model.ProjectId),
             };
             await applicationDbContext.Books.AddAsync(book);
@@ -50,9 +49,8 @@ namespace ProjectManagementSystem.Controllers
             {
                 Id = book.Id,
                 Name = book.Name,
-                Content = book.Content,
                 Summary = book.Summary,
-                CoverImagePath = book.CoverImage,
+                FilePath = book.BookFile,
                 ProjectId = book.Project.Id,
             };
             return View(model);
@@ -62,11 +60,10 @@ namespace ProjectManagementSystem.Controllers
         {
             var book = await applicationDbContext.Books.FindAsync(model.Id);
             book.Name = model.Name;
-            book.Content = model.Content;
             book.Summary = model.Summary;
-            if (model.CoverImage != null)
+            if (model.BookFile != null)
             {
-                book.CoverImage = SaveCoverImage(model.CoverImage);
+                book.BookFile = SaveFile(model.BookFile);
             }
             book.Project = await applicationDbContext.Projects.FindAsync(model.ProjectId);
             await applicationDbContext.SaveChangesAsync();
@@ -81,7 +78,30 @@ namespace ProjectManagementSystem.Controllers
             return RedirectToAction("ProjectDetail", "Project", new { id = book.Project.Id, tab = "bordered-books" });
         }
 
-        private string SaveCoverImage(IFormFile file)
+        public async Task<IActionResult> DownloadBook(string fileName)
+        {
+            if (fileName == null)
+                return Content("filename not present");
+
+            var path = Path.Combine(env.WebRootPath, fileName.TrimStart('/'));
+
+
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+
+            // 猜测MIME类型
+            var mime = GetMimeType(fileName);
+
+            return File(memory, mime, Path.GetFileName(path));
+        }
+
+
+        private string SaveFile(IFormFile file)
         {
             if (file != null && file.Length > 0)
             {
@@ -110,6 +130,28 @@ namespace ProjectManagementSystem.Controllers
         {
             return RedirectToAction("ProjectDetail", "Project", new { id = id, tab = "bordered-books" });
         }
+
+        public static string GetMimeType(string fileName)
+        {
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
+
+            switch (extension)
+            {
+                case ".txt": return "text/plain";
+                case ".pdf": return "application/pdf";
+                case ".doc": return "application/vnd.ms-word";
+                case ".docx": return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                case ".xls": return "application/vnd.ms-excel";
+                case ".xlsx": return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                case ".png": return "image/png";
+                case ".jpg": return "image/jpeg";
+                case ".jpeg": return "image/jpeg";
+                case ".gif": return "image/gif";
+                case ".csv": return "text/csv";
+                default: return "application/octet-stream";  // for unknown types
+            }
+        }
+
 
     }
 }
