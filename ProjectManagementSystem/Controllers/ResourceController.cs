@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace ProjectManagementSystem.Controllers
             this.env = env;
             this.userManager = userManager;
         }
+        [Authorize(Policy = "资源添加")]
         [HttpPost]
         public async Task<IActionResult> InitResource([Bind("ResourceAddViewModel")] ResourceViewModel vm)
         {
@@ -47,7 +49,7 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync();
             return RedirectToAction("ProjectDetail", "Project", new { id = model.ProjectId, tab = "bordered-resources" });
         }
-
+        [Authorize(Policy = "资源使用")]
         [HttpPost]
         public async Task<IActionResult> UseResource([Bind("UseResourceViewModel")] ResourceViewModel vm)
         {
@@ -71,7 +73,7 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync(true);
             return RedirectToAction("ProjectDetail", "Project", new { id = model.ProjectId, tab = "bordered-resources" });
         }
-
+        [Authorize(Policy = "资源使用")]
         [HttpPost]
         public async Task<IActionResult> AddResource([Bind("AddResourceViewModel")] ResourceViewModel vm)
         {
@@ -95,7 +97,7 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync(true);
             return RedirectToAction("ProjectDetail", "Project", new { id = model.ProjectId, tab = "bordered-resources" });
         }
-
+        [Authorize(Policy = "资源删除")]
         public async Task<IActionResult> DeleteResource(int id)
         {
             var resource = await applicationDbContext.Resources
@@ -108,7 +110,6 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync(true);
             return RedirectToAction("ProjectDetail", "Project", new { id = resource.Project.Id, tab = "bordered-resources" });
         }
-
 
         private string SaveImage(IFormFile file)
         {

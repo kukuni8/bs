@@ -66,9 +66,9 @@ namespace ProjectManagementSystem.Controllers
             {
                 return RedirectToAction("Login");
             }
-            foreach (var error in result.Errors)
+            else
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                ModelState.AddModelError(string.Empty, "用户名重复，换一个试试!");
             }
             return View(model);
         }

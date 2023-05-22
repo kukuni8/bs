@@ -6,6 +6,8 @@ using ProjectManagementSystem.Data;
 using ProjectManagementSystem.Models;
 using ProjectManagementSystem.ViewModels;
 using ProjectManagementSystem.Hubs;
+using Microsoft.AspNetCore.Authorization;
+
 namespace ProjectManagementSystem.Controllers
 {
 
@@ -22,7 +24,7 @@ namespace ProjectManagementSystem.Controllers
             this.applicationDbContext = applicationDbContext;
             this.userManager = userManager;
         }
-
+        [Authorize(Policy = "通知添加")]
         public async Task<IActionResult> AddNotice([Bind("NoticeAddViewModel")] NoticeIndexViewModel vm)
         {
             var model = vm.NoticeAddViewModel;

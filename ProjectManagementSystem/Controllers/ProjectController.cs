@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -72,7 +73,7 @@ namespace ProjectManagementSystem.Controllers
         }
 
 
-
+        [Authorize(Policy = "项目编辑")]
         [HttpPost]
         public async Task<IActionResult> EditProject([Bind("ProjectEditViewModel")] ProjectViewModel model)
         {
@@ -88,7 +89,7 @@ namespace ProjectManagementSystem.Controllers
             applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", "Project", new { id = project.Id, tab = "bordered-editProject" });
         }
-
+        [Authorize(Policy = "项目添加")]
         public IActionResult AddProject()
         {
             var model = new ProjectAddViewModel()
@@ -135,7 +136,7 @@ namespace ProjectManagementSystem.Controllers
             applicationDbContext.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        [Authorize(Policy = "项目删除")]
         public async Task<IActionResult> DeleteProject(int id)
         {
             var project = await applicationDbContext.Projects.FirstOrDefaultAsync(b => b.Id == id);
@@ -143,7 +144,7 @@ namespace ProjectManagementSystem.Controllers
             applicationDbContext.SaveChanges(true);
             return RedirectToAction("Index");
         }
-
+        [Authorize(Policy = "任务添加")]
         public async Task<IActionResult> AddMission(MissionIndexViewModel model)
         {
             if (!ModelState.IsValid)
@@ -238,7 +239,7 @@ namespace ProjectManagementSystem.Controllers
             applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", "Project", new { id = mission.Project.Id, tab = "bordered-missions" });
         }
-
+        [Authorize(Policy = "任务编辑")]
         public async Task<IActionResult> EditMission([Bind("EditMission")] MissionIndexViewModel proModel)
         {
             var model = proModel.EditMission;
@@ -376,7 +377,7 @@ namespace ProjectManagementSystem.Controllers
             applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", "Project", new { id = mission.Project.Id, tab = "bordered-missions" });
         }
-
+        [Authorize(Policy = "任务删除")]
         public async Task<IActionResult> DeleteMission(int id)
         {
             var missionId = id;
@@ -648,7 +649,7 @@ namespace ProjectManagementSystem.Controllers
 
 
 
-        public async Task<IActionResult> GetLookData(int projectId)
+        public async Task<IActionResult> GetLookData(int projectId, bool isOnlyMine)
         {
             var project = await applicationDbContext.Projects
                 .Include(p => p.ProjectUsers)
@@ -665,7 +666,7 @@ namespace ProjectManagementSystem.Controllers
             model.TrueUserNames.AddRange(project.ProjectUsers.Select(pu => pu.ApplicationUser.UserName).ToList());
             return PartialView("_LookPartialView", model);
         }
-        public async Task<IActionResult> GetNoticeData(int projectId)
+        public async Task<IActionResult> GetNoticeData(int projectId, bool isOnlyMine)
         {
             var project = await applicationDbContext.Projects
                 .Include(p => p.Notices)
@@ -683,11 +684,11 @@ namespace ProjectManagementSystem.Controllers
             };
             return PartialView("_NoticePartialView", model);
         }
-        public IActionResult GetChatData(int projectId)
+        public IActionResult GetChatData(int projectId, bool isOnlyMine)
         {
             return PartialView("_ChatPartialView");
         }
-        public async Task<IActionResult> GetMissionData(int projectId)
+        public async Task<IActionResult> GetMissionData(int projectId, bool isOnlyMine)
         {
             var project = await applicationDbContext.Projects
                 .Include(p => p.Missions)
@@ -700,7 +701,24 @@ namespace ProjectManagementSystem.Controllers
                 .ThenInclude(m => m.Dialogues)
                 .ThenInclude(d => d.Speaker)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
-            var missions = project.Missions;
+            var curMissions = project.Missions;
+            var user = await userManager.GetUserAsync(User);
+            List<Mission> missions = isOnlyMine ? new List<Mission>() : curMissions;
+            if (isOnlyMine)
+            {
+                foreach (var mission in curMissions)
+                {
+                    if (mission.PutForward == user)
+                    {
+                        missions.Add(mission);
+                    }
+                    else
+                    {
+                        if (mission.MissionExecutors.Select(me => me.ApplicationUser).Contains(user))
+                            missions.Add(mission);
+                    }
+                }
+            }
             var model = new MissionIndexViewModel
             {
                 ProjectMissionIndexViewModel = new ProjectMissionIndexViewModel()
@@ -766,7 +784,7 @@ namespace ProjectManagementSystem.Controllers
 
             return PartialView("_MissionPartialView", model);
         }
-        public async Task<IActionResult> GetRiskData(int projectId)
+        public async Task<IActionResult> GetRiskData(int projectId, bool isOnlyMine)
         {
             var project = await applicationDbContext.Projects
                 .Include(p => p.Risks)
@@ -861,7 +879,7 @@ namespace ProjectManagementSystem.Controllers
             };
             return PartialView("_RiskPartialView", model);
         }
-        public async Task<IActionResult> GetDefectData(int projectId)
+        public async Task<IActionResult> GetDefectData(int projectId, bool isOnlyMine)
         {
             var project = await applicationDbContext.Projects
                 .Include(p => p.Defects)
@@ -893,7 +911,7 @@ namespace ProjectManagementSystem.Controllers
             };
             return PartialView("_DefectPartialView", model);
         }
-        public async Task<IActionResult> GetCheckData(int projectId)
+        public async Task<IActionResult> GetCheckData(int projectId, bool isOnlyMine)
         {
             var project = await applicationDbContext.Projects
                 .Include(P => P.Missions)
@@ -930,7 +948,7 @@ namespace ProjectManagementSystem.Controllers
             };
             return PartialView("_CheckPartialView", model);
         }
-        public async Task<IActionResult> GetResourceData(int projectId)
+        public async Task<IActionResult> GetResourceData(int projectId, bool isOnlyMine)
         {
             var project = await applicationDbContext.Projects
                 .Include(p => p.Resources)
@@ -968,7 +986,7 @@ namespace ProjectManagementSystem.Controllers
             model.CurProjectId = project.Id;
             return PartialView("_ResourcePartialView", model);
         }
-        public async Task<IActionResult> GetUserData(int projectId)
+        public async Task<IActionResult> GetUserData(int projectId, bool isOnlyMine)
         {
             var projectUsers = await applicationDbContext.ProjectUsers
                 .Include(pu => pu.Project)
@@ -1004,7 +1022,7 @@ namespace ProjectManagementSystem.Controllers
             model.CurProjectId = projectId;
             return PartialView("_UserPartialView", model);
         }
-        public async Task<IActionResult> GetBookData(int projectId)
+        public async Task<IActionResult> GetBookData(int projectId, bool isOnlyMine)
         {
             var project = await applicationDbContext.Projects
                 .Include(p => p.Books)
@@ -1022,7 +1040,7 @@ namespace ProjectManagementSystem.Controllers
             model.CurProjectId = project.Id;
             return PartialView("_BookPartialView", model);
         }
-        public async Task<IActionResult> GetProjectData(int projectId)
+        public async Task<IActionResult> GetProjectData(int projectId, bool isOnlyMine)
         {
             var project = await applicationDbContext.Projects
                 .Include(p => p.PutForward)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementSystem.Data;
@@ -24,7 +25,7 @@ namespace ProjectManagementSystem.Controllers
             var risks = await applicationDbContext.Risks.ToListAsync();
             return View(risks);
         }
-
+        [Authorize(Policy = "风险添加")]
         public async Task<IActionResult> AddRisk(int projectId)
         {
             var project = await applicationDbContext.Projects.Include(p => p.Risks).FirstOrDefaultAsync(a => a.Id == projectId);
@@ -54,7 +55,7 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync();
             return RedirectToAction("ProjectDetail", "Project", new { id = model.ProjectId, tab = "bordered-risks" });
         }
-
+        [Authorize(Policy = "风险编辑")]
         public async Task<IActionResult> EditRisk(int riskId)
         {
             var risk = await applicationDbContext.Risks.Include(a => a.Project).Include(a => a.PutForward).Include(a => a.Functionary).FirstOrDefaultAsync(x => x.Id == riskId);
@@ -99,7 +100,7 @@ namespace ProjectManagementSystem.Controllers
             applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", "Project", new { id = risk.Project.Id, tab = "bordered-risks" });
         }
-
+        [Authorize(Policy = "风险删除")]
         public async Task<IActionResult> DeleteRisk(int riskId)
         {
             var risk = await applicationDbContext.Risks.Include(A => A.Project).FirstOrDefaultAsync(a => a.Id == riskId);

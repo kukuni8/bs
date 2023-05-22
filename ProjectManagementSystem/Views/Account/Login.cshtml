@@ -69,6 +69,7 @@
                                             <input asp-for="UserName" type="text" name="username" class="form-control" id="yourUsername"
                                                    required>
                                             <div class="invalid-feedback">请输入用户名！</div>
+                                            <span asp-validation-for="UserName" class="text-danger"></span>
                                         </div>
 
                                         <div class="col-12">
@@ -76,18 +77,16 @@
                                             <input asp-for="Password" type="password" name="password" class="form-control"
                                                    id="yourPassword" required>
                                             <div class="invalid-feedback">请输入密码</div>
+                                            <span asp-validation-for="Password" class="text-danger"></span>
                                         </div>
 
-                                        <div class="col-12">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="remember"
-                                                       value="true" id="rememberMe">
-                                                <label class="form-check-label" for="rememberMe">记住我</label>
-                                            </div>
+                                        <div class="invalid">
+                                            <span></span>
                                         </div>
                                         <div class="col-12">
                                             <button class="btn btn-primary w-100" type="submit">登录</button>
                                         </div>
+                                        <div asp-validation-summary="All" class="text-danger"></div>
                                         <div class="col-12">
                                             <p class="small mb-0">没有账号？<a asp-action="Register">注册账号</a></p>
                                         </div>

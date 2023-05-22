@@ -7,6 +7,7 @@ namespace ProjectManagementSystem.ViewModels
 {
     public class MissionIndexViewModel
     {
+        public bool IsOnlyMine { get; set; }
         public int CurProjectId { get; set; }
         public string CurProjectName { get; set; }
         public ProjectAddMissionViewModel AddMission { get; set; }

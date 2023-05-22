@@ -10,6 +10,8 @@ namespace ProjectManagementSystem.ViewModels
     {
 
 
+        public bool IsOnlyMine { get; set; }
+
         public Project CurProject { get; set; }
 
         public int CurProjectId { get; set; }

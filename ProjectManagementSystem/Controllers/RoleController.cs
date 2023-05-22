@@ -57,6 +57,7 @@ namespace ProjectManagementSystem.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "角色添加")]
         public IActionResult AddRole()
         {
             RoleAddViewModel model = new RoleAddViewModel();
@@ -100,7 +101,7 @@ namespace ProjectManagementSystem.Controllers
             }
             return View(roleAddViewModel);
         }
-
+        [Authorize(Policy = "角色编辑")]
         public async Task<IActionResult> EditRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -167,7 +168,7 @@ namespace ProjectManagementSystem.Controllers
             }
             return View(roleEditViewModel);
         }
-
+        [Authorize(Policy = "角色删除")]
         [HttpPost]
         public async Task<IActionResult> DeleteRole(string id)
         {

@@ -113,16 +113,26 @@ namespace ProjectManagementSystem.Controllers
                 await userManager.AddToRoleAsync(user, role.Name);
                 return RedirectToAction("Index");
             }
-
             foreach (IdentityError error in result.Errors)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                // 检查错误描述中是否包含有关重复用户名的信息
+                if (error.Code == "DuplicateUserName")
+                {
+                    // 这个错误是由于用户名重复
+                    ModelState.AddModelError(string.Empty, "用户名已存在。");
+                }
+                else
+                {
+                    // 其他错误
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
 
             return View(userAddViewModel);
 
         }
 
+        [Authorize(Policy = "用户编辑")]
         public async Task<IActionResult> EditUser(string id)
         {
             var user = await userManager.FindByIdAsync(id);
@@ -180,6 +190,7 @@ namespace ProjectManagementSystem.Controllers
             return View(user);
         }
 
+        [Authorize(Policy = "用户删除")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await userManager.FindByIdAsync(id);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementSystem.Data;
@@ -22,7 +23,7 @@ namespace ProjectManagementSystem.Controllers
             var defects = await applicationDbContext.Defects.ToListAsync();
             return View(defects);
         }
-
+        [Authorize(Policy = "缺陷添加")]
         public async Task<IActionResult> AddDefect(int projectId)
         {
             var project = await applicationDbContext.Projects.FirstOrDefaultAsync(a => a.Id == projectId);
@@ -56,7 +57,7 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync();
             return RedirectToAction("ProjectDetail", "Project", new { id = model.ProjectId, tab = "bordered-defects" });
         }
-
+        [Authorize(Policy = "缺陷编辑")]
         public async Task<IActionResult> EditDefect(int Id)
         {
             var defect = await applicationDbContext.Defects.Include(d => d.Project).Include(d => d.PutForward).FirstOrDefaultAsync(x => x.Id == Id);
@@ -97,7 +98,7 @@ namespace ProjectManagementSystem.Controllers
             applicationDbContext.SaveChanges();
             return RedirectToAction("ProjectDetail", "Project", new { id = defect.Project.Id, tab = "bordered-defects" });
         }
-
+        [Authorize(Policy = "缺陷删除")]
         public async Task<IActionResult> DeleteDefect(int Id)
         {
             var defect = await applicationDbContext.Defects.Include(d => d.Project).FirstOrDefaultAsync(a => a.Id == Id);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementSystem.Data;
@@ -17,6 +18,8 @@ namespace ProjectManagementSystem.Controllers
             this.userManager = userManager;
             this.applicationDbContext = applicationDbContext;
         }
+
+        [Authorize(Policy = "新增收入")]
         [HttpPost]
         public async Task<IActionResult> AddFund([Bind("AddFundViewModel")] ResourceViewModel vm)
         {
@@ -41,7 +44,7 @@ namespace ProjectManagementSystem.Controllers
             return RedirectToAction("ProjectDetail", "Project", new { id = fund.Project.Fund.Id, tab = "bordered-resources" });
         }
 
-
+        [Authorize(Policy = "新增支出")]
         [HttpPost]
         public async Task<IActionResult> UseFund([Bind("UseFundViewModel")] ResourceViewModel vm)
         {

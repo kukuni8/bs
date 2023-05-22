@@ -70,6 +70,16 @@ namespace ProjectManagementSystem
                 options.AddPolicy("缺陷添加", policy => policy.RequireClaim("缺陷添加"));
                 options.AddPolicy("缺陷编辑", policy => policy.RequireClaim("缺陷编辑"));
                 options.AddPolicy("缺陷删除", policy => policy.RequireClaim("缺陷删除"));
+
+                options.AddPolicy("通知添加", policy => policy.RequireClaim("通知添加"));
+
+                options.AddPolicy("资源添加", policy => policy.RequireClaim("资源添加"));
+                options.AddPolicy("资源使用", policy => policy.RequireClaim("资源使用"));
+                options.AddPolicy("资源删除", policy => policy.RequireClaim("资源删除"));
+                options.AddPolicy("资源记录", policy => policy.RequireClaim("资源记录"));
+
+                options.AddPolicy("新增支出", policy => policy.RequireClaim("新增支出"));
+                options.AddPolicy("新增收入", policy => policy.RequireClaim("新增收入"));
             });
 
             //builder.Services.AddScoped<CustomAuthorizationFilter>(provider =>
