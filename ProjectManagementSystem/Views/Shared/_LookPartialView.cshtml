@@ -15,7 +15,7 @@
                                 <i class="bi bi-card-checklist"></i>
                             </div>
                             <div class="ps-3">
-                                <h6>145</h6>
+                                <h6>@Model.MissionCount</h6>
                             </div>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                                 <i class="bi bi-currency-yen"></i>
                             </div>
                             <div class="ps-3">
-                                <h6>￥3,264</h6>
+                                <h6>@Model.Money</h6>
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                                 <i class="bi bi-people"></i>
                             </div>
                             <div class="ps-3">
-                                <h6>1244</h6>
+                                <h6>@Model.UserCount</h6>
                             </div>
                         </div>
 
@@ -81,7 +81,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">任务每日状态图</h5>
+                <h5 class="card-title">每日任务状态变动图</h5>
                 <div class="col-3">
                     <select id="user-select" class="form-control">
                         @foreach (var name in Model.UserNames)
@@ -186,7 +186,7 @@
             options.series[0].data = data.numbers;
             options.xaxis.categories = data.names;
             if (barChart) {
-                barChart.destory();
+                barChart.destroy();
             }
             barChart = new ApexCharts(document.querySelector("#barChart"), options);
             barChart.render();
@@ -206,6 +206,10 @@
     });
 
     function renderPieChart(data) {
+        if (data.length === 0) {
+            console.log('No data to render');
+            return;
+        }
         var options = {
             series: data.numbers,
             chart: {
@@ -237,6 +241,10 @@
     var fundChart;
 
     function renderFundChart(data) {
+        if (data.length === 0) {
+            console.log('No data to render');
+            return;
+        }
         if (fundChart) {
             fundChart.destroy();
         }
@@ -306,6 +314,10 @@
 <script>
     var stackChart;
     function renderStackChart(data) {
+        if (data.length === 0) {
+            console.log('No data to render');
+            return;
+        }
         console.log(stackChart);
 
         if (stackChart) {
@@ -354,7 +366,7 @@
             xaxis: {
                 type: 'datetime',
                 labels: {
-                    format: 'dd/MM/yy'
+                    format: 'yyyy/MM/dd'
                 }
             },
             legend: {
@@ -393,6 +405,10 @@
     var areachart;  // 创建一个全局变量来保存当前的图表
 
     function renderAreaChart(data) {
+        if (data.length === 0) {
+            console.log('No data to render');
+            return;
+        }
         if (areachart) {
             areachart.destroy();  // 如果已经存在一个图表，先销毁它
         }
@@ -443,7 +459,7 @@
                 shared: true,
                 intersect: false,
                 x: {
-                    format: 'dd/MM/yy HH:mm'
+                    format: 'yyyy/MM/dd'
                 },
             },
         };

@@ -38,39 +38,23 @@ namespace ProjectManagementSystem.Models
         public List<ProjectUser> ProjectUsers { get; set; }
         public List<Project> PutForwardProjects { get; set; }
         public List<Project> FunctionaryProjects { get; set; }
-
         // 与Mission的关系
         public List<Mission> PutForwardMissions { get; set; }
         public List<MissionExecutor> MissionExecutors { get; set; }
-
-
-
         // 与Defect的关系
         public List<Defect> PutForwardDefects { get; set; }
         public List<Defect> FunctionaryDefects { get; set; }
-
         // 与Risk的关系
         public List<Risk> PutForwardRisks { get; set; }
         public List<Risk> FunctionaryRisks { get; set; }
-
-
         // 与MissionDialogue的关系
         public List<MissionDialogue> MissionDialogues { get; set; }
-
         public List<Notice> Notices { get; set; }
-
-
-
-
         public List<ResourceChange> ResourceChanges { get; set; }
-
         public List<FundChange> FundChanges { get; set; }
-
         public List<NoticeReceiver> NoticeReceived { get; set; }
-
         public List<ChatRecord> PutforwardChats { get; set; }
         public List<ChatRecord> ReceiveChats { get; set; }
-
         public override string ToString()
         {
             return UserName;

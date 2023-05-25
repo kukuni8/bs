@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "QbKTFfGubq4zXvxJVFC4OemyRTezjcn3rFx+CoyvAZs=",
+  "Hash": "G5a30vatLHW4vrJRXI0JL6Z58nqg/M4Of6xBuL3y+kg=",
   "Source": "ProjectManagementSystem",
   "BasePath": "_content/ProjectManagementSystem",
   "Mode": "Default",
@@ -24531,6 +24531,40 @@
       "OriginalItemSpec": "wwwroot\\document\\dn.jpg"
     },
     {
+      "Identity": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\image1.jpg",
+      "SourceId": "ProjectManagementSystem",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\",
+      "BasePath": "_content/ProjectManagementSystem",
+      "RelativePath": "document/image1.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\document\\image1.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\image2.jpg",
+      "SourceId": "ProjectManagementSystem",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\",
+      "BasePath": "_content/ProjectManagementSystem",
+      "RelativePath": "document/image2.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\document\\image2.jpg"
+    },
+    {
       "Identity": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\image6.jpg",
       "SourceId": "ProjectManagementSystem",
       "SourceType": "Discovered",
@@ -24563,6 +24597,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\document\\sb.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\第二次写作记录.docx",
+      "SourceId": "ProjectManagementSystem",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\",
+      "BasePath": "_content/ProjectManagementSystem",
+      "RelativePath": "document/第二次写作记录.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\document\\第二次写作记录.docx"
     },
     {
       "Identity": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\论文初稿.docx",

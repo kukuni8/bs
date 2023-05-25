@@ -1,27 +1,79 @@
-﻿@{
+﻿@using ProjectManagementSystem.ViewModels
+@using ProjectManagementSystem.Models
+@{
     ViewData["Title"] = "Home Page";
 }
-
+@model HomeIndexViewModel
 <div class="container">
 
 
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div id="nChart"></div>
+    <div class="row">
+        <!-- Sales Card -->
+        <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">项目</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-card-checklist"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6>@Model.ProjectCount</h6>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- End Sales Card -->
+        <!-- Customers Card -->
+        <div class="col-xxl-4 col-xl-12">
+
+            <div class="card info-card customers-card">
+                <div class="card-body">
+                    <h5 class="card-title">用户</h5>
+
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6>@Model.UserCount</h6>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- End Customers Card -->
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <div id="barChart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Line Chart -->
+                    <div id="timeBarChart"></div>
+                    <!-- End Line Chart -->
+                </div>
             </div>
         </div>
     </div>
-
-
-    <div class="col-6">
-        <div class="card">
-            <div class="card-body">
-                <div id="barChart"></div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="fundChart"></div>
+                </div>
             </div>
         </div>
     </div>
-
 
 
 </div>
@@ -35,53 +87,6 @@
 @section Scripts{
 
     <script>
-        window.onload = function () {
-            // 获取需要绘制图表的 DOM 元素
-            var dom = document.getElementById("nChart");
-
-            // 初始化 ECharts 实例
-            var nChart = echarts.init(dom);
-
-            // 配置图表选项
-            var option = {
-                title: {
-                    text: '饼图示例',
-                    left: 'center'
-                },
-                tooltip: {
-                    trigger: 'item',
-                    formatter: '{a} <br/>{b}: {c} ({d}%)'
-                },
-                series: [
-                    {
-                        name: '访问来源',
-                        type: 'pie',
-                        radius: '70%',
-                        data: [
-                            { value: 335, name: '直接访问' },
-                            { value: 310, name: '邮件营销' },
-                            { value: 234, name: '联盟广告' },
-                            { value: 135, name: '视频广告' },
-                            { value: 1548, name: '搜索引擎' }
-                        ],
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                        }
-                    }
-                ]
-            };
-
-            // 使用配置项绘制图表
-            nChart.setOption(option);
-        };
-    </script>
-
-    <script>
-
         $(document).ready(function () {
             $.ajax({
                 url: '@Url.Action("GetBarData", "Home")',
@@ -141,4 +146,111 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            var options = {
+                series: [{
+                    name: '天数',
+                    data: []
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 350
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 4,
+                        borderRadiusApplication: 'end',
+                        horizontal: true,
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                xaxis: {
+                    categories: []
+                },
+                tooltip: {
+                    x: {
+                        show: true
+                    },
+                    y: {
+                        formatter: function (value) {
+                            return value;
+                        }
+                    }
+                },
+                title: {
+                    text: '项目耗时'
+                }
+            }; // 这里应该有一个分号来结束对象的定义
+
+            $.get('/Home/GetTimeBarData', function (data) {
+                options.series[0].data = data.times;
+                options.xaxis.categories = data.names;
+
+                var timeBarChart = new ApexCharts(document.querySelector("#timeBarChart"), options);
+                timeBarChart.render();
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $.get('/Home/GetFundData', function (data) {
+                console.log(data);  // print the data for debugging purposes
+                var seriesData = data.map(item => {
+                    return {
+                        name: item.name,
+                        data: item.date
+                    };
+                });
+                var options = {
+                    chart: {
+                        type: 'line',
+                        height: 350,
+                        toolbar: {
+                            show: true
+                        },
+                    },
+                    series: seriesData,
+                    xaxis: {
+                        type: 'datetime',
+                        labels: {
+                            format: 'yyyy-MM-dd',
+                        },
+                    },
+                    yaxis: {
+                        title: {
+                            text: '金额'
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false,
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                    },
+                };
+
+                var fundChart = new ApexCharts(document.querySelector("#fundChart"), options);
+                fundChart.render();
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

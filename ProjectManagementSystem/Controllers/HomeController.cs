@@ -6,6 +6,7 @@ using ProjectManagementSystem.Models;
 using ProjectManagementSystem.ViewModels;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 
@@ -28,15 +29,21 @@ namespace ProjectManagementSystem.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             // 检查用户是否已登录
             if (!User.Identity.IsAuthenticated)
             {
                 return View(); // 或者返回其他视图，比如登录页面
             }
+            SpecialInit i = new SpecialInit(applicationDbContext);
+            await i.Init();
 
-            var model = new HomeIndexViewModel();
+            var model = new HomeIndexViewModel()
+            {
+                UserCount = applicationDbContext.ApplicationUsers.Count(),
+                ProjectCount = applicationDbContext.Projects.Count(),
+            };
 
 
             return View(model);
@@ -114,6 +121,99 @@ namespace ProjectManagementSystem.Controllers
             return Json(data);
         }
 
+        public async Task<IActionResult> GetTimeBarData()
+        {
+            var names = await applicationDbContext.Projects.Select(p => p.Name).ToListAsync();
+            var times = await applicationDbContext.Projects.Select(p => (DateTime.Now.AddDays(1) - p.CreateDate).Days).ToListAsync();
+            var data = new
+            {
+                names = names,
+                times = times,
+            };
+            return Json(data);
+        }
+
+        public async Task<IActionResult> GetFundData()
+        {
+            var projects = await applicationDbContext.Projects
+                .Include(p => p.Fund)
+                .ThenInclude(p => p.Changes)
+                .ToListAsync();
+            var startDay = applicationDbContext.Projects.Select(p => p.CreateDate).Min();
+            var endDay = DateTime.Now;
+            var times = new List<DateTime>();
+            for (var i = startDay; i < endDay; i = i.AddDays(1))
+            {
+                times.Add(i.Date);
+            }
+            List<object> data = new List<object>();
+            foreach (var project in projects)
+            {
+                var changes = project.Fund.Changes.OrderBy(c => c.DateTime).ToList();
+                var numbers = new List<decimal>();
+                var number = 0M;
+                var i = startDay;
+                var j = 0;
+                List<(DateTime, decimal)> numbersString = new List<(DateTime, decimal)>();
+                while (i < endDay)
+                {
+                    while (j < changes.Count() && changes[j].DateTime < i)
+                    {
+                        if (changes[j].ChangeType == FundChangeType.支出)
+                        {
+                            number -= changes[j].Number;
+                        }
+                        else
+                        {
+                            number += changes[j].Number;
+                        }
+                        numbersString.Add((i, number));
+                        j++;
+                    }
+                    i = i.AddDays(1);
+                    numbers.Add(number);
+                }
+                var perData = new
+                {
+                    name = project.Name,
+                    date = numbersString.Select(n => new { x = n.Item1.ToString("o"), y = n.Item2 }).ToArray(),
+                };
+                data.Add(perData);
+            }
+            return Json(data);
+        }
+
+        //public IActionResult GetFundData()
+        //{
+        //    // 这只是一个示例，实际的数据应该根据你的具体需求从数据库或其他地方获取
+        //    var data = new List<object>
+        //{
+        //    new
+        //    {
+        //        name = "项目1",
+        //        times = new List<string>
+        //        {
+        //            new DateTime(2023, 5, 25).ToString("s"),  // 注意这里的日期格式是 "s"，以符合 ISO 8601
+        //            new DateTime(2023, 5, 26).ToString("s"),
+        //            new DateTime(2023, 5, 27).ToString("s")
+        //        },
+        //        numbers = new List<decimal> {100M, 150M, 120M}
+        //    },
+        //    new
+        //    {
+        //        name = "项目2",
+        //        times = new List<string>
+        //        {
+        //            new DateTime(2023, 5, 25).ToString("s"),
+        //            new DateTime(2023, 5, 26).ToString("s"),
+        //            new DateTime(2023, 5, 27).ToString("s")
+        //        },
+        //        numbers = new List<decimal> {90M, 80M, 95M}
+        //    }
+        //};
+
+        //    return Json(data);
+        //}
     }
 
     public class DbInit
@@ -125,9 +225,6 @@ namespace ProjectManagementSystem.Controllers
         /// 项目中的人员数
         /// </summary>
         private readonly int projectUserCount = 8;
-
-
-
 
         private ApplicationDbContext applicationDbContext;
         public DbInit(ApplicationDbContext applicationDbContext)
@@ -237,8 +334,8 @@ namespace ProjectManagementSystem.Controllers
             {
                 Name = projectName,
                 Description = "项目的描述",
-                CreateDate = new DateTime(2023, 5, 21, 10, 25, 55),
-                Deadline = new DateTime(2023, 11, 28, 10, 25, 55),
+                CreateDate = GetRandomTime().AddDays(-155),
+                Deadline = GetRandomTime().AddDays(155),
                 Status = ProjectStatus.进行中,
                 PutForward = usersInProject[putUserIndex],
                 Functionary = usersInProject[funUserIndex],
@@ -278,7 +375,7 @@ namespace ProjectManagementSystem.Controllers
                 var fundChange = new FundChange
                 {
                     Number = randomNumber,
-                    DateTime = GetRandomTime(),
+                    DateTime = GetFundDatetime(),
                     ChangeType = randomBool ? FundChangeType.支出 : FundChangeType.收入,
                     Fund = fund,
                     Description = $"原因{i}",
@@ -351,10 +448,6 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync();
         }
 
-
-
-
-
         public DateTime GetRandomTime()
         {
             Random random = new Random();
@@ -363,7 +456,7 @@ namespace ProjectManagementSystem.Controllers
             int year = 2023;
 
             // 生成随机的月份
-            int month = random.Next(1, 12);
+            int month = random.Next(1, 7);
 
             // 生成随机的日期
             int day = random.Next(1, DateTime.DaysInMonth(year, month) + 1);
@@ -384,5 +477,182 @@ namespace ProjectManagementSystem.Controllers
             return randomDateTime;
         }
 
+        public DateTime GetFundDatetime()
+        {
+            Random random = new Random();
+
+            // 生成随机的年份
+            int year = 2023;
+
+            // 生成随机的月份
+            int month = random.Next(1, 7);
+
+            // 生成随机的日期
+            int day = random.Next(1, DateTime.DaysInMonth(year, month) + 1);
+
+            // 生成随机的小时
+            int hour = random.Next(0, 24);
+
+            // 生成随机的分钟
+            int minute = random.Next(0, 60);
+
+            // 生成随机的秒钟
+            int second = random.Next(0, 60);
+
+            DateTime randomDateTime = new DateTime(year, month, day, hour, minute, second);
+
+            if (randomDateTime > DateTime.Now)
+                return GetFundDatetime();
+            return randomDateTime;
+        }
+
+
+
+    }
+
+    public class SpecialInit
+    {
+        private readonly ApplicationDbContext applicationDbContext;
+
+        public SpecialInit(ApplicationDbContext applicationDbContext)
+        {
+            this.applicationDbContext = applicationDbContext;
+        }
+        public async Task Init()
+        {
+            if (applicationDbContext.Projects.Count() > 0)
+                return;
+            var project = new Project();
+            project.Name = "一个项目";
+            var user = await applicationDbContext.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.UserName == "admin");
+            project.PutForward = user;
+            project.Functionary = user;
+            project.Deadline = DateTime.Now;
+            project.CreateDate = DateTime.Now;
+            await applicationDbContext.Projects.AddAsync(project);
+            await applicationDbContext.SaveChangesAsync();
+
+            await applicationDbContext.ProjectUsers.AddAsync(new ProjectUser
+            {
+                ApplicationUser = user,
+                Project = project,
+            });
+
+            var mission1 = new Mission();
+            mission1.Name = "任务1";
+            mission1.Project = project;
+            mission1.PutForward = user;
+            mission1.MissionExecutors = new List<MissionExecutor>
+            {
+                new MissionExecutor
+                {
+                    ApplicationUser=user,
+                    Mission = mission1,
+                }
+            };
+            mission1.CreateDate = DateTime.Now;
+            mission1.Deadline = DateTime.Now;
+            mission1.Priority = MissionPriority.较低;
+            mission1.Status = MissionStatus.待处理;
+            await applicationDbContext.Missions.AddAsync(mission1);
+
+            var mission2 = new Mission();
+            mission2.Name = "任务2";
+            mission2.Project = project;
+            mission2.PutForward = user;
+            mission2.MissionExecutors = new List<MissionExecutor>
+            {
+                new MissionExecutor
+                {
+                    ApplicationUser=user,
+                    Mission = mission2,
+                }
+            };
+            mission2.CreateDate = DateTime.Now;
+            mission2.Deadline = DateTime.Now;
+            mission2.Priority = MissionPriority.普通;
+            mission2.Status = MissionStatus.进行中;
+            await applicationDbContext.Missions.AddAsync(mission2);
+
+            var mission3 = new Mission();
+            mission3.Name = "任务2";
+            mission3.Project = project;
+            mission3.PutForward = user;
+            mission3.MissionExecutors = new List<MissionExecutor>
+            {
+                new MissionExecutor
+                {
+                    ApplicationUser=user,
+                    Mission = mission3,
+                }
+            };
+            mission3.CreateDate = DateTime.Now;
+            mission3.Deadline = DateTime.Now;
+            mission3.Priority = MissionPriority.紧急;
+            mission3.Status = MissionStatus.已完成;
+            await applicationDbContext.Missions.AddAsync(mission3);
+
+            await applicationDbContext.SaveChangesAsync();
+
+            var fund = new Fund()
+            {
+                Changes = new List<FundChange>(),
+            };
+
+            project.Fund = fund;
+
+            var fundchange = new FundChange()
+            {
+                ChangeType = FundChangeType.收入,
+                Number = 100,
+                User = user,
+                DateTime = DateTime.Now,
+            };
+            fund.Changes.Add(fundchange);
+
+            var notice1 = new Notice
+            {
+                NoticeType = NoticeType.Info,
+                CreateTime = DateTime.Now,
+                Information = "一条普通通知",
+                Putforward = user,
+                Project = project,
+            };
+            await applicationDbContext.Notices.AddAsync(notice1);
+
+            var notice2 = new Notice
+            {
+                NoticeType = NoticeType.Success,
+                CreateTime = DateTime.Now,
+                Information = "一条提醒通知",
+                Putforward = user,
+                Project = project,
+            };
+            await applicationDbContext.Notices.AddAsync(notice2);
+
+            var notice3 = new Notice
+            {
+                NoticeType = NoticeType.Warning,
+                CreateTime = DateTime.Now,
+                Information = "一条警告通知",
+                Putforward = user,
+                Project = project,
+            };
+            await applicationDbContext.Notices.AddAsync(notice3);
+
+            var notice4 = new Notice
+            {
+                NoticeType = NoticeType.Danger,
+                CreateTime = DateTime.Now,
+                Information = "一条危险通知",
+                Putforward = user,
+                Project = project,
+            };
+            await applicationDbContext.Notices.AddAsync(notice4);
+
+            applicationDbContext.Update(project);
+            await applicationDbContext.SaveChangesAsync();
+        }
     }
 }

@@ -3,6 +3,7 @@ namespace ProjectManagementSystem.ViewModels
 {
     public class HomeIndexViewModel
     {
-        public List<Notice> Notifications { get; set; }
+        public int ProjectCount { get; set; }
+        public int UserCount { get; set; }
     }
 }

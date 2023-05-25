@@ -5521,6 +5521,14 @@
       "PackagePath": "staticwebassets\\document\\dn.jpg"
     },
     {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\image1.jpg",
+      "PackagePath": "staticwebassets\\document\\image1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\image2.jpg",
+      "PackagePath": "staticwebassets\\document\\image2.jpg"
+    },
+    {
       "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\image6.jpg",
       "PackagePath": "staticwebassets\\document\\image6.jpg"
     },
@@ -5543,6 +5551,10 @@
     {
       "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\屏幕截图 2023-05-10 202417.png",
       "PackagePath": "staticwebassets\\document\\屏幕截图 2023-05-10 202417.png"
+    },
+    {
+      "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\第二次写作记录.docx",
+      "PackagePath": "staticwebassets\\document\\第二次写作记录.docx"
     },
     {
       "Id": "C:\\Users\\28135\\Desktop\\bs\\ProjectManagementSystem\\wwwroot\\document\\论文初稿.docx",

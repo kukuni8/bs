@@ -54,8 +54,8 @@
     {
         审核中,
         待处理,
-        已丢弃,
         已解决,
+        已丢弃,
     }
 
     public enum FundChangeType

@@ -412,210 +412,7 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.SaveChangesAsync();
             return RedirectToAction("ProjectDetail", "Project", new { id = model.CurProjectId, tab = "bordered-users" });
         }
-        [HttpGet]
-        public async Task<JsonResult> GetData(int projectId)
-        {
-            var missions = await applicationDbContext.Missions
-                .Include(m => m.Project)
-                .Where(p => p.Project.Id == projectId)
-                .ToListAsync();
-            var startDay = missions.Select(m => m.CreateDate).Min();
-            var endDay = missions.Select(m => m.FinishedTime).Max();
-            var undealData = new List<(DateTime, int)>();
-            var inprogressData = new List<(DateTime, int)>();
-            var finishedData = new List<(DateTime, int)>();
-            for (DateTime i = startDay; i <= endDay; i = i.AddDays(1))
-            {
-                undealData.Add((i, CalUndeal(missions, i)));
-                inprogressData.Add((i, CalInprogress(missions, i)));
-                finishedData.Add((i, CalFinished(missions, i)));
-            }
 
-            var data = new[]
-            {
-              new
-                 {
-                   name = "待处理",
-                   color = "#4154f1", // 颜色字段
-                   data = undealData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
-                 },
-              new
-                 {
-                   name = "进行中",
-                   color = "#2eca6a", // 颜色字段
-                   data = inprogressData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
-                 },
-              new
-                 {
-                   name = "已完成",
-                   color = "#ff771d",
-                   data = finishedData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
-                  }
-             };
-
-
-            return Json(data);
-        }
-
-        public async Task<JsonResult> GetStackColumnData(string user, int projectId)
-        {
-            var missions = await applicationDbContext.Missions
-                .Include(m => m.MissionExecutors)
-                .ThenInclude(me => me.ApplicationUser)
-                .Include(m => m.Project)
-                .Where(m => m.Project.Id == projectId)
-                .ToListAsync();
-            if (user != "All")
-            {
-                missions = missions.Where(m => m.MissionExecutors.Where(me => me.ApplicationUser.UserName == user).Count() > 0).ToList();
-            }
-            var undealData = new List<(DateTime, int)>();
-            var inProgressData = new List<(DateTime, int)>();
-            var FinishedData = new List<(DateTime, int)>();
-            for (int i = 0; i < 40; i++)
-            {
-                var dateTime = DateTime.Now.AddDays(-i);
-                undealData.Add((dateTime, CalCulateUndeal(missions, dateTime)));
-                inProgressData.Add((dateTime, CalCulateInProgress(missions, dateTime)));
-                FinishedData.Add((dateTime, CalCulateFinished(missions, dateTime)));
-            }
-
-            var data = new[]
-  {
-        new
-        {
-            name = "待处理",
-            color = "#4154f1", // 颜色字段
-            data = undealData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
-        },
-        new
-        {
-            name = "进行中",
-            color = "#2eca6a", // 颜色字段
-            data = inProgressData.Select(d => new { x = d.Item1.ToString("o") , y = d.Item2 }).ToArray()
-        },
-        new
-        {
-            name = "已完成",
-            color = "#ff771d",
-            data = FinishedData.Select(d => new { x = d.Item1.ToString("o") , y = d.Item2 }).ToArray()
-        }
-    };
-
-            return Json(data);
-        }
-
-        public async Task<IActionResult> GetFundData(int projecctId)
-        {
-            var project = await applicationDbContext.Projects
-                .Include(p => p.Fund)
-                .ThenInclude(f => f.Changes)
-                .FirstOrDefaultAsync(p => p.Id == projecctId);
-            var changes = project.Fund.Changes.OrderBy(c => c.DateTime).ToList();
-            var startDay = changes.Select(c => c.DateTime).Min();
-            var endDay = changes.Select(c => c.DateTime).Max();
-            decimal fund = 0M;
-            var fundData = new List<(DateTime, decimal)>();
-            var addData = new List<(DateTime, decimal)>();
-            var reduceData = new List<(DateTime, decimal)>();
-            foreach (var change in changes)
-            {
-                if (change.ChangeType == FundChangeType.支出)
-                {
-                    fund -= change.Number;
-                    reduceData.Add((change.DateTime.Date, change.Number));
-                    addData.Add((change.DateTime.Date, 0M));
-                }
-                else
-                {
-                    fund += change.Number;
-                    addData.Add((change.DateTime.Date, change.Number));
-                    reduceData.Add((change.DateTime.Date, 0M));
-                }
-                fundData.Add((change.DateTime.Date, fund));
-            }
-
-            var data = new[]
-            {
-                 new
-            {
-            name = "资金",
-            color = "#00008B", // 颜色字段
-            type="line",
-            data = fundData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
-            },
-                  new
-            {
-            name = "收入",
-            color = "#3CB371", // 颜色字段
-            type= "column",
-            data = addData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
-            },
-                   new
-            {
-            name = "支出",
-            color = "#FF6347", // 颜色字段
-            type= "column",
-            data = reduceData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2}).ToArray()
-            },
-            };
-
-            return Json(data);
-        }
-
-        public async Task<IActionResult> GetPieData(int projectId)
-        {
-            var me = await applicationDbContext.MissionExecutors
-            .Include(me => me.ApplicationUser)
-            .Include(me => me.Mission)
-            .ThenInclude(m => m.Project)
-            .Where(me => me.Mission.Project.Id == projectId && me.Mission.FinishedTime < DateTime.Now)
-            .ToListAsync();
-
-            var groupResult = me.GroupBy(me => me.ApplicationUser.UserName);
-            var pieData = new List<(string, int)>();
-            int count = 0;
-            var total = me.Count;
-            foreach (var group in groupResult)
-            {
-                pieData.Add((group.Key, group.Count()));
-                count += group.Count();
-                if ((float)count / total > 0.8f)
-                    break;
-            }
-            pieData.Add(("Others", total - count));
-            var data = new
-            {
-                names = pieData.Select(p => p.Item1).ToArray(),
-                numbers = pieData.Select(p => p.Item2).ToArray(),
-            };
-            return Json(data);
-        }
-
-        public async Task<IActionResult> GetBarData(int projectId)
-        {
-            var me = await applicationDbContext.MissionExecutors
-            .Include(me => me.ApplicationUser)
-            .Include(me => me.Mission)
-            .ThenInclude(m => m.Project)
-            .Where(me => me.Mission.Project.Id == projectId && me.Mission.FinishedTime < DateTime.Now)
-            .ToListAsync();
-
-            var groupResult = me
-                .GroupBy(me => me.ApplicationUser.UserName)
-                .OrderByDescending(g => g.Count());
-            var pieData = new List<(string, int)>();
-            foreach (var group in groupResult)
-            {
-                pieData.Add((group.Key, group.Count()));
-            }
-            var data = new
-            {
-                names = pieData.Select(p => p.Item1).ToArray(),
-                numbers = pieData.Select(p => p.Item2).ToArray(),
-            };
-            return Json(data);
-        }
 
         private int CalUndeal(List<Mission> missions, DateTime dateTime)
         {
@@ -653,15 +450,30 @@ namespace ProjectManagementSystem.Controllers
         public async Task<IActionResult> GetLookData(int projectId, bool isOnlyMine)
         {
             var project = await applicationDbContext.Projects
+                .Include(p => p.Fund)
+                .ThenInclude(f => f.Changes)
                 .Include(p => p.ProjectUsers)
                 .ThenInclude(pu => pu.ApplicationUser)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
+            var missions = await applicationDbContext.Missions
+                .Include(m => m.Project)
+                .ToListAsync();
+            var curMissions = missions.Where(m => m.Project.Id == projectId);
             var model = new LookIndexViewModel
             {
                 ProjectId = projectId,
                 UserNames = new List<string>(),
                 TrueUserNames = new List<string>(),
             };
+            var paid = project.Fund.Changes
+             .Where(c => c.ChangeType == FundChangeType.支出)
+             .Sum(c => c.Number);
+            var incom = project.Fund.Changes
+                .Where(c => c.ChangeType == FundChangeType.收入)
+                .Sum(c => c.Number);
+            model.MissionCount = curMissions.Count();
+            model.UserCount = project.ProjectUsers.Count();
+            model.Money = incom - paid;
             model.UserNames.Add("All");
             model.UserNames.AddRange(project.ProjectUsers.Select(pu => pu.ApplicationUser.UserName).ToList());
             model.TrueUserNames.AddRange(project.ProjectUsers.Select(pu => pu.ApplicationUser.UserName).ToList());
@@ -893,7 +705,9 @@ namespace ProjectManagementSystem.Controllers
             {
                 CurProjectId = project.Id,
                 CurProjectName = project.Name,
-                DefectEditViewModels = project.Defects.Select(d => new DefectEditViewModel
+                DefectEditViewModels = project.Defects
+                .OrderBy(d => d.Status)
+                .Select(d => new DefectEditViewModel
                 {
                     Id = d.Id,
                     Name = d.Name,
@@ -929,6 +743,7 @@ namespace ProjectManagementSystem.Controllers
                     Id = m.Id,
                     Name = m.Name,
                     Status = m.CheckStatus,
+                    CheckType = CheckType.任务审核,
                 }).ToList(),
                 RiskChecks = project.Risks
                 .Where(r => r.Status == RiskStatus.审核中)
@@ -937,6 +752,7 @@ namespace ProjectManagementSystem.Controllers
                     Id = m.Id,
                     Name = m.Name,
                     Status = m.CheckStatus,
+                    CheckType = CheckType.风险审核,
                 }).ToList(),
                 DefectChecks = project.Defects
                 .Where(d => d.Status == DefectStatus.审核中)
@@ -945,6 +761,7 @@ namespace ProjectManagementSystem.Controllers
                     Id = d.Id,
                     Name = d.Name,
                     Status = d.CheckStatus,
+                    CheckType = CheckType.缺陷审核,
                 }).ToList(),
                 UnMissionChecks = project.Missions
                 .Where(m => m.Status == MissionStatus.已完成 && m.CheckStatus == CheckStatus.审核通过)
@@ -954,6 +771,7 @@ namespace ProjectManagementSystem.Controllers
                     Id = m.Id,
                     Name = m.Name,
                     Status = m.CheckStatus,
+                    CheckType = CheckType.任务审核,
                 }).ToList(),
                 UnRiskChecks = project.Risks
                 .Where(r => r.CheckStatus == CheckStatus.审核通过 || r.CheckStatus == CheckStatus.审核未通过)
@@ -962,6 +780,7 @@ namespace ProjectManagementSystem.Controllers
                     Id = m.Id,
                     Name = m.Name,
                     Status = m.CheckStatus,
+                    CheckType = CheckType.风险审核,
                 }).ToList(),
                 UnDefectChecks = project.Defects
                 .Where(d => d.CheckStatus == CheckStatus.审核通过 || d.CheckStatus == CheckStatus.审核未通过)
@@ -970,6 +789,7 @@ namespace ProjectManagementSystem.Controllers
                     Id = d.Id,
                     Name = d.Name,
                     Status = d.CheckStatus,
+                    CheckType = CheckType.缺陷审核,
                 }).ToList(),
             };
             return PartialView("_CheckPartialView", model);
@@ -1086,6 +906,213 @@ namespace ProjectManagementSystem.Controllers
                 },
             };
             return PartialView("_EditProjectPartialView", model);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetData(int projectId)
+        {
+            var missions = await applicationDbContext.Missions
+                .Include(m => m.Project)
+                .Where(p => p.Project.Id == projectId)
+                .ToListAsync();
+            var startDay = missions.Select(m => m.CreateDate).Min();
+            var endDay = missions.Select(m => m.FinishedTime).Max();
+            var undealData = new List<(DateTime, int)>();
+            var inprogressData = new List<(DateTime, int)>();
+            var finishedData = new List<(DateTime, int)>();
+            for (DateTime i = startDay; i <= DateTime.Now; i = i.AddDays(1))
+            {
+                undealData.Add((i, CalUndeal(missions, i)));
+                inprogressData.Add((i, CalInprogress(missions, i)));
+                finishedData.Add((i, CalFinished(missions, i)));
+            }
+
+            var data = new[]
+            {
+              new
+                 {
+                   name = "待处理",
+                   color = "#4154f1", // 颜色字段
+                   data = undealData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
+                 },
+              new
+                 {
+                   name = "进行中",
+                   color = "#2eca6a", // 颜色字段
+                   data = inprogressData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
+                 },
+              new
+                 {
+                   name = "已完成",
+                   color = "#ff771d",
+                   data = finishedData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
+                  }
+             };
+
+
+            return Json(data);
+        }
+
+        public async Task<JsonResult> GetStackColumnData(string user, int projectId)
+        {
+            var missions = await applicationDbContext.Missions
+                .Include(m => m.MissionExecutors)
+                .ThenInclude(me => me.ApplicationUser)
+                .Include(m => m.Project)
+                .Where(m => m.Project.Id == projectId)
+                .ToListAsync();
+            if (user != "All")
+            {
+                missions = missions.Where(m => m.MissionExecutors.Where(me => me.ApplicationUser.UserName == user).Count() > 0).ToList();
+            }
+            var undealData = new List<(DateTime, int)>();
+            var inProgressData = new List<(DateTime, int)>();
+            var FinishedData = new List<(DateTime, int)>();
+            for (int i = 0; i < 40; i++)
+            {
+                var dateTime = DateTime.Now.AddDays(-i);
+                undealData.Add((dateTime, CalCulateUndeal(missions, dateTime)));
+                inProgressData.Add((dateTime, CalCulateInProgress(missions, dateTime)));
+                FinishedData.Add((dateTime, CalCulateFinished(missions, dateTime)));
+            }
+
+            var data = new[]
+  {
+        new
+        {
+            name = "待处理",
+            color = "#4154f1", // 颜色字段
+            data = undealData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
+        },
+        new
+        {
+            name = "进行中",
+            color = "#2eca6a", // 颜色字段
+            data = inProgressData.Select(d => new { x = d.Item1.ToString("o") , y = d.Item2 }).ToArray()
+        },
+        new
+        {
+            name = "已完成",
+            color = "#ff771d",
+            data = FinishedData.Select(d => new { x = d.Item1.ToString("o") , y = d.Item2 }).ToArray()
+        }
+    };
+
+            return Json(data);
+        }
+
+        public async Task<IActionResult> GetFundData(int projecctId)
+        {
+            var project = await applicationDbContext.Projects
+                .Include(p => p.Fund)
+                .ThenInclude(f => f.Changes)
+                .FirstOrDefaultAsync(p => p.Id == projecctId);
+            var changes = project.Fund.Changes.OrderBy(c => c.DateTime).ToList();
+            var startDay = changes.Select(c => c.DateTime).Min();
+            var endDay = changes.Select(c => c.DateTime).Max();
+            decimal fund = 0M;
+            var fundData = new List<(DateTime, decimal)>();
+            var addData = new List<(DateTime, decimal)>();
+            var reduceData = new List<(DateTime, decimal)>();
+            foreach (var change in changes)
+            {
+                if (change.DateTime > DateTime.Now)
+                    continue;
+                if (change.ChangeType == FundChangeType.支出)
+                {
+                    fund -= change.Number;
+                    reduceData.Add((change.DateTime.Date, change.Number));
+                    addData.Add((change.DateTime.Date, 0M));
+                }
+                else
+                {
+                    fund += change.Number;
+                    addData.Add((change.DateTime.Date, change.Number));
+                    reduceData.Add((change.DateTime.Date, 0M));
+                }
+                fundData.Add((change.DateTime.Date, fund));
+            }
+
+            var data = new[]
+            {
+                 new
+            {
+            name = "资金",
+            color = "#00008B", // 颜色字段
+            type="line",
+            data = fundData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
+            },
+                  new
+            {
+            name = "收入",
+            color = "#3CB371", // 颜色字段
+            type= "column",
+            data = addData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2 }).ToArray()
+            },
+                   new
+            {
+            name = "支出",
+            color = "#FF6347", // 颜色字段
+            type= "column",
+            data = reduceData.Select(d => new { x = d.Item1.ToString("o"), y = d.Item2}).ToArray()
+            },
+            };
+
+            return Json(data);
+        }
+
+        public async Task<IActionResult> GetPieData(int projectId)
+        {
+            var me = await applicationDbContext.MissionExecutors
+            .Include(me => me.ApplicationUser)
+            .Include(me => me.Mission)
+            .ThenInclude(m => m.Project)
+            .Where(me => me.Mission.Project.Id == projectId && me.Mission.FinishedTime < DateTime.Now)
+            .ToListAsync();
+
+            var groupResult = me.GroupBy(me => me.ApplicationUser.UserName);
+            var pieData = new List<(string, int)>();
+            int count = 0;
+            var total = me.Count;
+            foreach (var group in groupResult)
+            {
+                pieData.Add((group.Key, group.Count()));
+                count += group.Count();
+                if ((float)count / total > 0.8f)
+                    break;
+            }
+            pieData.Add(("Others", total - count));
+            var data = new
+            {
+                names = pieData.Select(p => p.Item1).ToArray(),
+                numbers = pieData.Select(p => p.Item2).ToArray(),
+            };
+            return Json(data);
+        }
+
+        public async Task<IActionResult> GetBarData(int projectId)
+        {
+            var me = await applicationDbContext.MissionExecutors
+            .Include(me => me.ApplicationUser)
+            .Include(me => me.Mission)
+            .ThenInclude(m => m.Project)
+            .Where(me => me.Mission.Project.Id == projectId && me.Mission.FinishedTime < DateTime.Now)
+            .ToListAsync();
+
+            var groupResult = me
+                .GroupBy(me => me.ApplicationUser.UserName)
+                .OrderByDescending(g => g.Count());
+            var pieData = new List<(string, int)>();
+            foreach (var group in groupResult)
+            {
+                pieData.Add((group.Key, group.Count()));
+            }
+            var data = new
+            {
+                names = pieData.Select(p => p.Item1).ToArray(),
+                numbers = pieData.Select(p => p.Item2).ToArray(),
+            };
+            return Json(data);
         }
     }
 }
