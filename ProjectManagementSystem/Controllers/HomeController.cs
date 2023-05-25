@@ -36,7 +36,7 @@ namespace ProjectManagementSystem.Controllers
             {
                 return View(); // 或者返回其他视图，比如登录页面
             }
-            SpecialInit i = new SpecialInit(applicationDbContext);
+            SpecialInit i = new SpecialInit(applicationDbContext, userManager);
             await i.Init();
 
             var model = new HomeIndexViewModel()
@@ -62,7 +62,7 @@ namespace ProjectManagementSystem.Controllers
 
         public async Task<IActionResult> AddData()
         {
-            var init = new DbInit(applicationDbContext);
+            var init = new DbInit(applicationDbContext, userManager);
             await init.Init();
             return RedirectToAction("Index");
         }
@@ -227,9 +227,12 @@ namespace ProjectManagementSystem.Controllers
         private readonly int projectUserCount = 8;
 
         private ApplicationDbContext applicationDbContext;
-        public DbInit(ApplicationDbContext applicationDbContext)
+        private readonly UserManager<ApplicationUser> userManager;
+
+        public DbInit(ApplicationDbContext applicationDbContext, UserManager<ApplicationUser> userManager)
         {
             this.applicationDbContext = applicationDbContext;
+            this.userManager = userManager;
         }
 
         public async Task Init()
@@ -302,7 +305,6 @@ namespace ProjectManagementSystem.Controllers
         {
             var departments = await applicationDbContext.Departments.ToListAsync();
             var positions = await applicationDbContext.Positions.ToListAsync();
-            var users = new List<ApplicationUser>();
             for (int i = 0; i < userCount; i++)
             {
                 Random derandom = new Random();
@@ -316,9 +318,9 @@ namespace ProjectManagementSystem.Controllers
                     Department = departments[dIndex],
                     Job = positions[pIndex],
                 };
-                users.Add(user);
+                await userManager.CreateAsync(user, "666");
             }
-            await applicationDbContext.ApplicationUsers.AddRangeAsync(users);
+
             await applicationDbContext.SaveChangesAsync();
         }
 
@@ -513,10 +515,12 @@ namespace ProjectManagementSystem.Controllers
     public class SpecialInit
     {
         private readonly ApplicationDbContext applicationDbContext;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public SpecialInit(ApplicationDbContext applicationDbContext)
+        public SpecialInit(ApplicationDbContext applicationDbContext, UserManager<ApplicationUser> userManager)
         {
             this.applicationDbContext = applicationDbContext;
+            this.userManager = userManager;
         }
         public async Task Init()
         {
@@ -652,6 +656,27 @@ namespace ProjectManagementSystem.Controllers
             await applicationDbContext.Notices.AddAsync(notice4);
 
             applicationDbContext.Update(project);
+            await applicationDbContext.SaveChangesAsync();
+
+            var department = new Department
+            {
+                Name = "部门1",
+            };
+            await applicationDbContext.Departments.AddAsync(department);
+            var position = new Position
+            {
+                Name = "position",
+            };
+            await applicationDbContext.Positions.AddAsync(position);
+            await applicationDbContext.SaveChangesAsync();
+            var secondUser = new ApplicationUser
+            {
+                UserName = "张三",
+                TrueName = "张三",
+                Department = department,
+                Job = position,
+            };
+            await userManager.CreateAsync(secondUser, "666");
             await applicationDbContext.SaveChangesAsync();
         }
     }
